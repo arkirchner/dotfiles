@@ -1,0 +1,24 @@
+" settings
+set number                      " Display line numbers beside buffer
+set nocompatible                " Don't maintain compatibilty with Vi.
+set hidden                      " Allow buffer change w/o saving
+set lazyredraw                  " Don't update while executing macros
+set backspace=indent,eol,start  " Sane backspace behavior
+set history=1000                " Remember last 1000 commands
+set scrolloff=4                 " Keep at least 4 lines below cursor
+
+" Make CtrlP use ag for listing the files. Way faster and no useless files.
+" dnf install the_silver_searcher
+let g:ctrlp_user_command = 'ag %s -l --hidden --nocolor -g ""'
+let g:ctrlp_use_caching = 0
+
+" plugins
+call plug#begin('~/.vim/plugged')
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'tpope/vim-rails'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-commentary'
+" Add plugins to &runtimepath
+call plug#end()
+
