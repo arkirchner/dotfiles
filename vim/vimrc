@@ -6,6 +6,12 @@ set lazyredraw                  " Don't update while executing macros
 set backspace=indent,eol,start  " Sane backspace behavior
 set history=1000                " Remember last 1000 commands
 set scrolloff=4                 " Keep at least 4 lines below cursor
+
+" indentation
+set expandtab
+set shiftwidth=2
+set softtabstop=2
+
 set spell spelllang=en_us       " Spellcheck us English
 syntax spell toplevel           " Spellcheck syntax as well
 
