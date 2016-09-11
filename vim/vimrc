@@ -34,6 +34,7 @@ let g:syntastic_check_on_wq = 0
 
 " plugins
 call plug#begin('~/.vim/plugged')
+Plug 'tpope/vim-sensible'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'tpope/vim-rails'
 Plug 'tpope/vim-surround'
