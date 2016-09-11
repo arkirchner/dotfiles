@@ -12,8 +12,10 @@ set expandtab
 set shiftwidth=2
 set softtabstop=2
 
+" spellcheck settings
 set spell spelllang=en_us       " Spellcheck us English
 syntax spell toplevel           " Spellcheck syntax as well
+set complete+=kspell
 
 " Make CtrlP use ag for listing the files. Way faster and no useless files.
 " dnf install the_silver_searcher
