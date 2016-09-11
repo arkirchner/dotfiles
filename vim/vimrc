@@ -41,6 +41,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
 Plug 'scrooloose/syntastic'
+Plug 'ntpeters/vim-better-whitespace'
 
 " Add plugins to &runtimepath
 call plug#end()
