@@ -15,7 +15,20 @@ set softtabstop=2
 " spellcheck settings
 set spell spelllang=en_us       " Spellcheck us English
 syntax spell toplevel           " Spellcheck syntax as well
+" zg to add word to word list
+" zw to reverse
+" zug to remove word from word list
+" z= to get list of possibilities
+set spellfile=~/.vim/spellfile.add
 set complete+=kspell
+highlight clear SpellBad
+highlight SpellBad term=standout ctermfg=1 term=underline cterm=underline
+highlight clear SpellCap
+highlight SpellCap term=underline cterm=underline
+highlight clear SpellRare
+highlight SpellRare term=underline cterm=underline
+highlight clear SpellLocal
+highlight SpellLocal term=underline cterm=underline
 
 " Make CtrlP use ag for listing the files. Way faster and no useless files.
 " dnf install the_silver_searcher
