@@ -1,6 +1,6 @@
 " settings
 set number                      " Display line numbers beside buffer
-set nocompatible                " Don't maintain compatibilty with Vi.
+set nocompatible                " Don't maintain compatibility with Vi.
 set hidden                      " Allow buffer change w/o saving
 set lazyredraw                  " Don't update while executing macros
 set backspace=indent,eol,start  " Sane backspace behavior
@@ -45,6 +45,16 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
+" start Tmux settings
+" automatically rebalance windows on vim resize
+autocmd VimResized * :wincmd =
+
+" zoom a vim pane, <C-w>= to re-balance
+nnoremap <leader>- :wincmd _<cr>:wincmd \|<cr>
+nnoremap <leader>= :wincmd =<cr>
+
+" end Tmux settings
+
 " plugins
 call plug#begin('~/.vim/plugged')
 Plug 'tpope/vim-sensible'
@@ -55,7 +65,7 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
 Plug 'scrooloose/syntastic'
 Plug 'ntpeters/vim-better-whitespace'
-
+Plug ''
 " Add plugins to &runtimepath
 call plug#end()
 
