@@ -54,7 +54,28 @@ autocmd VimResized * :wincmd =
 nnoremap <leader>- :wincmd _<cr>:wincmd \|<cr>
 nnoremap <leader>= :wincmd =<cr>
 
-" end Tmux settings
+" RSpec.vim mappings
+map <Leader>t :call RunCurrentSpecFile()<CR>
+map <Leader>s :call RunNearestSpec()<CR>
+map <Leader>l :call RunLastSpec()<CR>
+map <Leader>a :call RunAllSpecs()<CR>
+
+" RSpec.vim && vim tmux runner
+let g:rspec_command = "call VtrSendCommand('rspec {spec}')"
+
+" VIM TMUX runner
+map <leader>va :VtrAttachToPane<cr>
+map <leader>ror :VtrReorientRunner<cr>
+map <leader>sc :VtrSendCommandToRunner<cr>
+map <leader>sl :VtrSendLinesToRunner<cr>
+map <leader>sl :VtrSendLinesToRunner<cr>
+map <leader>or :VtrOpenRunner<cr>
+map <leader>kr :VtrKillRunner<cr>
+map <leader>fr :VtrFocusRunner<cr>
+map <leader>dr :VtrDetachRunner<cr>
+map <leader>cr :VtrClearRunner<cr>
+map <leader>fc :VtrFlushCommand<cr>
+map <leader>sf :VtrSendFile<cr>
 
 " plugins
 call plug#begin('~/.vim/plugged')
@@ -68,6 +89,8 @@ Plug 'scrooloose/syntastic'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'airblade/vim-gitgutter'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'thoughtbot/vim-rspec'
+Plug 'christoomey/vim-tmux-runner'
 " Add plugins to &runtimepath
 call plug#end()
 
