@@ -67,6 +67,7 @@ Plug 'tpope/vim-commentary'
 Plug 'scrooloose/syntastic'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'airblade/vim-gitgutter'
+Plug 'christoomey/vim-tmux-navigator'
 " Add plugins to &runtimepath
 call plug#end()
 
