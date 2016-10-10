@@ -15,6 +15,19 @@ export EDITOR="$VISUAL"
 # load dotfile bin
 export PATH="$HOME/.dotfiles/bin:$PATH"
 
+# stay always in tmux
+_not_inside_tmux() {
+  [[ -z "$TMUX" ]]
+}
+
+ensure_tmux_is_running() {
+  if _not_inside_tmux; then
+    tat
+  fi
+}
+
+ensure_tmux_is_running
+
 # Less git typing
 alias gs='git status '
 alias ga='git add '
