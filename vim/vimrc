@@ -91,6 +91,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'thoughtbot/vim-rspec'
 Plug 'christoomey/vim-tmux-runner'
+Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
 " Add plugins to &runtimepath
 call plug#end()
 
