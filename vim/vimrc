@@ -61,13 +61,12 @@ map <Leader>l :call RunLastSpec()<CR>
 map <Leader>a :call RunAllSpecs()<CR>
 
 " RSpec.vim && vim tmux runner
-let g:rspec_command = "call VtrSendCommand('rspec {spec}')"
+let g:rspec_command = "call VtrSendCommand('bundle exec rspec {spec}')"
 
 " VIM TMUX runner
 map <leader>va :VtrAttachToPane<cr>
 map <leader>ror :VtrReorientRunner<cr>
 map <leader>sc :VtrSendCommandToRunner<cr>
-map <leader>sl :VtrSendLinesToRunner<cr>
 map <leader>sl :VtrSendLinesToRunner<cr>
 map <leader>or :VtrOpenRunner<cr>
 map <leader>kr :VtrKillRunner<cr>
