@@ -15,6 +15,10 @@ export EDITOR="$VISUAL"
 # load dotfile bin
 export PATH="$HOME/.dotfiles/bin:$PATH"
 
+# disable freeze terminal commands
+stty -ixon
+stty ixany
+
 # stay always in tmux
 _not_inside_tmux() {
   [[ -z "$TMUX" ]]
