@@ -76,6 +76,9 @@ map <leader>cr :VtrClearRunner<cr>
 map <leader>fc :VtrFlushCommand<cr>
 map <leader>sf :VtrSendFile<cr>
 
+" ctags config
+set tags=./tags;
+
 " plugins
 call plug#begin('~/.vim/plugged')
 Plug 'tpope/vim-sensible'
@@ -91,6 +94,9 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'thoughtbot/vim-rspec'
 Plug 'christoomey/vim-tmux-runner'
 Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
+Plug 'sjl/badwolf'
 " Add plugins to &runtimepath
 call plug#end()
 
+" color scheme
+colorscheme badwolf
