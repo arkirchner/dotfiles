@@ -76,6 +76,11 @@ map <leader>cr :VtrClearRunner<cr>
 map <leader>fc :VtrFlushCommand<cr>
 map <leader>sf :VtrSendFile<cr>
 
+" show line limit
+set textwidth=100
+set colorcolumn=+1
+hi ColorColumn guibg=#2d2d2d ctermbg=246
+
 " ctags config
 set tags=./tags;
 
