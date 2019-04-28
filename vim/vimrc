@@ -63,7 +63,16 @@ map <Leader>l :call RunLastSpec()<CR>
 map <Leader>a :call RunAllSpecs()<CR>
 
 " RSpec.vim && vim tmux runner
-let g:rspec_command = "call VtrSendCommand('docker-compose run web rspec {spec}')"
+let g:rspec_command = "call VtrSendCommand('docker-compose run app rspec {spec}')"
+
+" format elixir code on save
+let g:mix_format_on_save = 1
+let g:ale_elixir_credo_strict = 1
+
+" Prettier format before saving
+let g:prettier#autoformat = 0
+autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html PrettierAsync
+
 
 " VIM TMUX runner
 map <leader>va :VtrAttachToPane<cr>
@@ -104,6 +113,11 @@ Plug 'christoomey/vim-tmux-runner'
 Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
 Plug 'sjl/badwolf'
 Plug 'pangloss/vim-javascript'
+Plug 'mhinz/vim-mix-format'
+Plug 'elixir-editors/vim-elixir'
+Plug 'prettier/vim-prettier', {
+  \ 'do': 'yarn install',
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
 " Add plugins to &runtimepath
 call plug#end()
 

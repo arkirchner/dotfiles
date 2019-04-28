@@ -31,6 +31,7 @@ ensure_tmux_is_running() {
 }
 
 ensure_tmux_is_running
+alias vi='vim'
 
 # Less git typing
 alias gs='git status '
@@ -44,15 +45,19 @@ alias gx='gitx --all'
 
 alias got='git '
 
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
-export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"
+# Version manger for all languages
+. $HOME/.asdf/asdf.sh
+. $HOME/.asdf/completions/asdf.bash
+
+# export PATH="$HOME/.rbenv/bin:$PATH"
+# eval "$(rbenv init -)"
+# export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"
 
 # qmake link
-export qmake=/usr/bin/qmake-qt4
+# export qmake=/usr/bin/qmake-qt4
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
 # work pathes
 if [ -f $HOME/.work_pathes ]; then
