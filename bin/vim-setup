@@ -1,0 +1,7 @@
+gem install rubocop-performance \
+            rubocop-rails \
+            rubocop-rspec \
+            solargraph \
+            yard
+
+npm install -g vim-node-rpc
