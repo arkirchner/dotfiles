@@ -49,6 +49,8 @@ alias got='git '
 . $HOME/.asdf/asdf.sh
 . $HOME/.asdf/completions/asdf.bash
 
+PATH="$HOME/bin:$HOME/.local/bin:$PATH"
+
 # export PATH="$HOME/.rbenv/bin:$PATH"
 # eval "$(rbenv init -)"
 # export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"
