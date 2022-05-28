@@ -103,37 +103,27 @@ Plug 'tpope/vim-rails'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
-" Plug 'w0rp/ale'
-" Plug 'scrooloose/syntastic'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'airblade/vim-gitgutter'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'thoughtbot/vim-rspec'
 Plug 'christoomey/vim-tmux-runner'
-" Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
 Plug 'sjl/badwolf'
-" Plug 'pangloss/vim-javascript'
-" Plug 'mhinz/vim-mix-format'
-" Plug 'elixir-editors/vim-elixir'
-" Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
-Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> coc#util#install() }}
-Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-prettier', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-eslint', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-css', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-highlight', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-html', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-yaml', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-stylelint', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-solargraph', {'do': 'yarn install --frozen-lockfile'}
-
-
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Plug 'neoclide/coc-prettier', {'do': 'yarn install --immutable'}
+" Plug 'neoclide/coc-eslint', {'do': 'yarn install --immutable'}
+" Plug 'neoclide/coc-css', {'do': 'yarn install --immutable'}
+" Plug 'neoclide/coc-highlight', {'do': 'yarn install --immutable'}
+" Plug 'neoclide/coc-json', {'do': 'yarn install --immutable'}
+" Plug 'neoclide/coc-tsserver', {'do': 'yarn install --immutable'}
+" Plug 'neoclide/coc-html', {'do': 'yarn install --immutable'}
+" Plug 'neoclide/coc-yaml', {'do': 'yarn install --immutable'}
+" Plug 'neoclide/coc-stylelint', {'do': 'yarn install --immutable'}
+Plug 'neoclide/coc-solargraph', {'do': 'yarn install --immutable'}
 Plug 'vim-ruby/vim-ruby'
-Plug 'prettier/vim-prettier', {
-  \ 'do': 'yarn install --frozen-lockfile',
-  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html', 'ruby'] }
+" Plug 'prettier/vim-prettier', {
+"   \ 'do': 'yarn install --immutable',
+"   \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html', 'ruby'] }
 " Add plugins to &runtimepath
 call plug#end()
 
