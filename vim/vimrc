@@ -95,6 +95,9 @@ hi ColorColumn guibg=#2d2d2d ctermbg=246
 " ctags config
 set tags=./tags;
 
+" don't crash with typescript
+set re=2
+
 " plugins
 call plug#begin('~/.vim/plugged')
 Plug 'tpope/vim-sensible'
