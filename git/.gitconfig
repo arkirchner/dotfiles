@@ -4,7 +4,7 @@
 [core]
 	autocrlf = input
 	safecrlf = true
-	excludesfile = /home/akirchner/.gitignore
+	excludesfile = ~/.gitignore
 [alias]
   co = checkout
   ci = commit
@@ -15,3 +15,5 @@
   dump = cat-file -p
 [commit]
 	gpgsign = true
+[init]
+	defaultBranch = main
