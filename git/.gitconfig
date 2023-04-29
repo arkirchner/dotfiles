@@ -15,5 +15,7 @@
   dump = cat-file -p
 [commit]
 	gpgsign = true
+[cola]
+	spellcheck = true
 [init]
 	defaultBranch = main
