@@ -2,9 +2,10 @@
 	name = Armin Kirchner
 	email = post.armin@gmail.com
 [core]
-	autocrlf = input
+  autocrlf = input
 	safecrlf = true
-	excludesfile = ~/.gitignore
+  excludesfile = ~/.gitignore
+  editor = nvim
 [alias]
   co = checkout
   ci = commit

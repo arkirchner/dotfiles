@@ -1,0 +1,15 @@
+# linux dotfiles
+
+Make Yubikey work
+
+```
+sudo dnf install pcsc-lite
+```
+
+Create sym links
+
+```
+stow -t ~/ .
+```
+
+
