@@ -12,6 +12,13 @@ local plugins = {
       require("copilot").setup({})
     end,
   },
+  {
+    "christoomey/vim-tmux-runner",
+    lazy = false,
+    init = function ()
+     vim.g.VtrUseVtrMaps = 1
+    end
+  },
 }
 
 return plugins
