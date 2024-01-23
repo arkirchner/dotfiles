@@ -2,6 +2,23 @@ local cmp = require "cmp"
 
 local plugins = {
   {
+    "williamboman/mason.nvim",
+    opts = {
+      ensure_installed = {
+        "ltex-ls",
+        "rubocop",
+        "ruby-lsp",
+      },
+    },
+  },
+  {
+    "neovim/nvim-lspconfig",
+    config = function ()
+      require "plugins.configs.lspconfig"
+      require "custom.configs.lspconfig"
+    end,
+  },
+  {
     "vim-test/vim-test",
     lazy = false,
     init = function()
