@@ -7,6 +7,29 @@ local lspconfig = require("lspconfig")
 lspconfig.ltex.setup {
   on_attach = on_attach,
   capabilities = capabilities,
+  settings = {
+    ltex = {
+      language = "en-US",
+      additionalRules = {
+        enablePickyRules = true,
+        motherTongue = "de-DE"
+      }
+    }
+  },
+  filetypes = {
+    "bib",
+    "gitcommit",
+    "markdown",
+    "org",
+    "plaintex",
+    "rst",
+    "rnoweb",
+    "tex",
+    "pandoc",
+    "quarto",
+    "rmd",
+    "ruby"
+  }
   -- root_dir = util.root_dir(".git"),
 }
 
