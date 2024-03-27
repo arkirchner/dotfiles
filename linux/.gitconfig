@@ -15,7 +15,7 @@
   type = cat-file -t
   dump = cat-file -p
 [commit]
-	gpgsign = true
+  gpgsign = true
 [cola]
 	spellcheck = true
 [init]

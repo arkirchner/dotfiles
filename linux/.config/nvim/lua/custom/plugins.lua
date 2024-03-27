@@ -23,12 +23,10 @@ local plugins = {
     lazy = false,
     init = function()
       vim.g['test#strategy'] = 'vtr'
-      vim.api.nvim_set_keymap('n', '<leader>t', ':TestNearest<CR>', { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('n', '<leader>C', ':TestClass<CR>', { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('n', '<leader>T', ':TestFile<CR>', { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', '<leader>s', ':TestNearest<CR>', { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', '<leader>t', ':TestClass<CR>', { noremap = true, silent = true })
       vim.api.nvim_set_keymap('n', '<leader>a', ':TestSuite<CR>', { noremap = true, silent = true })
       vim.api.nvim_set_keymap('n', '<leader>l', ':TestLast<CR>', { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('n', '<leader>g', ':TestVisit<CR>', { noremap = true, silent = true })
     end
   },
   {
@@ -49,6 +47,19 @@ local plugins = {
       vim.g.VtrUseVtrMaps = 1
     end
   },
+  {
+    "jackMort/ChatGPT.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("chatgpt").setup({})
+    end,
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+      "nvim-lua/plenary.nvim",
+      "folke/trouble.nvim",
+      "nvim-telescope/telescope.nvim"
+    }
+  }
 }
 
 return plugins
