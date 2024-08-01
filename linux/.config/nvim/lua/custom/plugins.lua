@@ -12,6 +12,10 @@ local plugins = {
     },
   },
   {
+    "windwp/nvim-autopairs",
+    enable = false,
+  },
+  {
     "neovim/nvim-lspconfig",
     config = function ()
       require "plugins.configs.lspconfig"
