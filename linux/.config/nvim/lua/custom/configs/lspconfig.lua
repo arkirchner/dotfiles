@@ -33,7 +33,7 @@ lspconfig.ltex.setup {
   -- root_dir = util.root_dir(".git"),
 }
 
-lspconfig.ruby_ls.setup {
+lspconfig.ruby_lsp.setup {
   on_attach = on_attach,
   capabilities = capabilities,
 }
