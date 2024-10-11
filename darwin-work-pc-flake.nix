@@ -14,8 +14,14 @@
       # $ nix-env -qaP | grep wget
       environment.systemPackages =
         [
+          pkgs.alacritty
           pkgs.neovim
           pkgs.tmux
+        ];
+
+      fonts.packages =
+        [
+          (pkgs.nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
         ];
 
       # Auto upgrade nix package and the daemon service.
