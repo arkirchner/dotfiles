@@ -24,6 +24,22 @@
           (pkgs.nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
         ];
 
+      system.defaults = {
+        dock.autohide = true;
+        dock.persistent-apps = [
+         "${pkgs.alacritty}/Applications/Alacritty.app"
+         "Applications/Google Chrome.app"
+         "Applications/Firefox.app"
+         "Applications/Slack.app"
+         "Applications/pgAdmin 4.app"
+        ];
+        finder.FXPreferredViewStyle = "clmv";
+        NSGlobalDomain.AppleICUForce24HourTime = true;
+        NSGlobalDomain.AppleInterfaceStyle = "Dark";
+        NSGlobalDomain.AppleShowAllExtensions = true;
+        NSGlobalDomain.KeyRepeat = 2;
+      };
+
       # Auto upgrade nix package and the daemon service.
       services.nix-daemon.enable = true;
       # nix.package = pkgs.nix;
