@@ -8,6 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       /etc/nixos/hardware-configuration.nix
+      <home-manager/nixos>
     ];
 
   # Bootloader.
@@ -59,17 +60,27 @@
   # Enable automatic login for the user.
   services.getty.autologinUser = "armin";
 
+  home-manager.users.armin = { pkgs, ...}: {
+    home.packages = with pkgs; [
+      wofi
+      tmux
+      firefox
+      kitty
+    ];
+
+    programs.bash.enable = true;
+
+    home.stateVersion = "24.05";
+  };
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    wofi
-    vim
+    neovim
     git
-    kitty
-    firefox
   ];
 
   programs.hyprland.enable = true;
