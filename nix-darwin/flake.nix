@@ -74,14 +74,6 @@
     darwinConfigurations."PC0099" = nix-darwin.lib.darwinSystem {
       modules = [
        configuration
-       home-manager.darwinModules.home-manager
-       {
-         home-manager.useGlobalPkgs = true;
-         home-manager.useUserPackages = true;
-
-
-         home-manager.users.armin = import ~/Documents/dotfiles/home.nix;
-       }
       ];
     };
 

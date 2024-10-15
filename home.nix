@@ -12,7 +12,7 @@
 
   imports = (import ./programs);
 
-  home.bash.shellAliases = {
+  home.shellAliases = {
     vi = "nvim";
     vim = "nvim";
 
