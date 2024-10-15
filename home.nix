@@ -5,7 +5,7 @@
 
   home.packages = with pkgs; [
     (writeShellScriptBin "tat" (builtins.readFile ./bin/tat))
-    pkgs.alacritty
+    pkgs.kitty
     pkgs.neovim
     pkgs.tmux
   ];

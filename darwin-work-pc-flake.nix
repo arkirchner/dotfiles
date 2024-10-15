@@ -16,7 +16,8 @@
       # $ nix-env -qaP | grep wget
       environment.systemPackages =
         [
-          pkgs.alacritty
+          pkgs.kitty
+          pkgs.kitty-themes
           pkgs.neovim
           pkgs.tmux
         ];
@@ -29,7 +30,7 @@
       system.defaults = {
         dock.autohide = true;
         dock.persistent-apps = [
-         "${pkgs.alacritty}/Applications/Alacritty.app"
+         "${pkgs.kitty}/Applications/Kitty.app"
          "Applications/Google Chrome.app"
          "Applications/Firefox.app"
          "Applications/Slack.app"
