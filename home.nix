@@ -5,12 +5,7 @@
 
   home.packages = with pkgs; [
     (writeShellScriptBin "tat" (builtins.readFile ./bin/tat))
-    pkgs.kitty
-    pkgs.neovim
-    pkgs.tmux
   ];
-
-  imports = (import ./programs);
 
   home.shellAliases = {
     vi = "nvim";
@@ -25,4 +20,6 @@
     gk = "gitk --all&";
     gx = "gitx --all";
   };
+
+  imports = (import ./programs);
 }

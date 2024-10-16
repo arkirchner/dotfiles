@@ -1,7 +1,10 @@
 { config, pkgs, ... }:
 
 let
-  tmuxConfig = builtins.readFile ./tmux.config;
+  tmuxConfig = ''
+    set-option -g default-shell ${pkgs.bashInteractive}/bin/bash
+    ${builtins.readFile ./tmux.config}
+  '';
 in
 {
   programs.tmux = {

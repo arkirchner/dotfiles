@@ -10,6 +10,6 @@
 
     themeFile = "Catppuccin-Macchiato";
 
-    shellIntegration.enableZshIntegration = true;
+    shellIntegration.enableBashIntegration = true;
   };
 }

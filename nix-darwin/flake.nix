@@ -20,6 +20,7 @@
           pkgs.kitty-themes
           pkgs.neovim
           pkgs.tmux
+          pkgs.bashInteractive
         ];
 
       fonts.packages =
@@ -53,7 +54,9 @@
       # Necessary for using flakes on this system.
       nix.settings.experimental-features = "nix-command flakes";
 
-      programs.zsh.enable = true;
+      programs.bash.enable = true;
+      users.users.holdenc.shell = pkgs.bash;
+      environment.shells = [ pkgs.bash ];
 
       # Set Git commit hash for darwin-version.
       system.configurationRevision = self.rev or self.dirtyRev or null;
@@ -72,6 +75,12 @@
     darwinConfigurations."PC0099" = nix-darwin.lib.darwinSystem {
       modules = [
        configuration
+       home-manager.darwinModules.home-manager
+       {
+         home-manager.useGlobalPkgs = true;
+         home-manager.useUserPackages = true;
+         home-manager.users.armin = import ../home.nix;
+       }
       ];
     };
 

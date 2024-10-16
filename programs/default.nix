@@ -1,4 +1,5 @@
 [
+  ./bash
   ./tmux
   ./kitty
 ]
