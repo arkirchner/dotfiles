@@ -1,11 +1,13 @@
 { config, pkgs, ... }:
+
+let tatConfig = "${builtins.readFile ../../linux/.bashrc.d/tmux}";
+in
 {
   programs.bash = {
     enable = true;
 
-    # shellAliases = {
-    #   ...config.programs.bash.shellAliases
-    #   ...config.home.shellAliases
-    # };
+    bashrcExtra = ''
+      ${tatConfig}
+    '';
   };
 }

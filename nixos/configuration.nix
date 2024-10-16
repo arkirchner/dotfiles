@@ -60,8 +60,9 @@
   # Enable automatic login for the user.
   services.getty.autologinUser = "armin";
 
-  home-manager.users.armin = { pkgs, ...}: {
+  home-manager.users.armin = { config, pkgs, lib, ...}: {
     home.packages = with pkgs; [
+      (writeShellScriptBin "tat" (builtins.readFile ../bin/tat))
       wofi
       tmux
       firefox
@@ -82,7 +83,7 @@
       gx = "gitx --all";
     };
 
-    programs.bash.enable = true;
+    imports = (import ./programs.nix);
 
     home.stateVersion = "24.05";
   };
