@@ -19,7 +19,7 @@
 
     extraConfig = {
       core.editor = "nvim";
-      commit.signing = true;
+      commit.gpgsign = true;
       init.defaultBranch = "main";
     };
   };

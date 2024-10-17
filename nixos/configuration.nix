@@ -68,6 +68,7 @@
       tmux
       firefox
       kitty
+      gnupg
     ];
 
     home.shellAliases = {
