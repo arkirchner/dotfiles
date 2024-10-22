@@ -80,7 +80,13 @@
        {
          home-manager.useGlobalPkgs = true;
          home-manager.useUserPackages = true;
-         home-manager.users.armin = import ../home.nix;
+         home-manager.users.armin = { config, pkgs, lib, ... }:
+           {
+             home.stateVersion = "24.05";
+             programs.home-manager.enable = true;
+ 
+             imports = (import ../programs);
+           };
        }
       ];
     };

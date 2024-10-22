@@ -8,9 +8,8 @@
   imports =
     [ # Include the results of the hardware scan.
       /etc/nixos/hardware-configuration.nix
-      ./thunar.nix
       <home-manager/nixos>
-    ];
+    ] ++ (import ./system_programs);
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -71,21 +70,7 @@
       gnupg
     ];
 
-    home.shellAliases = {
-      vi = "nvim";
-      vim = "nvim";
-
-      gs = "git status ";
-      ga = "git add ";
-      gb = "git branch ";
-      gc = "git commit";
-      gd = "git diff";
-      go = "git checkout ";
-      gk = "gitk --all&";
-      gx = "gitx --all";
-    };
-
-    imports = (import ./programs.nix);
+    imports = (import ../programs) ++ (import ./programs);
 
     home.stateVersion = "24.05";
   };
@@ -115,6 +100,10 @@
     ]);
   };
 
+  fonts.packages = [
+    (pkgs.nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
+  ];
+ 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;

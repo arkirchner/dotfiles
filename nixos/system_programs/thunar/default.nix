@@ -5,7 +5,7 @@
 
   programs.thunar.plugins = with pkgs.xfce; [
     thunar-archive-plugin
-   thunar-volman
+    thunar-volman
   ];
 
   services.gvfs.enable = true; # Mount, trash, and other functionalities

@@ -4,11 +4,8 @@
     enable = true;
 
     font = {
-      size = 20;
-      name = "JetBrains Mono Font";
+      name = "JetBrainsMono";
     };
-
-    themeFile = "Catppuccin-Macchiato";
 
     shellIntegration.enableBashIntegration = true;
   };
