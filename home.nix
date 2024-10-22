@@ -9,7 +9,7 @@
 
     gs = "git status ";
     ga = "git add ";
-    gb = "git branch ";
+    gb = "git branch --sort=-committerdate ";
     gc = "git commit";
     gd = "git diff";
     go = "git checkout ";
