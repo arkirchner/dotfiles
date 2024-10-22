@@ -5,6 +5,7 @@ let
 in
 {
   home.packages = [
+    pkgs.fzf
     tat
   ];
 
