@@ -62,8 +62,6 @@
 
   home-manager.users.armin = { config, pkgs, lib, ...}: {
     home.packages = with pkgs; [
-      (writeShellScriptBin "tat" (builtins.readFile ../bin/tat))
-      wofi
       tmux
       firefox
       kitty
