@@ -15,6 +15,8 @@
     enable = true;
 
     enableSshSupport = true;
-    pinentryPackage = pkgs.pinentry-curses;
+    pinentryPackage = if pkgs.stdenv.isDarwin
+                      then pkgs.pinentry_mac
+                      else pkgs.pinentry-curses;
   };
 }
