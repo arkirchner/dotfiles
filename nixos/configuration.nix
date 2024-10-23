@@ -62,6 +62,7 @@
 
   home-manager.users.armin = { config, pkgs, lib, ...}: {
     home.packages = with pkgs; [
+      hyprland
       tmux
       firefox
       kitty
@@ -82,8 +83,6 @@
     neovim
     git
   ];
-
-  programs.hyprland.enable = true;
 
   security.pam.u2f = {
     enable = true;
