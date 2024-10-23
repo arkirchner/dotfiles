@@ -4,9 +4,6 @@ let
 in
 {
   home.shellAliases = {
-    vi = "nvim";
-    vim = "nvim";
-  
     gs = "git status ";
     ga = "git add ";
     gb = "git branch --sort=-committerdate ";
