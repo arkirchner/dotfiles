@@ -15,6 +15,12 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  hardware.opengl = {
+    enable = true;
+    driSupport = true;
+    driSupport32Bit = true;
+  };
+
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -59,8 +65,11 @@
 
   # Enable automatic login for the user.
   services.getty.autologinUser = "armin";
+  
+  home-manager.backupFileExtension = "backup";
 
   home-manager.users.armin = { config, pkgs, lib, ...}: {
+
     home.packages = with pkgs; [
       hyprland
       tmux
