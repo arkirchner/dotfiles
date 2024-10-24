@@ -1,0 +1,63 @@
+{ config, pkgs, ... }:
+{
+  programs.waybar = {
+    enable = true;
+
+    settings = [
+      {
+        position = "top";
+        modules-left = ["hyprland/workspaces"];
+        modules-center = ["hyprland/window"];
+        modules-right = ["network" "pulseaudio" "bluetooth" "battery" "clock"];
+        clock = {
+          format = "<span foreground='#f5c2e7'>   </span>{:%a %d %H:%M}";
+          tooltip-format = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
+        };
+        battery = {
+          states = {
+            warning = 30;
+            critical = 15;
+          };
+          format = "<span size='13000' foreground='#a6e3a1'>{icon} </span> {capacity}%";
+          format-warning = "<span size='13000' foreground='#B1E3AD'>{icon} </span> {capacity}%";
+          format-critical = "<span size='13000' foreground='#E38C8F'>{icon} </span> {capacity}%";
+          format-charging = "<span size='13000' foreground='#B1E3AD'> </span>{capacity}%";
+          format-plugged = "<span size='13000' foreground='#B1E3AD'> </span>{capacity}%";
+          format-alt = "<span size='13000' foreground='#B1E3AD'>{icon} </span> {time}";
+          format-full = "<span size='13000' foreground='#B1E3AD'> </span>{capacity}%";
+          format-icons = ["" "" "" "" ""];
+          tooltip-format = "{time}";
+        };
+        network = {
+          format-wifi = "<span size='13000' foreground='#f5e0dc'>  </span>{essid}";
+          format-ethernet = "<span size='13000' foreground='#f5e0dc'>󰤭  </span> Disconnected";
+          format-linked = "{ifname} (No IP) ";
+          format-disconnected = "<span size='13000' foreground='#f5e0dc'>  </span>Disconnected";
+          tooltip-format-wifi = "Signal Strenght: {signalStrength}%";
+        };
+        pulseaudio = {
+          format = "{icon}  {volume}%";
+          format-muted = "";
+          format-icons = {
+            default = ["" "" " "];
+          };
+          on-click = "pavucontrol";
+        };
+        bluetooth = {
+	        format = " {status}";
+	        format-connected = " {device_alias}";
+	        format-connected-battery = " {device_alias} {device_battery_percentage}%";
+	        tooltip-format = "{controller_alias}\t{controller_address}\n\n{num_connections} connected";
+	        tooltip-format-connected = "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}";
+	        tooltip-format-enumerate-connected = "{device_alias}\t{device_address}";
+	        tooltip-format-enumerate-connected-battery = "{device_alias}\t{device_address}\t{device_battery_percentage}%";
+        };
+      }
+    ];
+
+    style = ''
+      ${builtins.readFile ./mocha.css}
+      ${builtins.readFile ./style.css}
+    '';
+  };
+}

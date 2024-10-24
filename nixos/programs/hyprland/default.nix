@@ -38,6 +38,7 @@
       # exec-once = $terminal
       # exec-once = nm-applet &
       # exec-once = waybar & hyprpaper & firefox
+      exec-once = waybar
       
       
       #############################

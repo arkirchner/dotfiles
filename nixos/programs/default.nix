@@ -1,4 +1,5 @@
 [
   ./wofi
   ./hyprland
+  ./waybar
 ]
