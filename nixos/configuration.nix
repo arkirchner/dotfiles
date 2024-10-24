@@ -15,10 +15,22 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # Hardware exelerated graphics.
   hardware.opengl = {
     enable = true;
     driSupport = true;
     driSupport32Bit = true;
+  };
+
+  # Sound configuration
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    # If you want to use JACK applications, uncomment this
+    #jack.enable = true;
   };
 
   networking.hostName = "nixos"; # Define your hostname.
@@ -76,6 +88,7 @@
       firefox
       kitty
       gnupg
+      pavucontrol
     ];
 
     imports = (import ../programs) ++ (import ./programs);
