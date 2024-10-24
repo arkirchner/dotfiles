@@ -4,6 +4,6 @@
     enable = true;
 
     enableBashIntegration = true;
-    useTheme = "kali";
+    useTheme = "catppuccin";
   };
 }
