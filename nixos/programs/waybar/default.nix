@@ -34,6 +34,7 @@
           format-linked = "{ifname} (No IP) ";
           format-disconnected = "<span size='13000' foreground='#f5e0dc'>  </span>Disconnected";
           tooltip-format-wifi = "Signal Strenght: {signalStrength}%";
+          on-click = "kitty nmtui";
         };
         pulseaudio = {
           format = "{icon}  {volume}%";
@@ -41,7 +42,7 @@
           format-icons = {
             default = ["" "" " "];
           };
-          on-click = "pavucontrol";
+          on-click = "pwvucontrol";
         };
         bluetooth = {
 	        format = " {status}";
@@ -51,6 +52,7 @@
 	        tooltip-format-connected = "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}";
 	        tooltip-format-enumerate-connected = "{device_alias}\t{device_address}";
 	        tooltip-format-enumerate-connected-battery = "{device_alias}\t{device_address}\t{device_battery_percentage}%";
+          on-click = "blueman-manager";
         };
       }
     ];

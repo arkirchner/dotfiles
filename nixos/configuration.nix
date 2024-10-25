@@ -22,6 +22,14 @@
     driSupport32Bit = true;
   };
 
+  # Enable bluetooth support.
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+  };
+
+  services.blueman.enable = true;
+
   # Sound configuration
   security.rtkit.enable = true;
   services.pipewire = {
@@ -88,7 +96,8 @@
       firefox
       kitty
       gnupg
-      pavucontrol
+      pwvucontrol
+      bluetuith
     ];
 
     imports = (import ../programs) ++ (import ./programs);

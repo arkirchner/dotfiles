@@ -64,7 +64,8 @@ button:hover {
 #tray,
 #network,
 #mode,
-#scratchpad {
+#scratchpad,
+#bluetooth {
   margin-top: 2px;
   margin-bottom: 2px;
   margin-left: 4px;
@@ -86,6 +87,11 @@ button:hover {
 #pulseaudio {
     color: @blue;
     border-bottom: 2px solid @blue;
+}
+
+#bluetooth {
+    color: @teal;
+    border-bottom: 2px solid @teal;
 }
 
 #network {
