@@ -15,6 +15,9 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # Fix netwerk issues caused by bluetooth on Ideapad 720s
+  boot.extraModprobeConfig = "options rtw88_core disable_lps_deep=Y";
+
   # Hardware exelerated graphics.
   hardware.opengl = {
     enable = true;
