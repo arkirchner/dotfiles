@@ -34,6 +34,7 @@
       luasnip
       cmp_luasnip
       friendly-snippets
+      catppuccin-nvim
     ];
 
     extraLuaConfig = ''
