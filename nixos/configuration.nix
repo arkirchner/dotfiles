@@ -21,9 +21,13 @@
   services.greetd = {
     enable = true;
     settings = {
+      initial_session = {
+        command = "Hyprland";
+        user = "armin";
+      };
+
       default_session = {
-        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd Hyprland";
-        user = "greeter";
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --remember --cmd Hyprland";
       };
     };
   };
@@ -97,9 +101,6 @@
     packages = with pkgs; [];
   };
 
-  # Enable automatic login for the user.
-  services.getty.autologinUser = "armin";
-  
   home-manager.backupFileExtension = "backup";
 
   home-manager.users.armin = { config, pkgs, lib, ...}: {
