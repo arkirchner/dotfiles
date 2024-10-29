@@ -1,10 +1,18 @@
 {config, pkgs, ... }: 
 {
+
+  home.packages = with pkgs; [
+    hyprland
+    playerctl
+    brightnessctl
+    firefox
+    kitty
+    pwvucontrol
+  ];
+
   wayland.windowManager.hyprland = {
     enable = true;
-    systemd.enable = true;
     xwayland.enable = true;
-
     package = pkgs.hyprland;
 
     extraConfig = ''
@@ -226,8 +234,18 @@
       # Move/resize windows with mainMod + LMB/RMB and dragging
       bindm = $mainMod, mouse:272, movewindow
       bindm = $mainMod, mouse:273, resizewindow
-      
-      
+
+      # Function keys
+      bind = ,XF86AudioRaiseVolume,exec,wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+
+      bind = ,XF86AudioLowerVolume,exec,wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
+      bind = ,XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+      bind = ,XF86AudioPlay, exec, playerctl play-pause
+      bind = ,XF86AudioPause, exec, playerctl play-pause
+      bind = ,XF86AudioNext, exec, playerctl next
+      bind = ,XF86AudioPrev, exec, playerctl previous
+      bind = ,XF86MonBrightnessDown,exec,brightnessctl set 5%-
+      bind = ,XF86MonBrightnessUp,exec,brightnessctl set +5%
+
       ##############################
       ### WINDOWS AND WORKSPACES ###
       ##############################

@@ -18,6 +18,17 @@
   # Fix netwerk issues caused by bluetooth on Ideapad 720s
   boot.extraModprobeConfig = "options rtw88_core disable_lps_deep=Y";
 
+  services.greetd = {
+    enable = true;
+    settings = {
+      default_session = {
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd Hyprland";
+        user = "greeter";
+      };
+    };
+  };
+
+
   # Hardware exelerated graphics.
   hardware.opengl = {
     enable = true;
@@ -94,13 +105,10 @@
   home-manager.users.armin = { config, pkgs, lib, ...}: {
 
     home.packages = with pkgs; [
-      hyprland
       tmux
       firefox
       kitty
       gnupg
-      pwvucontrol
-      bluetuith
     ];
 
     imports = (import ../programs) ++ (import ./programs);
