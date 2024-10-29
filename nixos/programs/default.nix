@@ -1,5 +1,6 @@
 [
   ./wofi
   ./hyprland
+  ./hyprpaper
   ./waybar
 ]
