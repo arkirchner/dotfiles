@@ -2,8 +2,7 @@
 {
   programs.oh-my-posh = {
     enable = true;
-
     enableBashIntegration = true;
-    useTheme = "catppuccin";
+    settings = builtins.fromJSON (builtins.readFile ./catppuccin.omp.json);
   };
 }
