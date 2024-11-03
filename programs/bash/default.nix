@@ -14,11 +14,18 @@ in
     gx = "gitx --all";
   };
 
-  programs.bash = {
-    enable = true;
+  programs = {
+    carapace = {
+      enable = true;
+      enableBashIntegration = true;
+    };
 
-    bashrcExtra = ''
-      ${tatConfig}
-    '';
+    bash = {
+      enable = true;
+
+      bashrcExtra = ''
+        ${tatConfig}
+      '';
+    };
   };
 }
