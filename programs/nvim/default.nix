@@ -14,8 +14,6 @@
       lua-language-server
       yaml-language-server
       ltex-ls
-      rubyPackages_3_3.ruby-lsp
-      rubyPackages_3_3.rubocop
       nodePackages.bash-language-server
     ];
 

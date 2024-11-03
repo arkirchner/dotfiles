@@ -21,7 +21,7 @@
           pkgs.neovim
           pkgs.tmux
           pkgs.bashInteractive
-	  pkgs.gnupg
+          pkgs.gnupg
         ];
 
       fonts.packages =

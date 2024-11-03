@@ -4,8 +4,13 @@ lspconfig.nil_ls.setup {}
 lspconfig.marksman.setup {}
 lspconfig.yamlls.setup {}
 lspconfig.bashls.setup {}
-lspconfig.ruby_lsp.setup {}
-lspconfig.rubocop.setup {}
+lspconfig.ruby_lsp.setup {
+  cmd = { "bundle", "exec", "ruby-lsp" },
+}
+
+lspconfig.rubocop.setup {
+  cmd = { "bundle", "exec", "rubocop", "--lsp" },
+}
 
 lspconfig.ltex.setup {
   settings = {
