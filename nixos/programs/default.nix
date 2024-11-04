@@ -3,4 +3,6 @@
   ./hyprland
   ./hyprpaper
   ./waybar
+  ./imv
+  ./mpv
 ]
