@@ -13,6 +13,13 @@
       postgresql_16
       libyaml
       vips
+      jemalloc
+      geos
+      proj
+      exiftool
+      libidn
+      awscli2
+      vegeta
     ];
   };
 }
