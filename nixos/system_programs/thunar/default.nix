@@ -8,6 +8,11 @@
     thunar-volman
   ];
 
-  services.gvfs.enable = true; # Mount, trash, and other functionalities
+  # Mount, trash, and other functionalities
+  services.gvfs = {
+    enable = true;
+    package = lib.mkForce pkgs.gnome3.gvfs;
+  };
+
   services.tumbler.enable = true; # Thumbnail support for images
 }

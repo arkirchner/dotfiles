@@ -125,6 +125,8 @@
   environment.systemPackages = with pkgs; [
     neovim
     git
+    samba
+    lxqt.lxqt-policykit
   ];
 
   security.pam.u2f = {
@@ -165,6 +167,8 @@
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
+  # Allow SMTP discovery
+  networking.firewall.extraCommands = ''iptables -t raw -A OUTPUT -p udp -m udp --dport 137 -j CT --helper netbios-ns'';
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
