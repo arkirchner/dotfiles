@@ -20,6 +20,8 @@
       libidn
       awscli2
       vegeta
+      chromedriver
+      chromium
     ];
   };
 }

@@ -143,6 +143,9 @@
   fonts.packages = [
     (pkgs.nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
   ];
+
+  # Enable wayland support for chromium and electron
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
  
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
