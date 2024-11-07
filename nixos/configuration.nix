@@ -110,6 +110,7 @@
       firefox
       kitty
       gnupg
+      cmus
     ];
 
     imports = (import ../programs) ++ (import ./programs);
