@@ -15,6 +15,7 @@
       yaml-language-server
       ltex-ls
       nodePackages.bash-language-server
+      rubyPackages_3_3.ruby-lsp
     ];
 
     plugins = with pkgs.vimPlugins; [

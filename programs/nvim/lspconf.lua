@@ -5,7 +5,7 @@ lspconfig.marksman.setup {}
 lspconfig.yamlls.setup {}
 lspconfig.bashls.setup {}
 lspconfig.ruby_lsp.setup {
-  cmd = { "bundle", "exec", "ruby-lsp" },
+  -- cmd = { "bundle", "exec", "ruby-lsp" },
 }
 
 lspconfig.rubocop.setup {
