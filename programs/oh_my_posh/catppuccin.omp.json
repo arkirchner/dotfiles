@@ -2,11 +2,10 @@
   "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
   "palette": {
     "os": "#ACB0BE",
-    "pink": "#F5BDE6",
-    "lavender": "#B7BDF8",
-    "blue":  "#8AADF4",
-    "wight": "#FFFFFF",
-    "text": "#494D64",
+    "closer": "p:os",
+    "pink": "#F5C2E7",
+    "lavender": "#B4BEFE",
+    "blue":  "#89B4FA",
     "red": "#f38ba8",
     "green": "#a6e3a1"
   },
@@ -15,39 +14,30 @@
       "alignment": "left",
       "segments": [
         {
-          "background": "p:blue",
-          "foreground": "p:wight",
-          "powerline_symbol": "\ue0b4",
-          "leading_diamond": "\ue0b6",
-          "style": "diamond",
+          "foreground": "p:os",
+          "style": "plain",
           "template": "{{.Icon}} ",
           "type": "os"
         },
         {
-          "background": "p:blue",
-          "foreground": "p:text",
-          "powerline_symbol": "\ue0b4",
-          "style": "diamond",
-          "template": "{{ .UserName }}@{{ .HostName }}",
+          "foreground": "p:blue",
+          "style": "plain",
+          "template": "{{ .UserName }}@{{ .HostName }} ",
           "type": "session"
         },
         {
-          "background": "p:pink",
-          "foreground": "p:text",
+          "foreground": "p:pink",
           "properties": {
             "folder_icon": "..\ue5fe..",
             "home_icon": "~",
             "style": "agnoster_short"
           },
-          "powerline_symbol": "\ue0b4",
-          "style": "powerline",
-          "template": " {{ .Path }}",
+          "style": "plain",
+          "template": "{{ .Path }} ",
           "type": "path"
         },
         {
-          "background": "p:lavender",
-          "foreground": "p:text",
-          "style": "powerline",
+          "foreground": "p:lavender",
           "properties": {
             "branch_icon": "\ue725 ",
             "cherry_pick_icon": "\ue29b ",
@@ -60,8 +50,8 @@
             "revert_icon": "\uf0e2 ",
             "tag_icon": "\uf412 "
           },
-          "powerline_symbol": "\ue0b4",
-          "template": " {{ .HEAD }}",
+          "template": "{{ .HEAD }} ",
+          "style": "plain",
           "type": "git"
         }
       ],
@@ -102,7 +92,13 @@
         {
           "foreground": "lightBlue",
           "style": "plain",
-          "template": "{{ if .Env.IN_NIX_SHELL }}nix-{{ end }}{{.Shell}} $",
+          "template": "{{ if .Env.IN_NIX_SHELL }}nix-{{ end }}{{.Shell}}",
+          "type": "text"
+        },
+        {
+          "style": "plain",
+          "foreground": "p:closer",
+          "template": " \uf105",
           "type": "text"
         }
       ],
