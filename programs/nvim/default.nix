@@ -38,6 +38,7 @@
       catppuccin-nvim
       telescope-nvim
       telescope-ui-select-nvim
+      oil-nvim
     ];
 
     extraLuaConfig = ''
@@ -48,6 +49,7 @@
       ${builtins.readFile ./lspconf.lua}
       ${builtins.readFile ./treesitter.lua}
       ${builtins.readFile ./telescope.lua}
+      ${builtins.readFile ./oil.lua}
     '';
   };
 }
