@@ -16,6 +16,8 @@
       ltex-ls
       nodePackages.bash-language-server
       rubyPackages_3_3.ruby-lsp
+      rubyPackages_3_3.rubocop
+      ripgrep
     ];
 
     plugins = with pkgs.vimPlugins; [
@@ -34,6 +36,8 @@
       cmp_luasnip
       friendly-snippets
       catppuccin-nvim
+      telescope-nvim
+      telescope-ui-select-nvim
     ];
 
     extraLuaConfig = ''
@@ -43,6 +47,7 @@
       ${builtins.readFile ./vimux.lua}
       ${builtins.readFile ./lspconf.lua}
       ${builtins.readFile ./treesitter.lua}
+      ${builtins.readFile ./telescope.lua}
     '';
   };
 }
