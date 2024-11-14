@@ -36,8 +36,6 @@
   # Hardware exelerated graphics.
   hardware.opengl = {
     enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
   };
 
   # Enable bluetooth support.
