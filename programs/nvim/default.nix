@@ -18,6 +18,7 @@
       rubyPackages_3_3.ruby-lsp
       rubyPackages_3_3.rubocop
       ripgrep
+      terraform-ls
     ];
 
     plugins = with pkgs.vimPlugins; [

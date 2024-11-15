@@ -18,6 +18,10 @@ lspconfig.ruby_lsp.setup {
   -- cmd = { "bundle", "exec", "ruby-lsp" },
 }
 
+lspconfig.tsserver.setup {
+  capabilities = capabilities,
+}
+
 -- Disabled because this should be handled by the ruby_lsp bit it is not ...
 -- lspconfig.rubocop.setup {
 --   capabilities = capabilities,

@@ -20,8 +20,16 @@
       libidn
       awscli2
       vegeta
-      chromedriver
-      chromium
+      jemalloc
+      libxml2
+      libxslt
+      libffi
+      openssl
+      zlib
+      opentofu
+      # No mac support ...
+      # chromedriver
+      # chromium
     ];
   };
 }
