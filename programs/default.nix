@@ -6,5 +6,4 @@
   ./git
   ./oh_my_posh
   ./nvim
-  ./development
 ]

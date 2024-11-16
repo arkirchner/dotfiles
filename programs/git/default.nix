@@ -15,6 +15,7 @@
       "*~"
       "*.swp"
       "*.swo"
+      ".direnv/"
     ];
 
     extraConfig = {

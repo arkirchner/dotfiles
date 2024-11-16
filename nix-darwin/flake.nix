@@ -22,6 +22,8 @@
           pkgs.tmux
           pkgs.bashInteractive
           pkgs.gnupg
+          pkgs.opentofu
+          pkgs.awscli2
         ];
 
       fonts.packages =

@@ -15,6 +15,13 @@ in
   };
 
   programs = {
+    direnv = {
+      enable = true;
+      silent = true;
+      nix-direnv.enable = true;
+      enableBashIntegration = true;
+    };
+
     carapace = {
       enable = true;
       enableBashIntegration = true;
