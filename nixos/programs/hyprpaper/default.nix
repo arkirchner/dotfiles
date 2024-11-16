@@ -3,8 +3,8 @@
   services.hyprpaper = {
     enable = true;
     settings = {
-      preload = ["${../../../wallpapers/cabin-5.png}"];
-      wallpaper = [",${../../../wallpapers/cabin-5.png}"];
+      preload = ["${../../../wallpapers/night-mountain.jpg}"];
+      wallpaper = [",${../../../wallpapers/night-mountain.jpg}"];
     };
   };
 }
