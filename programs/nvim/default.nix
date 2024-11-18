@@ -15,8 +15,6 @@
       yaml-language-server
       ltex-ls
       nodePackages.bash-language-server
-      rubyPackages_3_3.ruby-lsp
-      rubyPackages_3_3.rubocop
       ripgrep
       terraform-ls
     ];

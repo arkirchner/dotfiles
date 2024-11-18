@@ -15,7 +15,7 @@ lspconfig.bashls.setup {
 }
 lspconfig.ruby_lsp.setup {
   capabilities = capabilities,
-  -- cmd = { "bundle", "exec", "ruby-lsp" },
+  cmd = { "bundle", "exec", "ruby-lsp" },
 }
 
 -- Disabled because this should be handled by the ruby_lsp bit it is not ...
@@ -31,24 +31,9 @@ lspconfig.ltex.setup {
       language = "en-US",
       additionalRules = {
         enablePickyRules = true,
-        motherTongue = "de-DE"
       }
     }
   },
-  filetypes = {
-    "bib",
-    "gitcommit",
-    "markdown",
-    "org",
-    "plaintex",
-    "rst",
-    "rnoweb",
-    "tex",
-    "pandoc",
-    "quarto",
-    "rmd",
-    "ruby"
-  }
   -- root_dir = util.root_dir(".git"),
 }
 
