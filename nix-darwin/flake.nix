@@ -58,8 +58,7 @@
       nix.settings.experimental-features = "nix-command flakes";
 
       programs.bash.enable = true;
-      users.users.holdenc.shell = pkgs.bash;
-      environment.shells = [ pkgs.bash ];
+      users.users.holdenc.shell = pkgs.bashInteractive;
 
       # Set Git commit hash for darwin-version.
       system.configurationRevision = self.rev or self.dirtyRev or null;

@@ -14,7 +14,7 @@
       macos_option_as_alt = "yes";
     };
 
-    theme = "Catppuccin-Mocha";
+    themeFile = "Catppuccin-Mocha";
     shellIntegration.enableBashIntegration = true;
   };
 }
