@@ -1,4 +1,5 @@
 [
   ./thunar
   ./postgresql
+  ./podman
 ]

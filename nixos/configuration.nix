@@ -99,7 +99,7 @@
   users.users.armin = {
     isNormalUser = true;
     description = "Armin Kirchner";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" ];
     packages = with pkgs; [];
   };
 
