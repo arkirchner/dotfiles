@@ -36,7 +36,8 @@
   networking.firewall = {
     enable = true;
     allowedTCPPorts = [
-      6443 # k3s: required so that pods can reach the API server (running on port 6443 by default)
+      6443  # k3s: API server
+      10250 # k3s: metrics server
     ];
     allowedUDPPortRanges = [];
   };
