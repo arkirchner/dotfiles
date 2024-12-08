@@ -18,6 +18,15 @@
         AllowUsers = [ "armin" ];
       };
     };
+
+    k3s = {
+      enable = true;
+      role = "server";
+      gracefulNodeShutdown.enable = true;
+      extraFlags = [
+        "--disable=traefik"
+      ];
+    };
   };
 
   # Allow SSH agent forwarding for sudo etc.
@@ -26,7 +35,9 @@
   networking.nftables.enable = true;
   networking.firewall = {
     enable = true;
-    allowedTCPPorts = [];
+    allowedTCPPorts = [
+      6443 # k3s: required so that pods can reach the API server (running on port 6443 by default)
+    ];
     allowedUDPPortRanges = [];
   };
 
