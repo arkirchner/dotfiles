@@ -2,4 +2,5 @@
   ./thunar
   ./postgresql
   ./podman
+  ./virtualbox
 ]
