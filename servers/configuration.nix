@@ -3,7 +3,11 @@
     ./hardware-configuration.nix
   ];
 
-  boot.tmp.cleanOnBoot = true;
+  boot = {
+    tmp.cleanOnBoot = true;
+    kernelModules = [ "rbd" ];
+  };
+
   zramSwap.enable = true;
   networking.hostName = "vmi2124375";
   networking.domain = "contaboserver.net";

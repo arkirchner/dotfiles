@@ -115,6 +115,10 @@
       kitty
       gnupg
       cmus
+      pass
+      kubectl
+      kubernetes-helm
+      tenv
     ];
 
     imports = (import ../programs) ++ (import ./programs);
