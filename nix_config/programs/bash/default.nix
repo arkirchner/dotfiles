@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 let
-  tatConfig = "${builtins.readFile ../../linux/.bashrc.d/tmux}";
+  tatConfig = "${builtins.readFile ./stay_always_in_tmux}";
 in
 {
   home.shellAliases = {

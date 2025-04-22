@@ -121,7 +121,7 @@
       tenv
     ];
 
-    imports = (import ../programs) ++ (import ./programs);
+    imports = (import ../../programs) ++ (import ./programs);
 
     home.stateVersion = "24.05";
   };
