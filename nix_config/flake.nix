@@ -5,7 +5,7 @@
   outputs = { self, nixpkgs, ... }@inputs: {
     nixosConfigurations.armin-laptop = nixpkgs.lib.nixosSystem {
       specialArgs = { inherit inputs; };
-      modules = [ ./configuration.nix ];
+      modules = [ ./machines/720s/configuration.nix ];
     };
   };
 }
