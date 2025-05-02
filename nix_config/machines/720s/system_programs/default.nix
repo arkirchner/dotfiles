@@ -1,6 +1,0 @@
-[
-  ./thunar
-  ./postgresql
-  ./podman
-  ./virtualbox
-]
