@@ -2,19 +2,58 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-    ];
+      inputs.home-manager.nixosModules.default
+    ] ++ (import ./system_programs);
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "nixos"; # Define your hostname.
+  services.greetd = {
+    enable = true;
+    settings = {
+      initial_session = {
+        command = "Hyprland";
+        user = "armin";
+      };
+
+      default_session = {
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --remember --cmd Hyprland";
+      };
+    };
+  };
+
+  # Hardware exelerated graphics.
+  hardware.graphics = {
+    enable = true;
+  };
+
+  # Enable bluetooth support.
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+  };
+
+  services.blueman.enable = true;
+
+  # Sound configuration
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    # If you want to use JACK applications, uncomment this
+    #jack.enable = true;
+  };
+
+  networking.hostName = "armin-work-laptop"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -52,8 +91,31 @@
   users.users.armin = {
     isNormalUser = true;
     description = "Armin Kirchner";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" ];
     packages = with pkgs; [];
+  };
+
+  home-manager.backupFileExtension = "backup";
+
+  home-manager.users.armin = { config, pkgs, lib, ...}: {
+
+    home.packages = with pkgs; [
+      tmux
+      firefox
+      chromedriver
+      chromium
+      kitty
+      gnupg
+      cmus
+      pass
+      kubectl
+      kubernetes-helm
+      tenv
+    ];
+
+    imports = (import ../../programs) ++ (import ./programs);
+
+    home.stateVersion = "24.05";
   };
 
   # Allow unfree packages
@@ -62,9 +124,34 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
+    neovim
+    git
+    samba
+    lxqt.lxqt-policykit
   ];
+
+  security.pam.u2f = {
+    enable = true;
+
+    settings = {
+      interactive = true;
+      cue = true;
+
+      origin = "pam://yubi";
+      authFile = pkgs.writeText "u2f-mappings" (lib.concatStrings [
+        "armin"
+        ":YOraJfl9LTreqCp+xoW/Xs/yJy+EYo1nc63FjkCXGs7jtZeWHXlw0zWeyrYCfspwZflaPqDlK5s4ZsfUSk4Eqw==,7tBOY1igcf49G+7VXQ0m1E7A4irWnnKhfqQosBJb2TwkYdKAvFM2LkUJKPc613+8FhSfDLyv87LNGFKGAzeFDg==,es256,+presence"
+        ":DeJhZjWWn+4IP5/+0wRZOjZHJHvpE9dlybdnVUE7Z7+oXPRfm5MOqSKKxCxXm8uz+4hsXP0s4Da3Mu7r9fx8pA==,9Oq8pLO14qK/9bOu4uLLL+l0gu+iVUNlMv+U2TwN0MvsephwJg75yNWImVT7SsuSeZTnjWnBkidh1Sg2zskzFA==,es256,+presence"
+      ]);
+    };
+  };
+
+  fonts.packages = [
+    pkgs.nerd-fonts.jetbrains-mono
+  ];
+
+  # Enable wayland support for chromium and electron
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
