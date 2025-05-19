@@ -8,7 +8,7 @@
       client = {
         enabled = true;
         # TODO: I needed to create /var/lib/alloc_mounts for nomad to start ...
-        alloc_dir = "/var/lib/nomad/alloc_mounts";
+        alloc_dir = "/var/lib/nomad/allococ_mounts";
       };
       server = {
         enabled = true;
