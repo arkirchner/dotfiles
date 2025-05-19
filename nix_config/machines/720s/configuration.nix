@@ -182,6 +182,9 @@
   # Allow SMTP discovery
   networking.firewall.extraCommands = ''iptables -t raw -A OUTPUT -p udp -m udp --dport 137 -j CT --helper netbios-ns'';
 
+  # Allow experimental nix features
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
