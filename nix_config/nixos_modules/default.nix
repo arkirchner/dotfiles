@@ -153,6 +153,8 @@
     git
     samba
     lxqt.lxqt-policykit
+    slack
+    zoom-us
   ];
 
   security.pam.u2f = {
