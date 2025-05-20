@@ -21,9 +21,9 @@
       ################
       
       # See https://wiki.hyprland.org/Configuring/Monitors/
-      monitor=eDP-1,1920x1080,1920x500,1
-      monitor=DP-1,1920x1080,0x0,1
-      monitor=,preferred,auto,auto
+      monitor=eDP-1,1920x1080,1200x1560,1
+      monitor=DP-4,1920x1200,0x0,1,transform,1
+      monitor=DP-3,1920x1200,1200x360,1
       
       
       ###################
