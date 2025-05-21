@@ -12,6 +12,7 @@ in
     go = "git checkout ";
     gk = "gitk --all&";
     gx = "gitx --all";
+    hpi-vpn = "sudo snx-rs -o vpn -s vpn.hpi.de";
   };
 
   programs = {

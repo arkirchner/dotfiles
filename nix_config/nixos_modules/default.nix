@@ -136,6 +136,7 @@
       kubectl
       kubernetes-helm
       tenv
+      snx-rs
     ];
 
     imports = (import ../programs) ++ (import ./desktop_programs);
