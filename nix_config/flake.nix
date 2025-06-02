@@ -4,6 +4,14 @@
 
   outputs = { self, nixpkgs, ... }@inputs: {
     nixosConfigurations = {
+      armin-pc = nixpkgs.lib.nixosSystem {
+        specialArgs = { inherit inputs; };
+        modules = [
+          ./machines/x600/configuration.nix
+          ./nixos_modules/default.nix
+        ];
+      };
+
       armin-laptop = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; };
         modules = [
