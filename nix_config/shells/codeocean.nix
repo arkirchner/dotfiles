@@ -16,7 +16,8 @@ pkgs.mkShell {
     libyaml
     shared-mime-info
     icu
-    corepack_20
+    nodejs_22
+    corepack_22
   ];
 
   shellHook = ''
