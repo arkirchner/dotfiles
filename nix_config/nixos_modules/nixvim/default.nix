@@ -23,6 +23,47 @@
       autoindent = true;
       wrap = false;
     };
+
+    extraPackages = [
+      (pkgs.ruby_3_4.withPackages (ps: with ps; [ ruby-lsp ]))
+    ];
+
+    lsp = {
+      servers = {
+        ruby_lsp.enable = true;
+        nil_ls.enable = true;
+        yamlls.enable = true;
+      };
+
+      keymaps = [
+        {
+	  key = "K";
+	  lspBufAction = "hover";
+        }
+	{
+	  key = "<leader>gd";
+	  lspBufAction = "definition";
+	}
+	{
+	  key = "<leader>gr"; 
+	  lspBufAction = "references";
+        }
+	{
+          key = "<leader>gf"; 
+          lspBufAction = "format";
+	}
+	{
+          key = "<leader>ca";
+          lspBufAction = "code_action";
+	}
+	{
+          key = "<leader>rn"; 
+          lspBufAction = "rename";
+	}
+      ];
+    };
+
+    plugins.lspconfig.enable = true;
   };
 }
 

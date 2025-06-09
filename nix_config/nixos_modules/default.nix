@@ -7,6 +7,8 @@
     ./virtualbox
     ./nomad
     inputs.home-manager.nixosModules.default
+    inputs.nixvim.nixosModules.nixvim
+    ./nixvim
   ];
 
   # Plymouth setup
@@ -150,7 +152,6 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    neovim
     git
     samba
     lxqt.lxqt-policykit
