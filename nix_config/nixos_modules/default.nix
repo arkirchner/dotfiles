@@ -7,8 +7,7 @@
     ./virtualbox
     ./nomad
     inputs.home-manager.nixosModules.default
-    inputs.nixvim.nixosModules.nixvim
-    ./nixvim
+    ./nvf.nix
   ];
 
   # Plymouth setup
