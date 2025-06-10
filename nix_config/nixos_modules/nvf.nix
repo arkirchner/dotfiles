@@ -33,6 +33,20 @@
           };
         };
 
+        assistant.avante-nvim = {
+          enable = true;
+        };
+
+        # Until https://github.com/yetone/avante.nvim/pull/2174 is in pkgs
+        pluginOverrides = {
+          avante-nvim = pkgs.fetchFromGitHub {
+            owner = "yetone";
+            repo = "avante.nvim";
+            rev = "c7edd87820ea91a8c6f67ece5c47e27f720e5937";
+            hash = "sha256-KP/Wg2pxpyBR3P9mjkLKcqsm5FlG9Cv+Fbe69V2dkXuBc4=";
+          };
+        };
+
         telescope = {
           enable = true;
           setupOpts.defaults.file_ignore_patterns = [
