@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 {
   programs.nvf = {
     enable = true;
@@ -33,19 +33,122 @@
           };
         };
 
-        assistant.avante-nvim = {
-          enable = true;
-        };
+        luaConfigPre = ''
+          vim.g['test#strategy'] = 'vimux'
+        '';
 
-        # Until https://github.com/yetone/avante.nvim/pull/2174 is in pkgs
-        pluginOverrides = {
-          avante-nvim = pkgs.fetchFromGitHub {
-            owner = "yetone";
-            repo = "avante.nvim";
-            rev = "c7edd87820ea91a8c6f67ece5c47e27f720e5937";
-            hash = "sha256-KP/Wg2pxpyBR3P9mjkLKcqsm5FlG9Cv+Fbe69V2dkXuBc4=";
+        keymaps = [
+          # oil
+          {
+            key = "-";
+            mode = "n";
+            action = "<CMD>Oil<CR>";
+            desc = "Open parent directory";
+          }
+          # vim-test
+          {
+            key = "<leader>s";
+            mode = "n";
+            silent = true;
+            noremap = true;
+            action = ":TestNearest<CR>";
+          }
+          {
+            key = "<leader>t";
+            mode = "n";
+            silent = true;
+            noremap = true;
+            action = ":TestFile<CR>";
+          }
+          # vimux
+          {
+            key = "<leader>sl";
+            mode = "n";
+            silent = true;
+            noremap = true;
+            action = ":call VimuxRunCommand(getline('.'))<CR>";
+          }
+          {
+            key = "<leader>sl";
+            mode = "v";
+            silent = true;
+            noremap = true;
+            action = ":<C-u>call VimuxRunCommand(join(getline(\"'<\", \"'>\"), \"\\n\"))<CR>";
+          }
+        ];
+
+        extraPlugins = with pkgs.vimPlugins; {
+          vim-test = {
+            package = vim-test;
+          };
+          
+          vimux = {
+            package = vimux;
           };
         };
+
+        assistant.codecompanion-nvim = {
+          enable = true;
+          setupOpts = {
+            adapters = lib.generators.mkLuaInline ''
+              {
+                anthropic = function()
+                  return require("codecompanion.adapters").extend("anthropic", {
+                    env = {
+                      api_key = (function()
+                        local handle = io.popen("pass show api/anthropic")
+                        if handle then
+                          local result = handle:read("*a")
+                          handle:close()
+                          return vim.trim(result)
+                        else
+                          vim.notify("Failed to read Anthropic API key from pass", vim.log.levels.ERROR)
+                          return nil
+                        end
+                      end)(),
+                    },
+                  })
+                end,
+               }
+            '';
+
+            strategies = {
+              chat = {
+                adapter = "anthropic";
+              };
+              inline = {
+                adapter = "anthropic";
+              };
+              cmd = {
+                adapter = "anthropic";
+              };
+            };
+            display = {
+              chat = {
+                auto_scroll = true;
+                show_settings = true;
+              };
+              action_palette.provider = "telescope";
+            };
+          };
+        };
+
+        # TODO: Try this!
+        # assistant.avante-nvim = {
+        #   enable = true;
+        #   setupOpts = {
+        #     provider = "copilot";
+        #     copilot = {
+        #       model = "claude-3.5-sonnet";
+        #       endpoint = "https://api.githubcopilot.com";
+        #       allow_insecure = false;
+        #       timeout = 10 * 60 * 1000;
+        #       temperature = 0;
+        #       max_completion_tokens = 1000000;
+        #       reasoning_effort = "high";
+        #     };
+        #   };
+        # };
 
         telescope = {
           enable = true;
@@ -58,6 +161,10 @@
             "target/"
             "result/"
           ];
+        };
+
+        utility = {
+          oil-nvim.enable = true;
         };
       };
     };
