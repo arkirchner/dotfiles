@@ -18,20 +18,41 @@
 
         lsp = {
           enable = true;
+          formatOnSave = true;
 
           lspconfig.enable = true;
+          trouble.enable = true;
+          lspSignature.enable = true;
+          lightbulb.enable = true;
         };
 
         languages = {
+          enableTreesitter = true;
+
+          # nix.enable = true;
+          # yaml.enable = true;
+          # bash.enable = true;
+          # css.enable = true;
+          # helm.enable = true;
+          # sql.enable = true;
+          # ts.enable = true;
+          # lua.enable = true;
+          html.enable = true;
+          # hcl.enable = true;
+          # markdown.enable = true;
+          # tailwind.enable = true;
+          # go.enable = true;
+
           ruby = {
             enable = true;
-            treesitter.enable = true;
             lsp = {
-              enable = true;
               server = "rubylsp";
             };
           };
         };
+
+        autocomplete.nvim-cmp.enable = true;
+        snippets.luasnip.enable = true;
 
         luaConfigPre = ''
           vim.g['test#strategy'] = 'vimux'
