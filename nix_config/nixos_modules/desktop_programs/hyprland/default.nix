@@ -8,6 +8,8 @@
     firefox
     kitty
     pwvucontrol
+    grim
+    slurp
   ];
 
   programs.hyprlock.enable = true;
@@ -193,6 +195,7 @@
       bind = $mainMod, J, togglesplit, # dwindle
       bind = $mainMod, W, exec, $browser
       bind = $mainMod, L, exec, hyprlock
+      bind = $mainMod, S, exec, sh -c 'mkdir -p ~/Pictures/screenshot && grim -g "$(slurp)" ~/Pictures/screenshot/$(date +%s).png'
       
       # Move focus with mainMod + arrow keys
       bind = $mainMod, left, movefocus, l
@@ -223,10 +226,6 @@
       bind = $mainMod SHIFT, 8, movetoworkspace, 8
       bind = $mainMod SHIFT, 9, movetoworkspace, 9
       bind = $mainMod SHIFT, 0, movetoworkspace, 10
-      
-      # Example special workspace (scratchpad)
-      bind = $mainMod, S, togglespecialworkspace, magic
-      bind = $mainMod SHIFT, S, movetoworkspace, special:magic
       
       # Scroll through existing workspaces with mainMod + scroll
       bind = $mainMod, mouse_down, workspace, e+1
