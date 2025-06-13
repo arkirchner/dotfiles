@@ -36,6 +36,7 @@
       $terminal = kitty
       $fileManager = thunar
       $menu = wofi --show drun
+      $browser = firefox
       
       
       #################
@@ -188,6 +189,7 @@
       bind = $mainMod, R, exec, $menu
       bind = $mainMod, P, pseudo, # dwindle
       bind = $mainMod, J, togglesplit, # dwindle
+      bind = $mainMod, W, exec, $browser
       
       # Move focus with mainMod + arrow keys
       bind = $mainMod, left, movefocus, l
