@@ -10,6 +10,8 @@
     pwvucontrol
   ];
 
+  programs.hyprlock.enable = true;
+
   wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;
@@ -190,6 +192,7 @@
       bind = $mainMod, P, pseudo, # dwindle
       bind = $mainMod, J, togglesplit, # dwindle
       bind = $mainMod, W, exec, $browser
+      bind = $mainMod, L, exec, hyprlock
       
       # Move focus with mainMod + arrow keys
       bind = $mainMod, left, movefocus, l
