@@ -96,6 +96,13 @@
             noremap = true;
             action = ":<C-u>call VimuxRunCommand(join(getline(\"'<\", \"'>\"), \"\\n\"))<CR>";
           }
+          # telescope
+          {
+            key = "<leader><leader>";
+            mode = "n";
+            action = "require(\"telescope.builtin\").oldfiles";
+            lua = true;
+          }
         ];
 
         extraPlugins = with pkgs.vimPlugins; {
