@@ -184,6 +184,8 @@
             "log/"
             "coverage/"
             "%.bundle/"
+            "public/packs-test"
+            "public/packs"
           ];
         };
 
