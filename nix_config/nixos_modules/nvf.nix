@@ -181,6 +181,8 @@
             "build/"
             "target/"
             "result/"
+            "log/"
+            "coverage/"
           ];
         };
 
