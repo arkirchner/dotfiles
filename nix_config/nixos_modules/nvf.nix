@@ -183,6 +183,7 @@
             "result/"
             "log/"
             "coverage/"
+            "%.bundle/"
           ];
         };
 
