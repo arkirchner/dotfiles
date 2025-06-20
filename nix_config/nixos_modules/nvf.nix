@@ -29,8 +29,8 @@
         languages = {
           enableTreesitter = true;
 
-          # nix.enable = true;
-          # yaml.enable = true;
+          nix.enable = true;
+          yaml.enable = true;
           # bash.enable = true;
           # css.enable = true;
           # helm.enable = true;
@@ -40,7 +40,7 @@
           html.enable = true;
           # hcl.enable = true;
           # markdown.enable = true;
-          # tailwind.enable = true;
+          tailwind.enable = true;
           # go.enable = true;
 
           ruby = {
