@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 {
   programs.nvf = {
     enable = true;
@@ -46,6 +51,7 @@
           ruby = {
             enable = true;
             lsp = {
+              package = pkgs.rubyPackages_3_4.ruby-lsp;
               server = "rubylsp";
             };
           };
@@ -109,7 +115,7 @@
           vim-test = {
             package = vim-test;
           };
-          
+
           vimux = {
             package = vimux;
           };
