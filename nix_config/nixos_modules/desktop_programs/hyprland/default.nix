@@ -14,6 +14,8 @@
 
   programs.hyprlock.enable = true;
 
+  services.mako.enable = true;
+
   wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;
@@ -53,7 +55,7 @@
       # exec-once = $terminal
       # exec-once = nm-applet &
       # exec-once = waybar & hyprpaper & firefox
-      exec-once = waybar
+      exec-once = waybar & mako
       
       
       #############################
