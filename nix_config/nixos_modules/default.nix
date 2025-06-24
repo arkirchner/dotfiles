@@ -206,8 +206,11 @@
     pkgs.nerd-fonts.jetbrains-mono
   ];
 
-  # Enable wayland support for chromium and electron
-  environment.sessionVariables.NIXOS_OZONE_WL = "1";
+  environment.sessionVariables = {
+    # Enable wayland support for chromium and electron
+    NIXOS_OZONE_WL = "1";
+    CONTAINERD_ENABLE_DEPRECATED_PULL_SCHEMA_1_IMAGE = "1";
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
