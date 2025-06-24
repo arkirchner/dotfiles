@@ -1,4 +1,10 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 {
   imports = [
     ./thunar
@@ -43,11 +49,20 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  services.dbus.enable = true;
+
+  xdg.portal = {
+    enable = true;
+    wlr.enable = false; # disable wlr if using Hyprland
+    extraPortals = with pkgs; [ xdg-desktop-portal-hyprland ];
+    config.common.default = "hyprland";
+  };
+
   services.greetd = {
     enable = true;
     settings = {
       initial_session = {
-        command = "Hyprland";
+        command = "${pkgs.dbus}/bin/dbus-run-session ${pkgs.hyprland}/bin/Hyprland";
         user = "armin";
       };
 
@@ -118,32 +133,43 @@
   users.users.armin = {
     isNormalUser = true;
     description = "Armin Kirchner";
-    extraGroups = [ "networkmanager" "wheel" "docker" ];
-    packages = with pkgs; [];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "docker"
+    ];
+    packages = with pkgs; [ ];
   };
 
   home-manager.backupFileExtension = "backup";
 
-  home-manager.users.armin = { config, pkgs, lib, ...}: {
-    home.packages = with pkgs; [
-      tmux
-      firefox
-      chromedriver
-      chromium
-      kitty
-      gnupg
-      cmus
-      pass
-      kubectl
-      kubernetes-helm
-      tenv
-      snx-rs
-    ];
+  home-manager.users.armin =
+    {
+      config,
+      pkgs,
+      lib,
+      ...
+    }:
+    {
+      home.packages = with pkgs; [
+        tmux
+        firefox
+        chromedriver
+        chromium
+        kitty
+        gnupg
+        cmus
+        pass
+        kubectl
+        kubernetes-helm
+        tenv
+        snx-rs
+      ];
 
-    imports = (import ../programs) ++ (import ./desktop_programs);
+      imports = (import ../programs) ++ (import ./desktop_programs);
 
-    home.stateVersion = "24.05";
-  };
+      home.stateVersion = "24.05";
+    };
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -166,11 +192,13 @@
       cue = true;
 
       origin = "pam://yubi";
-      authFile = pkgs.writeText "u2f-mappings" (lib.concatStrings [
-        "armin"
-        ":YOraJfl9LTreqCp+xoW/Xs/yJy+EYo1nc63FjkCXGs7jtZeWHXlw0zWeyrYCfspwZflaPqDlK5s4ZsfUSk4Eqw==,7tBOY1igcf49G+7VXQ0m1E7A4irWnnKhfqQosBJb2TwkYdKAvFM2LkUJKPc613+8FhSfDLyv87LNGFKGAzeFDg==,es256,+presence"
-        ":DeJhZjWWn+4IP5/+0wRZOjZHJHvpE9dlybdnVUE7Z7+oXPRfm5MOqSKKxCxXm8uz+4hsXP0s4Da3Mu7r9fx8pA==,9Oq8pLO14qK/9bOu4uLLL+l0gu+iVUNlMv+U2TwN0MvsephwJg75yNWImVT7SsuSeZTnjWnBkidh1Sg2zskzFA==,es256,+presence"
-      ]);
+      authFile = pkgs.writeText "u2f-mappings" (
+        lib.concatStrings [
+          "armin"
+          ":YOraJfl9LTreqCp+xoW/Xs/yJy+EYo1nc63FjkCXGs7jtZeWHXlw0zWeyrYCfspwZflaPqDlK5s4ZsfUSk4Eqw==,7tBOY1igcf49G+7VXQ0m1E7A4irWnnKhfqQosBJb2TwkYdKAvFM2LkUJKPc613+8FhSfDLyv87LNGFKGAzeFDg==,es256,+presence"
+          ":DeJhZjWWn+4IP5/+0wRZOjZHJHvpE9dlybdnVUE7Z7+oXPRfm5MOqSKKxCxXm8uz+4hsXP0s4Da3Mu7r9fx8pA==,9Oq8pLO14qK/9bOu4uLLL+l0gu+iVUNlMv+U2TwN0MvsephwJg75yNWImVT7SsuSeZTnjWnBkidh1Sg2zskzFA==,es256,+presence"
+        ]
+      );
     };
   };
 
@@ -180,7 +208,7 @@
 
   # Enable wayland support for chromium and electron
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
- 
+
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
@@ -203,7 +231,10 @@
   networking.firewall.extraCommands = ''iptables -t raw -A OUTPUT -p udp -m udp --dport 137 -j CT --helper netbios-ns'';
 
   # Allow experimental nix features
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
