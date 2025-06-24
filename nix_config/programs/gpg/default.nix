@@ -15,8 +15,8 @@
     enable = true;
 
     enableSshSupport = true;
-    pinentryPackage = if pkgs.stdenv.isDarwin
-                      then pkgs.pinentry_mac
-                      else pkgs.wayprompt;
+    pinentry = {
+      package = if pkgs.stdenv.isDarwin then pkgs.pinentry_mac else pkgs.wayprompt;
+    };
   };
 }
