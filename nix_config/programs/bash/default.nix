@@ -14,6 +14,9 @@ in
     gx = "gitx --all";
     hpi-vpn = "sudo snx-rs -o vpn -s vpn.hpi.de";
   };
+  home.packages = with pkgs; [
+    fastfetch
+  ];
 
   programs = {
     direnv = {
@@ -33,6 +36,7 @@ in
 
       bashrcExtra = ''
         ${tatConfig}
+        fastfetch
       '';
     };
   };
