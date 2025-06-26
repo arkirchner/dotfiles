@@ -47,6 +47,7 @@
           # markdown.enable = true;
           tailwind.enable = true;
           # go.enable = true;
+          tex.enable = true;
 
           ruby = {
             enable = true;
