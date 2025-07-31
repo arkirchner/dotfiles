@@ -164,6 +164,7 @@
         kubernetes-helm
         tenv
         snx-rs
+        overmind
       ];
 
       imports = (import ../programs) ++ (import ./desktop_programs);
