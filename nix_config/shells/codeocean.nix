@@ -21,6 +21,9 @@ pkgs.mkShell {
     nodejs_22
     corepack_22
     libidn
+    curl
+    pkg-config
+    cairo
   ];
 
   shellHook = ''
@@ -36,6 +39,9 @@ pkgs.mkShell {
           libyaml
           postgresql_16
           libidn
+          curl
+          libsodium
+          cairo
         ]
       )
     };
