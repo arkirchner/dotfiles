@@ -1,6 +1,11 @@
-{ config, lib, pkgs, ... }:
 {
-    # Enable common container config files in /etc/containers
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+{
+  # Enable common container config files in /etc/containers
   virtualisation = {
     containers.enable = true;
     podman = {
@@ -11,6 +16,11 @@
 
       # Required for containers under podman-compose to be able to talk to each other.
       defaultNetwork.settings.dns_enabled = true;
+    };
+
+    docker = {
+      enable = true;
+      extraOptions = "--add-runtime=runsc=${pkgs.gvisor}/bin/runsc";
     };
   };
 

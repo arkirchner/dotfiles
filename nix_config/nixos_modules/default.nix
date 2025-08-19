@@ -165,6 +165,7 @@
         tenv
         snx-rs
         overmind
+        gimp3
       ];
 
       imports = (import ../programs) ++ (import ./desktop_programs);
