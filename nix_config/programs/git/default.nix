@@ -24,5 +24,12 @@
       init.defaultBranch = "main";
       user.signingkey = "CB0A750597297FF3C6861AE11FED64228A24AF9E";
     };
+
+    includes = [
+      {
+        condition = "hasconfig:remote.*.url:git@gitlab.hpi.de:*";
+        contents.user.email = "armin.kirchner@hpi.de";
+      }
+    ];
   };
 }
