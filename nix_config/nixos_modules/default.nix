@@ -15,6 +15,7 @@
     inputs.home-manager.nixosModules.default
     ./nvf.nix
     ./qmk.nix
+    ./rabbitmq.nix
   ];
 
   # Plymouth setup
