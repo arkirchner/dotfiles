@@ -14,6 +14,7 @@
     ./nomad
     inputs.home-manager.nixosModules.default
     ./nvf.nix
+    ./qmk.nix
   ];
 
   # Plymouth setup
