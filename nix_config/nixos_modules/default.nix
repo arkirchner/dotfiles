@@ -16,6 +16,7 @@
     ./nvf.nix
     ./qmk.nix
     ./rabbitmq.nix
+    ./redis.nix
   ];
 
   # Plymouth setup
