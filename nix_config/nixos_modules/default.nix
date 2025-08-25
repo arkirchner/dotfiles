@@ -17,6 +17,7 @@
     ./qmk.nix
     ./rabbitmq.nix
     ./redis.nix
+    ./minio.nix
   ];
 
   # Plymouth setup
