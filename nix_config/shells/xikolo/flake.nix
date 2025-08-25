@@ -70,6 +70,7 @@
           ++ gtk_deps;
 
         shellHook = ''
+          export HUSKY=0
           export BUNDLE_PATH=$PWD/.bundle
           export GEM_HOME=$PWD/.bundle
           export PATH=$PWD/.bundle/bin:$PATH
