@@ -3,13 +3,19 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-22_11.url = "github:NixOS/nixpkgs/22.11";
   };
 
   outputs =
-    { self, nixpkgs }:
+    {
+      self,
+      nixpkgs,
+      nixpkgs-22_11,
+    }:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs { inherit system; };
+      legacy = import nixpkgs-22_11 { inherit system; };
       gtk_deps = with pkgs; [
         pkg-config
         cairo
@@ -59,13 +65,13 @@
             libyaml
             shared-mime-info
             icu
-            nodejs_22
-            corepack_22
             libidn
             curl
             pkg-config
             cairo
             libpng
+            corepack_24
+            nodejs_24
           ]
           ++ gtk_deps;
 
