@@ -72,10 +72,29 @@
             libpng
             corepack_24
             nodejs_24
+            autoreconfHook
+            autoconf
+            automake
+            libtool
+            gifsicle
+            optipng
+            mozjpeg
+            nasm
+            dart
+            python3Full
           ]
           ++ gtk_deps;
 
         shellHook = ''
+          export npm_config_build_from_source=true
+          export npm_config_fallback_to_build=false
+          export CFLAGS="-O2"
+          export LDFLAGS="-lc"
+          export SASS_FORCE_REBUILD=true
+          export GIFSICLE_BINARY=${pkgs.gifsicle}/bin/gifsicle
+          export OPTIPNG_BINARY=${pkgs.optipng}/bin/optipng
+          export OPTIPNG_BIN=${pkgs.optipng}/bin/optipng
+          export MOZJPEG_BINARY=${pkgs.mozjpeg}/bin/cjpeg
           export HUSKY=0
           export BUNDLE_PATH=$PWD/.bundle
           export GEM_HOME=$PWD/.bundle
@@ -101,6 +120,12 @@
           export PKG_CONFIG_PATH=${
             builtins.concatStringsSep ":" (map (p: "${p.dev or p}/lib/pkgconfig") gtk_deps)
           }:${pkgs.xorg.xorgproto}/share/pkgconfig:$PKG_CONFIG_PATH
+
+          yarn install
+
+          rm node_modules/optipng-bin/vendor/optipng node_modules/sass-embedded-linux-x64/dart-sass/sass
+          ln -s ${pkgs.optipng}/bin/optipng node_modules/optipng-bin/vendor/optipng
+          ln -s ${pkgs.dart-sass}/bin/dart-sass node_modules/sass-embedded-linux-x64/dart-sass/sass
         '';
       };
     };
