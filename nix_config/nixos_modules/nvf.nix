@@ -14,6 +14,12 @@
         viAlias = true;
         vimAlias = true;
 
+        options = {
+          expandtab = true;
+          shiftwidth = 2;
+          tabstop = 2;
+        };
+
         theme = {
           enable = true;
           name = "catppuccin";
