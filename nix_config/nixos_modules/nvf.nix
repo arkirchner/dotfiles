@@ -128,52 +128,6 @@
           };
         };
 
-        assistant.codecompanion-nvim = {
-          enable = true;
-          setupOpts = {
-            adapters = lib.generators.mkLuaInline ''
-              {
-                anthropic = function()
-                  return require("codecompanion.adapters").extend("anthropic", {
-                    env = {
-                      api_key = (function()
-                        local handle = io.popen("pass show api/anthropic")
-                        if handle then
-                          local result = handle:read("*a")
-                          handle:close()
-                          return vim.trim(result)
-                        else
-                          vim.notify("Failed to read Anthropic API key from pass", vim.log.levels.ERROR)
-                          return nil
-                        end
-                      end)(),
-                    },
-                  })
-                end,
-               }
-            '';
-
-            strategies = {
-              chat = {
-                adapter = "anthropic";
-              };
-              inline = {
-                adapter = "anthropic";
-              };
-              cmd = {
-                adapter = "anthropic";
-              };
-            };
-            display = {
-              chat = {
-                auto_scroll = true;
-                show_settings = true;
-              };
-              action_palette.provider = "telescope";
-            };
-          };
-        };
-
         # TODO: Try this!
         # assistant.avante-nvim = {
         #   enable = true;
