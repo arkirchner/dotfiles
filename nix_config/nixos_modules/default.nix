@@ -55,6 +55,12 @@
 
   services.dbus.enable = true;
 
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-generations +5";
+  };
+
   xdg.portal = {
     enable = true;
     wlr.enable = false; # disable wlr if using Hyprland
