@@ -29,7 +29,7 @@
 
         lsp = {
           enable = true;
-          formatOnSave = true;
+          formatOnSave = false;
 
           lspconfig.enable = true;
           trouble.enable = true;
