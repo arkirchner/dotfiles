@@ -13,6 +13,7 @@ in
     gk = "gitk --all&";
     gx = "gitx --all";
     hpi-vpn = "sudo snx-rs -o vpn -s vpn.hpi.de";
+    nixos-update = "sudo nixos-rebuild switch && sudo nix-env --delete-generations +5 && sudo nix-collect-garbage -d";
   };
   home.packages = with pkgs; [
     fastfetch
