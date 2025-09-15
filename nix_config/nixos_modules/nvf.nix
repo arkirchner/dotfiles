@@ -160,6 +160,7 @@
             "%.bundle/"
             "public/packs-test"
             "public/packs"
+            "public/assets/webpack"
           ];
         };
 
