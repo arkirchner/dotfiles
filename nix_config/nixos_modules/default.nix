@@ -18,6 +18,7 @@
     ./rabbitmq.nix
     ./redis.nix
     ./minio.nix
+    ./vpn.nix
   ];
 
   # Plymouth setup
