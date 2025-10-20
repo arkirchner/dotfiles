@@ -82,6 +82,7 @@
             nasm
             dart
             python3Full
+            ffmpeg
           ]
           ++ gtk_deps;
 
