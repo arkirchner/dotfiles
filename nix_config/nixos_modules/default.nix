@@ -10,7 +10,6 @@
     ./thunar
     ./postgresql
     ./podman
-    ./virtualbox
     ./nomad
     inputs.home-manager.nixosModules.default
     ./nvf.nix
@@ -19,7 +18,10 @@
     ./redis.nix
     ./minio.nix
     ./vpn.nix
+    # ./libvirtd.nix
   ];
+
+  virtualisation.multipass.enable = true;
 
   # Plymouth setup
   boot = {
@@ -148,6 +150,7 @@
       "networkmanager"
       "wheel"
       "docker"
+      "libvirtd"
     ];
     packages = with pkgs; [ ];
   };
