@@ -83,10 +83,13 @@
             dart
             python3Full
             ffmpeg
+            patchelf
           ]
           ++ gtk_deps;
 
         shellHook = ''
+          export NIX_LD=${pkgs.lib.fileContents "${pkgs.stdenv.cc}/nix-support/dynamic-linker"}
+          export NIX_LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath [ pkgs.stdenv.cc.cc ]}
           export CFLAGS="-O2"
           export LDFLAGS="-lc"
           export GIFSICLE_BINARY=${pkgs.gifsicle}/bin/gifsicle
@@ -119,7 +122,13 @@
             builtins.concatStringsSep ":" (map (p: "${p.dev or p}/lib/pkgconfig") gtk_deps)
           }:${pkgs.xorg.xorgproto}/share/pkgconfig:$PKG_CONFIG_PATH
 
-          # yarn install
+          yarn install
+
+          patchelf --set-interpreter "$NIX_LD" ./node_modules/sass-embedded-linux-x64/dart-sass/src/dart
+          # patchelf --set-interpreter "$NIX_LD" ./node_modules/optipng-bin/vendor/optipng
+          rm ./node_modules/optipng-bin/vendor/optipng
+          ln -s ${pkgs.optipng}/bin/optipng ./node_modules/optipng-bin/vendor/optipng
+
 
           # rm node_modules/optipng-bin/vendor/optipng node_modules/sass-embedded-linux-x64/dart-sass/sass
           # ln -s ${pkgs.optipng}/bin/optipng node_modules/optipng-bin/vendor/optipng
