@@ -21,7 +21,8 @@
     # ./libvirtd.nix
   ];
 
-  virtualisation.multipass.enable = true;
+  # current release dose not compile.
+  # virtualisation.multipass.enable = true;
 
   # Plymouth setup
   boot = {
