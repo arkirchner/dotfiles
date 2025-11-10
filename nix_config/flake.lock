@@ -127,15 +127,15 @@
         "systems": "systems"
       },
       "locked": {
-        "lastModified": 1762622004,
-        "narHash": "sha256-NpzzgaoMK8aRHnndHWbYNKLcZN0r1y6icCoJvGoBsoE=",
-        "owner": "NotAShelf",
+        "lastModified": 1762764216,
+        "narHash": "sha256-hmRp6bOKiwvr/2nf/kZShC5r3bkE57Pjz5EY4e9/v9k=",
+        "owner": "arkirchner",
         "repo": "nvf",
-        "rev": "09470524a214ed26633ddc2b6ec0c9bf31a8b909",
+        "rev": "0f15de9a2b3c256db681165fafeeb14ae8a0f81b",
         "type": "github"
       },
       "original": {
-        "owner": "NotAShelf",
+        "owner": "arkirchner",
         "repo": "nvf",
         "type": "github"
       }

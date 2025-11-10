@@ -1,7 +1,7 @@
 {
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
   inputs.home-manager.url = "github:nix-community/home-manager";
-  inputs.nvf.url = "github:NotAShelf/nvf";
+  inputs.nvf.url = "github:arkirchner/nvf";
 
   outputs =
     { self, nixpkgs, ... }@inputs:
