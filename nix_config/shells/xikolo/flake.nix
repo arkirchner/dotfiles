@@ -17,6 +17,7 @@
       pkgs = import nixpkgs { inherit system; };
       legacy = import nixpkgs-22_11 { inherit system; };
       gtk_deps = with pkgs; [
+        bun
         pkg-config
         cairo
         zlib

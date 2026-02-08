@@ -38,8 +38,6 @@
         };
 
         languages = {
-          enableTreesitter = true;
-
           nix.enable = true;
           yaml.enable = true;
           # bash.enable = true;
@@ -51,17 +49,10 @@
           html.enable = true;
           # hcl.enable = true;
           # markdown.enable = true;
-          tailwind.enable = true;
+          # tailwind.enable = true;
           # go.enable = true;
           tex.enable = true;
-
-          ruby = {
-            enable = true;
-            lsp = {
-              package = pkgs.rubyPackages_3_4.ruby-lsp;
-              server = "rubylsp";
-            };
-          };
+          ruby.enable = true;
         };
 
         autocomplete.nvim-cmp.enable = true;
