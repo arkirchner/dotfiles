@@ -4,6 +4,13 @@
   lib,
   ...
 }:
+let
+  # Define a Ruby environment with the ruby-lsp gem
+  # pkgs.ruby points to the latest stable Ruby in nixos-unstable
+  rubyWithLsp = pkgs.ruby.withPackages (rbPkgs: with rbPkgs; [
+    ruby-lsp
+  ]);
+in
 {
   programs.nvf = {
     enable = true;
@@ -35,6 +42,13 @@
           trouble.enable = true;
           lspSignature.enable = true;
           lightbulb.enable = true;
+
+          # New LSP configuration for Ruby LSP
+          servers.ruby-lsp = {
+            enable = true;
+            # Ensure the ruby-lsp executable is found within our custom rubyWithLsp environment
+            executable = "${rubyWithLsp}/bin/ruby-lsp";
+          };
         };
 
         languages = {
@@ -52,7 +66,6 @@
           # tailwind.enable = true;
           # go.enable = true;
           tex.enable = true;
-          ruby.enable = true;
         };
 
         autocomplete.nvim-cmp.enable = true;
