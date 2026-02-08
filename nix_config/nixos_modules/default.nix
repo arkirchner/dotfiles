@@ -58,6 +58,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   services.dbus.enable = true;
+  programs.dconf.enable = true;
 
   nix.gc = {
     automatic = true;
@@ -184,6 +185,34 @@
       ];
 
       imports = (import ../programs) ++ (import ./desktop_programs);
+
+      gtk = {
+        enable = true;
+        theme = {
+          name = "Catppuccin-Mocha-Standard-Blue-dark";
+          package = pkgs.catppuccin-gtk.override {
+            accents = [ "blue" ];
+            variant = "mocha";
+          };
+        };
+        iconTheme = {
+          name = "Papirus-Dark";
+          package = (pkgs.catppuccin-papirus-folders.override {
+            flavor = "mocha";
+            accent = "blue";
+          });
+        };
+        cursorTheme = {
+          name = "Catppuccin-Mocha-Blue-Cursors";
+          package = pkgs.catppuccin-cursors.mochaBlue;
+        };
+      };
+
+      qt = {
+        enable = true;
+        platformTheme.name = "gtk";
+      };
+
 
       home.stateVersion = "24.05";
     };
