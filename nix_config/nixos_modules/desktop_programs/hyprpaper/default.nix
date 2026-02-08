@@ -3,8 +3,28 @@
   services.hyprpaper = {
     enable = true;
     settings = {
-      preload = ["${../../../wallpapers/night-mountain.jpg}"];
-      wallpaper = [",${../../../wallpapers/night-mountain.jpg}"];
+      wallpaper = [
+        {
+          monitor = "eDP-1";
+          path = "${../../../wallpapers/night-mountain.jpg}";
+        }
+        {
+          monitor = "DP-1";
+          path = "${../../../wallpapers/night-mountain.jpg}";
+        }
+        {
+          monitor = "DP-2";
+          path = "${../../../wallpapers/night-mountain.jpg}";
+        }
+        {
+          monitor = "DP-3";
+          path = "${../../../wallpapers/night-mountain.jpg}";
+        }
+        {
+          monitor = "DP-4";
+          path = "${../../../wallpapers/night-mountain.jpg}";
+        }
+      ];
     };
   };
 }
