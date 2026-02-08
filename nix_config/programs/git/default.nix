@@ -19,7 +19,7 @@
         ".direnv/"
       ];
 
-      extraConfig = {
+      settings = {
         core.editor = "nvim";
         commit.gpgsign = true;
         init.defaultBranch = "main";
