@@ -242,21 +242,6 @@
       bind = ,XF86AudioPrev, exec, playerctl previous
       bind = ,XF86MonBrightnessDown,exec,brightnessctl set 5%-
       bind = ,XF86MonBrightnessUp,exec,brightnessctl set +5%
-
-      ##############################
-      ### WINDOWS AND WORKSPACES ###
-      ##############################
-      
-      # See https://wiki.hyprland.org/Configuring/Window-Rules/ for more
-      # See https://wiki.hyprland.org/Configuring/Workspace-Rules/ for workspace rules
-      
-      # Example windowrule v1
-      # windowrule = float, ^(kitty)$
-      
-      # Example windowrule v2
-      # windowrulev2 = float,class:^(kitty)$,title:^(kitty)$
-      
-      windowrulev2 = suppressevent maximize, class:.* # You'll probably like this.
     '';
   };
 }
