@@ -182,6 +182,7 @@
         snx-rs
         overmind
         gimp3
+        opencode
       ];
 
       imports = (import ../programs) ++ (import ./desktop_programs);
