@@ -59,6 +59,7 @@
 
   services.dbus.enable = true;
   programs.dconf.enable = true;
+  programs.fish.enable = true;
 
   nix.gc = {
     automatic = true;
@@ -148,6 +149,7 @@
   users.users.armin = {
     isNormalUser = true;
     description = "Armin Kirchner";
+    shell = pkgs.fish;
     extraGroups = [
       "networkmanager"
       "wheel"

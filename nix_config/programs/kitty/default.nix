@@ -15,6 +15,6 @@
     };
 
     themeFile = "Catppuccin-Mocha";
-    shellIntegration.enableBashIntegration = true;
+    shellIntegration.enableFishIntegration = true;
   };
 }
