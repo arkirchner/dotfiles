@@ -10,6 +10,8 @@
     pwvucontrol
     grim
     slurp
+    wl-clipboard
+    clipse
   ];
 
   programs.hyprlock.enable = true;
@@ -56,6 +58,7 @@
       # exec-once = nm-applet &
       # exec-once = waybar & hyprpaper & firefox
       exec-once = waybar & mako
+      exec-once = clipse -listen
       
       
       #############################
@@ -186,7 +189,7 @@
       bind = $mainMod, C, killactive,
       bind = $mainMod, M, exit,
       bind = $mainMod, E, exec, $fileManager
-      bind = $mainMod, V, togglefloating,
+      bind = $mainMod, V, exec, kitty --class clipse -e clipse
       bind = $mainMod, R, exec, $menu
       bind = $mainMod, P, pseudo, # dwindle
       bind = $mainMod, J, togglesplit, # dwindle
@@ -242,6 +245,12 @@
       bind = ,XF86AudioPrev, exec, playerctl previous
       bind = ,XF86MonBrightnessDown,exec,brightnessctl set 5%-
       bind = ,XF86MonBrightnessUp,exec,brightnessctl set +5%
+
+      ###################
+      ### Windowrules ###
+      ###################
+
+      windowrule = float on, size 622 652, stay_focused on, match:class ^(clipse)$
     '';
   };
 }
