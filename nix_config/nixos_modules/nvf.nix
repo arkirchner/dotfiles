@@ -7,7 +7,7 @@
 let
   # Define a Ruby environment with the ruby-lsp gem
   # pkgs.ruby points to the latest stable Ruby in nixos-unstable
-  rubyWithLsp = pkgs.ruby.withPackages (rbPkgs: with rbPkgs; [
+  rubyWithLsp = pkgs.ruby_3_4.withPackages (rbPkgs: with rbPkgs; [
     ruby-lsp
   ]);
 in
@@ -44,11 +44,7 @@ in
           lightbulb.enable = true;
 
           # New LSP configuration for Ruby LSP
-          servers.ruby-lsp = {
-            enable = true;
-            # Ensure the ruby-lsp executable is found within our custom rubyWithLsp environment
-            executable = "${rubyWithLsp}/bin/ruby-lsp";
-          };
+          servers.ruby_lsp.cmd = lib.mkForce [ "${rubyWithLsp}/bin/ruby-lsp" ];
         };
 
         languages = {
@@ -66,6 +62,13 @@ in
           # tailwind.enable = true;
           # go.enable = true;
           tex.enable = true;
+
+          ruby = {
+            enable = true;
+            lsp = {
+              servers = ["ruby_lsp"];
+            };
+          };
         };
 
         autocomplete.nvim-cmp.enable = true;
@@ -132,23 +135,6 @@ in
           };
         };
 
-        # TODO: Try this!
-        # assistant.avante-nvim = {
-        #   enable = true;
-        #   setupOpts = {
-        #     provider = "copilot";
-        #     copilot = {
-        #       model = "claude-3.5-sonnet";
-        #       endpoint = "https://api.githubcopilot.com";
-        #       allow_insecure = false;
-        #       timeout = 10 * 60 * 1000;
-        #       temperature = 0;
-        #       max_completion_tokens = 1000000;
-        #       reasoning_effort = "high";
-        #     };
-        #   };
-        # };
-
         telescope = {
           enable = true;
           setupOpts.defaults.file_ignore_patterns = [
@@ -165,6 +151,7 @@ in
             "public/packs-test"
             "public/packs"
             "public/assets/webpack"
+            "app/assets/builds/"
           ];
         };
 
