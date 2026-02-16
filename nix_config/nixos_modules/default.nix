@@ -18,11 +18,8 @@
     ./redis.nix
     ./minio.nix
     ./vpn.nix
-    # ./libvirtd.nix
+    ./libvirtd.nix
   ];
-
-  # current release dose not compile.
-  # virtualisation.multipass.enable = true;
 
   # Plymouth setup
   boot = {
