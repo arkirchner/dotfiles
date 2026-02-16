@@ -24,13 +24,13 @@
         libpng
         fontconfig
         freetype
-        xorg.libX11
-        xorg.libXext
-        xorg.libXrender
-        xorg.libxcb
-        xorg.xorgproto
-        xorg.libXau
-        xorg.libXdmcp
+        libx11
+        libxext
+        libxrender
+        libxcb
+        xorgproto
+        libXau
+        libXdmcp
         pixman
         expat
         bzip2
@@ -82,7 +82,7 @@
             mozjpeg
             nasm
             dart
-            python3Full
+            python315
             ffmpeg
             patchelf
           ]
@@ -93,10 +93,6 @@
           export NIX_LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath [ pkgs.stdenv.cc.cc ]}
           export CFLAGS="-O2"
           export LDFLAGS="-lc"
-          export GIFSICLE_BINARY=${pkgs.gifsicle}/bin/gifsicle
-          export OPTIPNG_BINARY=${pkgs.optipng}/bin/optipng
-          export OPTIPNG_BIN=${pkgs.optipng}/bin/optipng
-          export MOZJPEG_BINARY=${pkgs.mozjpeg}/bin/cjpeg
           export HUSKY=0
           export BUNDLE_PATH=$PWD/.bundle
           export GEM_HOME=$PWD/.bundle
@@ -121,7 +117,7 @@
           export PKG_CONFIG=${pkgs.pkg-config}/bin/pkg-config
           export PKG_CONFIG_PATH=${
             builtins.concatStringsSep ":" (map (p: "${p.dev or p}/lib/pkgconfig") gtk_deps)
-          }:${pkgs.xorg.xorgproto}/share/pkgconfig:$PKG_CONFIG_PATH
+          }:${pkgs.xorgproto}/share/pkgconfig:$PKG_CONFIG_PATH
         '';
       };
     };
