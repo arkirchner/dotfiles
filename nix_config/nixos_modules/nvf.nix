@@ -71,8 +71,24 @@ in
           };
         };
 
-        autocomplete.nvim-cmp.enable = true;
-        snippets.luasnip.enable = true;
+        autocomplete.nvim-cmp = {
+          enable = true;
+          sources = lib.mkForce {
+            nvim_lsp = null;
+            path = null;
+            buffer = null;
+          };
+          setupOpts = {
+            experimental.ghost_text = true;
+            matching = {
+              disallow_fuzzy_matching = false;
+              disallow_fullfuzzy_matching = false;
+              disallow_partial_fuzzy_matching = false;
+              disallow_prefix_unmatching = false;
+            };
+          };
+        };
+        snippets.luasnip.enable = false;
 
         luaConfigPre = ''
           vim.g['test#strategy'] = 'vimux'
