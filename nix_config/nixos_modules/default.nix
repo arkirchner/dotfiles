@@ -181,6 +181,7 @@
         snx-rs
         overmind
         gimp3
+        libreoffice
         opencode
       ];
 
