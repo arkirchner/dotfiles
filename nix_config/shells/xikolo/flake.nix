@@ -52,7 +52,7 @@
         buildInputs =
           with pkgs;
           [
-            ruby_3_4
+            ruby_4_0
             postgresql_16
             libffi
             openssl

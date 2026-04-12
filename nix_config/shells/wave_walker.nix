@@ -4,9 +4,7 @@
 
 pkgs.mkShell {
   buildInputs = with pkgs; [
-    bun
     ruby_4_0
-    postgresql_16
     libffi
     openssl
     libxml2
@@ -17,14 +15,6 @@ pkgs.mkShell {
     curl
     gnumake
     libyaml
-    shared-mime-info
-    icu
-    nodejs_22
-    corepack_22
-    libidn
-    curl
-    pkg-config
-    cairo
   ];
 
   shellHook = ''
@@ -35,18 +25,11 @@ pkgs.mkShell {
       pkgs.lib.makeLibraryPath (
         with pkgs;
         [
-          icu
           vips
           libyaml
-          postgresql_16
-          libidn
-          curl
-          libsodium
-          cairo
         ]
       )
     };
     export RUBY_YJIT_ENABLE=1;
-    export FREEDESKTOP_MIME_TYPES_PATH="${pkgs.shared-mime-info}/share/mime/packages/freedesktop.org.xml"
   '';
 }

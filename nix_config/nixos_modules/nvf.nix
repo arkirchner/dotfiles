@@ -7,7 +7,7 @@
 let
   # Define a Ruby environment with the ruby-lsp gem
   # pkgs.ruby points to the latest stable Ruby in nixos-unstable
-  rubyWithLsp = pkgs.ruby_3_4.withPackages (rbPkgs: with rbPkgs; [
+  rubyWithLsp = pkgs.ruby_4_0.withPackages (rbPkgs: with rbPkgs; [
     ruby-lsp
   ]);
 in
