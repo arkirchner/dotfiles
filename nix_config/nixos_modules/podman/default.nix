@@ -20,7 +20,7 @@
 
     docker = {
       enable = true;
-      extraOptions = "--add-runtime=runsc=${pkgs.gvisor}/bin/runsc";
+      # extraOptions = "--add-runtime=runsc=${pkgs.gvisor}/bin/runsc";
 
       # enableOnBoot = true;
 
