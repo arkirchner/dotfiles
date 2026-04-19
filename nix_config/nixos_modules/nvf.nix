@@ -14,6 +14,8 @@ in
 {
   programs.nvf = {
     enable = true;
+    defaultEditor = true;
+
     # your settings need to go into the settings attribute set
     # most settings are documented in the appendix
     settings = {
@@ -163,10 +165,11 @@ in
             "result/"
             "log/"
             "coverage/"
+            "examples.txt"
             "%.bundle/"
             "public/packs-test"
             "public/packs"
-            "public/assets/webpack"
+            "public/assets"
             "app/assets/builds/"
           ];
         };
