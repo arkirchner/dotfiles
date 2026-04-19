@@ -184,7 +184,6 @@
         overmind
         gimp3
         libreoffice
-        opencode
       ];
 
       imports = (import ../programs) ++ (import ./desktop_programs);
