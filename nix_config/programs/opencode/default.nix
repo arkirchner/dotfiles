@@ -28,4 +28,5 @@ in
   };
 
   home.file.".config/opencode/agents/".source = ./agents;
+  home.file.".config/opencode/AGENTS.md".source = ./AGENTS.md;
 }
