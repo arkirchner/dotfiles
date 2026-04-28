@@ -194,6 +194,18 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  nixpkgs.overlays = [
+    (final: prev: {
+      python313Packages = prev.python313Packages.override {
+        overrides = pyfinal: pyprev: {
+          aioboto3 = pyprev.aioboto3.overridePythonAttrs (old: {
+            doCheck = false;
+          });
+        };
+      };
+    })
+  ];
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
