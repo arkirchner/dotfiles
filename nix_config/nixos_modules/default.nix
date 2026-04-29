@@ -184,6 +184,7 @@
         overmind
         gimp3
         libreoffice
+        sqlite-interactive
       ];
 
       imports = (import ../programs) ++ (import ./desktop_programs);
