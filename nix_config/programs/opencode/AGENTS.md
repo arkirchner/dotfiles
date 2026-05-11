@@ -60,11 +60,47 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 **These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
 
-# Opencode Agents Configuration
+# Model Context Protocol (MCP) Usage
 
-When operating in this environment, please proactively utilize the following configured Model Context Protocol (MCP) servers to gather information and context:
+## Core Rule: Use MCPs Before Guessing
 
-- **rails**: Use this MCP when interacting with or querying the local Ruby on Rails environment, codebase, and documentation. For Rails applications, you MUST use the rails MCP for documentation first. Only if you cannot find the necessary information here should you fall back to context7.
-- **context7**: Use this MCP to query up-to-date documentation, API references, and code examples for various programming libraries and frameworks.
-- **exa**: Use this MCP for web search capabilities to find current information, news, guides, or troubleshooting steps on the internet.
-- **nixos**: Use this MCP to query NixOS packages, system options, Home Manager options, Darwin configurations, and Flake inputs.
+When working with libraries, frameworks, or packages, query the appropriate MCP FIRST. Don't rely on training data.
+
+## Available MCPs
+
+**rails** - Rails API docs, methods, conventions, gems (use first for Rails projects)
+**context7** - JS/TS/Python libraries, frameworks, APIs (call resolve-library-id, then query-docs)
+**exa** - Current info, troubleshooting, best practices (use descriptive queries, not keywords)
+**nixos** - Nix packages, NixOS/Home Manager/Darwin options, flake inputs
+
+## Quick Reference
+
+### When to Use Each MCP
+- Rails code? → **rails** (fallback to context7 if needed)
+- React/Vue/Next.js/Django/etc? → **context7**
+- Post-2023 info or error troubleshooting? → **exa**
+- NixOS packages or options? → **nixos**
+
+### Common Patterns
+```
+# context7: resolve first, then query
+context7_resolve-library-id(libraryName: "React", query: "...")
+context7_query-docs(libraryId: "/facebook/react", query: "useState hook usage")
+
+# nixos: common actions
+nixos(action: "search", query: "package-name")
+nixos(action: "info", query: "package-name")
+nixos(action: "search", query: "option", type: "options")
+nixos(action: "search", query: "option", source: "home-manager")
+
+# exa: descriptive queries
+exa_web_search_exa(query: "blog post comparing React and Vue performance")
+```
+
+## Key Rules
+
+1. **MCP First**: Query MCP before writing code with external dependencies
+2. **Be Specific**: Include framework/version/feature context in queries
+3. **Verify Results**: Apply MCP info directly; don't mix with outdated training data
+
+MCPs are your source of truth. Training data is outdated. When in doubt, query the MCP.
