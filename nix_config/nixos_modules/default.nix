@@ -53,6 +53,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   services.dbus.enable = true;
+  services.fwupd.enable = true;
   programs.dconf.enable = true;
   programs.fish.enable = true;
 

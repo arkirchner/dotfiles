@@ -11,4 +11,5 @@
     ];
 
   networking.hostName = "armin-work-laptop"; # Define your hostname.
+  powerManagement.cpuFreqGovernor = "performance";
 }
