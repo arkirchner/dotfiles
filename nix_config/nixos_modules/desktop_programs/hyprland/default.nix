@@ -22,6 +22,7 @@
     enable = true;
     xwayland.enable = true;
     package = pkgs.hyprland;
+    configType = "hyprlang";
 
     extraConfig = ''
       ################
@@ -133,7 +134,6 @@
       
       # See https://wiki.hyprland.org/Configuring/Dwindle-Layout/ for more
       dwindle {
-          pseudotile = true # Master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
           preserve_split = true # You probably want this
       }
       
@@ -191,8 +191,6 @@
       bind = $mainMod, E, exec, $fileManager
       bind = $mainMod, V, exec, kitty --class clipse -e clipse
       bind = $mainMod, R, exec, $menu
-      bind = $mainMod, P, pseudo, # dwindle
-      bind = $mainMod, J, togglesplit, # dwindle
       bind = $mainMod, W, exec, $browser
       bind = $mainMod, L, exec, hyprlock
       bind = $mainMod, S, exec, sh -c 'mkdir -p ~/Pictures/screenshot && grim -g "$(slurp)" ~/Pictures/screenshot/$(date +%s).png'
