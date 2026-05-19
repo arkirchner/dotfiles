@@ -16,7 +16,6 @@
     ./qmk.nix
     ./rabbitmq.nix
     ./redis.nix
-    ./garage.nix
     ./vpn.nix
     ./libvirtd.nix
   ];
