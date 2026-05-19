@@ -184,6 +184,7 @@
         gimp3
         libreoffice
         sqlite-interactive
+        teams-for-linux
       ];
 
       imports = (import ../programs) ++ (import ./desktop_programs);
