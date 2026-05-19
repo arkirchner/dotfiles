@@ -14,7 +14,6 @@
     inputs.home-manager.nixosModules.default
     ./nvf.nix
     ./qmk.nix
-    ./rabbitmq.nix
     ./redis.nix
     ./vpn.nix
     ./libvirtd.nix
