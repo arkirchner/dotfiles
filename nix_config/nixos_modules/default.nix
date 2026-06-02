@@ -185,6 +185,8 @@
         libreoffice
         sqlite-interactive
         teams-for-linux
+        dig
+        ptop
       ];
 
       imports = (import ../programs) ++ (import ./desktop_programs);
