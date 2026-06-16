@@ -191,6 +191,7 @@
         teams-for-linux
         dig
         btop
+        pgadmin4-desktopmode
       ];
 
       imports = (import ../programs) ++ (import ./desktop_programs);
