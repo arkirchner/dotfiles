@@ -209,6 +209,9 @@
           aioboto3 = pyprev.aioboto3.overridePythonAttrs (old: {
             doCheck = false;
           });
+          fastmcp = pyprev.fastmcp.overridePythonAttrs (old: {
+            doCheck = false;
+          });
         };
       };
     })
