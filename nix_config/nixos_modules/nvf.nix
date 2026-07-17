@@ -68,7 +68,7 @@ in
           ruby = {
             enable = true;
             lsp = {
-              servers = ["ruby_lsp"];
+              servers = ["ruby-lsp"];
             };
           };
         };
