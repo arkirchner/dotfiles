@@ -5,4 +5,5 @@
   ./waybar
   ./imv
   ./mpv
+  ./easyeffects
 ]
