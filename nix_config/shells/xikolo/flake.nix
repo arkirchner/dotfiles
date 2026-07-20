@@ -3,19 +3,16 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-22_11.url = "github:NixOS/nixpkgs/22.11";
   };
 
   outputs =
     {
       self,
       nixpkgs,
-      nixpkgs-22_11,
     }:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs { inherit system; };
-      legacy = import nixpkgs-22_11 { inherit system; };
       gtk_deps = with pkgs; [
         kind
         bun
