@@ -52,25 +52,8 @@ in
         languages = {
           nix.enable = true;
           yaml.enable = true;
-          # bash.enable = true;
-          # css.enable = true;
-          # helm.enable = true;
-          # sql.enable = true;
-          # ts.enable = true;
-          # lua.enable = true;
           html.enable = true;
-          # hcl.enable = true;
-          # markdown.enable = true;
-          # tailwind.enable = true;
-          # go.enable = true;
           tex.enable = true;
-
-          ruby = {
-            enable = true;
-            lsp = {
-              servers = ["ruby-lsp"];
-            };
-          };
         };
 
         autocomplete.nvim-cmp = {
