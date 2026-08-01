@@ -56,6 +56,7 @@
   services.fwupd.enable = true;
   programs.dconf.enable = true;
   programs.fish.enable = true;
+  programs.steam.enable = true;
 
   nix.gc = {
     automatic = true;

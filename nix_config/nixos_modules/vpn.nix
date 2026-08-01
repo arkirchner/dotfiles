@@ -21,5 +21,11 @@
         resolvectl revert $dev
       '';
     };
+
+    csiVPN = {
+      autoStart = false;
+      config = '' config /home/armin/vpn/SC_User.ovpn '';
+      updateResolvConf = true;
+    };
   };
 }
