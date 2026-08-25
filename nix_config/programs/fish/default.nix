@@ -16,10 +16,6 @@ in
     nixos-update = "sudo nixos-rebuild switch && sudo nix-env --delete-generations +5 && sudo nix-collect-garbage -d";
   };
 
-  home.packages = with pkgs; [
-    gemini-cli
-  ];
-
   programs = {
     direnv = {
       enable = true;
