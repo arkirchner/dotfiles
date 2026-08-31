@@ -70,7 +70,6 @@ When working with libraries, frameworks, or packages, query the appropriate MCP 
 
 **rails** - Rails API docs, methods, conventions, gems (use first for Rails projects)
 **context7** - JS/TS/Python libraries, frameworks, APIs (call resolve-library-id, then query-docs)
-**exa** - Current info, troubleshooting, best practices (use descriptive queries, not keywords)
 **nixos** - Nix packages, NixOS/Home Manager/Darwin options, flake inputs
 
 ## Quick Reference
@@ -78,7 +77,6 @@ When working with libraries, frameworks, or packages, query the appropriate MCP 
 ### When to Use Each MCP
 - Rails code? → **rails** (fallback to context7 if needed)
 - React/Vue/Next.js/Django/etc? → **context7**
-- Post-2023 info or error troubleshooting? → **exa**
 - NixOS packages or options? → **nixos**
 
 ### Common Patterns
@@ -93,8 +91,6 @@ nixos(action: "info", query: "package-name")
 nixos(action: "search", query: "option", type: "options")
 nixos(action: "search", query: "option", source: "home-manager")
 
-# exa: descriptive queries
-exa_web_search_exa(query: "blog post comparing React and Vue performance")
 ```
 
 ## Key Rules
