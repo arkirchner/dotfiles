@@ -22,6 +22,21 @@
       '';
     };
 
+     adminVPN  = {
+      autoStart = false;
+      config = '' config /home/armin/vpn/admin/openhpicloud-admin.conf '';
+      updateResolvConf = true;
+
+      up = ''
+        resolvectl dns $dev 10.231.0.41 10.231.0.42 10.231.0.43
+        resolvectl domain $dev "~openhpi.cloud" "~openhpi.net" "~openhpicloud.de" "~xopic.de"
+      '';
+
+      down = ''
+        resolvectl revert $dev
+      '';
+    }; 
+
     csiVPN = {
       autoStart = false;
       config = '' config /home/armin/vpn/SC_User.ovpn '';
