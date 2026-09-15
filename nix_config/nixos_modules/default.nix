@@ -178,7 +178,6 @@
         pass
         kubectl
         kubernetes-helm
-        tenv
         snx-rs
         overmind
         gimp3
@@ -188,6 +187,8 @@
         dig
         btop
         pgadmin4-desktopmode
+        glab
+        opentofu
       ];
 
       imports = (import ../programs) ++ (import ./desktop_programs);
