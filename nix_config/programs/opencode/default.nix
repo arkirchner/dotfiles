@@ -24,6 +24,16 @@ in
                 output = 32768;
               };
             };
+            "HPI-Intern-Qwen38-27B" = {
+              name = "HPI Qwen 3.8 27B";
+              attachment = true;
+              reasoning = true;
+              tool_call = true;
+              limit = {
+                context = 434464;
+                output = 65536;
+              };
+            };
           };
         };
       };
