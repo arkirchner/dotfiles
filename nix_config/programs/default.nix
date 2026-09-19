@@ -6,4 +6,5 @@
   ./gpg
   ./git
   ./opencode
+  ./hermes-agent
 ]

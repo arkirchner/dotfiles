@@ -3,6 +3,11 @@
   inputs.home-manager.url = "github:nix-community/home-manager";
   inputs.nvf.url = "github:arkirchner/nvf";
 
+  inputs.hermes-agent.url = "github:NousResearch/hermes-agent";
+
+  inputs.sops-nix.url = "github:Mic92/sops-nix";
+  inputs.sops-nix.inputs.nixpkgs.follows = "nixpkgs";
+
   outputs =
     { self, nixpkgs, ... }@inputs:
     {

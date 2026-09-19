@@ -146,6 +146,9 @@
     isNormalUser = true;
     description = "Armin Kirchner";
     shell = pkgs.fish;
+    # Keep the systemd user manager alive after logout so the Hermes user
+    # service (dashboard/backend) keeps running.
+    linger = true;
     extraGroups = [
       "networkmanager"
       "wheel"
@@ -158,6 +161,10 @@
   home-manager.backupFileExtension = "backup";
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
+  home-manager.sharedModules = [
+    inputs.hermes-agent.homeManagerModules.default
+    inputs.sops-nix.homeManagerModules.sops
+  ];
 
   home-manager.users.armin =
     {
