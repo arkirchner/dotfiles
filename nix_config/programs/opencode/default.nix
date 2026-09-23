@@ -6,6 +6,9 @@ in
   programs.opencode = {
     enable = true;
     settings = {
+      lsp = true;
+      enabled_providers = [ "hpi" ];
+      model = "hpi/HPI-Intern-Qwen38-27B#medium";
       provider = {
         hpi = {
           npm = "@ai-sdk/openai-compatible";
@@ -29,9 +32,31 @@ in
               attachment = true;
               reasoning = true;
               tool_call = true;
+              interleaved = "reasoning_content";
               limit = {
                 context = 434464;
                 output = 65536;
+              };
+              options = {
+                chat_template_kwargs = {
+                  enable_thinking = true;
+                };
+              };
+              variants = {
+                low = {
+                  reasoning_effort = "low";
+                };
+                medium = {
+                  reasoning_effort = "medium";
+                };
+                xhigh = {
+                  reasoning_effort = "xhigh";
+                };
+                off = {
+                  chat_template_kwargs = {
+                    enable_thinking = false;
+                  };
+                };
               };
             };
           };
