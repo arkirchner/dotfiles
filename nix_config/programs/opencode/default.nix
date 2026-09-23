@@ -7,7 +7,6 @@ in
     enable = true;
     settings = {
       lsp = true;
-      enabled_providers = [ "hpi" ];
       model = "hpi/HPI-Intern-Qwen38-27B#medium";
       provider = {
         hpi = {
