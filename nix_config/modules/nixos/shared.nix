@@ -27,6 +27,7 @@
       config.flake.modules.nixos.redis
       config.flake.modules.nixos.vpn
       config.flake.modules.nixos.libvirtd
+      config.flake.modules.nixos.home-manager
     ];
   };
 }
