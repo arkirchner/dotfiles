@@ -46,7 +46,7 @@
       
       # Set programs that you use
       $terminal = kitty
-      $fileManager = thunar
+      $fileManager = kitty -e yazi
       $menu = wofi --show drun
       $browser = firefox
       

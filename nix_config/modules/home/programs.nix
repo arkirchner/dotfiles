@@ -10,6 +10,7 @@
       git
       opencode
       hermes-agent
+      yazi
     ];
   };
 }

@@ -16,7 +16,6 @@
       config.flake.modules.nixos.fonts
       config.flake.modules.nixos.overlays
       config.flake.modules.nixos.packages
-      config.flake.modules.nixos.thunar
       config.flake.modules.nixos.postgresql
       config.flake.modules.nixos.podman
       config.flake.modules.nixos.nomad
