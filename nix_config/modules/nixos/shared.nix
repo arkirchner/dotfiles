@@ -5,7 +5,6 @@
       inputs.nvf.nixosModules.default
 
       config.flake.modules.nixos.boot
-      config.flake.modules.nixos.plymouth
       config.flake.modules.nixos.nix
       config.flake.modules.nixos.networking
       config.flake.modules.nixos.locale
@@ -15,7 +14,6 @@
       config.flake.modules.nixos.bluetooth
       config.flake.modules.nixos.graphics
       config.flake.modules.nixos.fonts
-      config.flake.modules.nixos.pam-u2f
       config.flake.modules.nixos.overlays
       config.flake.modules.nixos.packages
       config.flake.modules.nixos.thunar
