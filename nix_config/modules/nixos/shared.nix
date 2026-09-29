@@ -23,10 +23,13 @@
       config.flake.modules.nixos.nomad
       config.flake.modules.nixos.nvf
       config.flake.modules.nixos.qmk
-      config.flake.modules.nixos.redis
       config.flake.modules.nixos.vpn
       config.flake.modules.nixos.libvirtd
       config.flake.modules.nixos.home-manager
     ];
+
+    # Every host runs the same Home Manager config; hosts add their own modules
+    # (e.g. per-machine niri outputs) on top of this list.
+    home-manager.users.armin.imports = [ config.flake.modules.homeManager.armin ];
   };
 }
