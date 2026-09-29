@@ -66,6 +66,13 @@
                 default-window-height = { fixed = 920; };
               };
             }
+            # Shows Noctalia's blurred wallpaper backdrop in niri's overview.
+            {
+              layer-rule = {
+                match._props = { namespace = "^noctalia-backdrop"; };
+                place-within-backdrop = true;
+              };
+            }
           ];
 
           layout = {

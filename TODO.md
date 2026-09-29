@@ -105,7 +105,7 @@ in niri >= 26.04; start Noctalia with `noctalia --daemon`.
 
 ## Phase 3 - Home Manager: Noctalia shell
 
-- [ ] `modules/home/desktop/noctalia.nix`: `programs.noctalia.enable = true` +
+- [x] `modules/home/desktop/noctalia.nix`: `programs.noctalia.enable = true` +
       `programs.noctalia.settings`:
       - `[theme]` `mode = "dark"`, `source = "builtin"`, `builtin = "Catppuccin"`.
       - `[wallpaper]` -> `wallpapers/night-mountain.jpg` (same file hyprpaper used).
@@ -113,11 +113,13 @@ in niri >= 26.04; start Noctalia with `noctalia --daemon`.
         niri integration, window title, battery, network, bluetooth, clock).
       - `[lockscreen]`, `[idle]` (lock on idle timeout).
       - niri integration settings (window rules for Noctalia surfaces).
-- [ ] niri `spawn-at-startup "noctalia" "--daemon"` (Phase 2 file).
-- [ ] Keep `programs.noctalia.systemd.enable` (HM) OFF during parallel phase.
+- [x] niri `spawn-at-startup "noctalia" "--daemon"` (Phase 2 file).
+- [x] Keep `programs.noctalia.systemd.enable` (HM) OFF during parallel phase.
 
-Verify: build hosts; boot into niri; Noctalia bar/launcher/lock/idle work.
-Commit.
+Verify:
+- [x] Host builds pass (`noctalia config validate` runs at build time).
+- [ ] Boot test: niri starts Noctalia; bar/launcher/lock/idle work.
+- [x] Commit.
 
 ## Phase 4 - End-to-end verification
 
