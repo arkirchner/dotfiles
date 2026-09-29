@@ -1,51 +1,30 @@
 { pkgs }:
 
-pkgs.mkShell {
-  buildInputs = with pkgs; [
+import ./rails-base.nix {
+  inherit pkgs;
+  extraBuildInputs = with pkgs; [
     bun
-    # The 4.0 series on purpose; nixpkgs `ruby` is still on 3.4.
-    ruby_4_0
     postgresql_16
-    libffi
-    openssl
-    libxml2
-    libxslt
-    zlib
     vips
-    wget
-    curl
-    gnumake
-    libyaml
     shared-mime-info
     icu
     nodejs_22
     corepack_22
     libidn
-    curl
     pkg-config
     cairo
   ];
-
-  shellHook = ''
-    export BUNDLE_PATH=$PWD/.bundle
-    export GEM_HOME=$PWD/.bundle
-    export PATH=$PWD/.bundle/bin:$PATH
-    export LD_LIBRARY_PATH=${
-      pkgs.lib.makeLibraryPath (
-        with pkgs;
-        [
-          icu
-          vips
-          libyaml
-          postgresql_16
-          libidn
-          curl
-          libsodium
-          cairo
-        ]
-      )
-    };
-    export RUBY_YJIT_ENABLE=1;
+  # The C extensions in here link against more than the shared set.
+  extraLibPath = with pkgs; [
+    cairo
+    curl
+    icu
+    libidn
+    libsodium
+    postgresql_16
+    vips
+  ];
+  extraShellHook = ''
     export FREEDESKTOP_MIME_TYPES_PATH="${pkgs.shared-mime-info}/share/mime/packages/freedesktop.org.xml"
   '';
 }
