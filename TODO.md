@@ -142,6 +142,8 @@ Verify:
 - Do NOT enable `programs.noctalia.systemd.enable` (NixOS or HM) during the
   parallel phase: the unit targets `graphical-session.target`, which Hyprland
   also reaches, so Noctalia would run under Hyprland and fight Waybar/Mako.
+- `services.hyprpaper` is scoped to `hyprland-session.target` so the
+  Hyprland-only tool does not start (and fail-loop) under niri.
 - Noctalia greeter sets `services.greetd` via `mkDefault`; the old manual
   greetd block in `core/desktop.nix` must be deleted, not overridden.
 - Noctalia greeter needs `services.greetd.settings.default_session.user` to
