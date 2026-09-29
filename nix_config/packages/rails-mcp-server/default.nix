@@ -6,7 +6,7 @@ let
     ruby = pkgs.ruby_4_0;
     gemdir = ./.; # Looks for Gemfile, Gemfile.lock, and gemset.nix here
   };
-in pkgs.stdenv.mkDerivation {
+in pkgs.stdenvNoCC.mkDerivation {
   pname = "rails-mcp-server";
   version = "1.5.1";
 

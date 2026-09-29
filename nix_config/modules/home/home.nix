@@ -4,11 +4,9 @@
     { pkgs, ... }:
     {
       home.packages = with pkgs; [
-        tmux
         firefox
         chromedriver
         chromium
-        kitty
         gnupg
         cmus
         pass

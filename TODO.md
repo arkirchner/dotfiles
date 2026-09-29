@@ -44,30 +44,36 @@ nix flake check
 
 ## 2. Dead weight — safe no-op deletions
 
-- [ ] `core/desktop.nix:4` `services.dbus.enable = true` — NixOS default.
-- [ ] `core/desktop.nix:13-17` `services.xserver.xkb` block — default is already
+- [x] `core/desktop.nix:4` `services.dbus.enable = true` — NixOS default.
+- [x] `core/desktop.nix:13-17` `services.xserver.xkb` block — default is already
       `layout = "us"`, `variant = ""`, and niri/xwayland-satellite ignore
       `/etc/X11/xkb` anyway (`input.keyboard.xkb.layout` in the niri config is
       what applies).
-- [ ] `core/bluetooth.nix:6` `hardware.bluetooth.powerOnBoot = true` — default.
-- [ ] `home/home.nix` `tmux`, `kitty` — already added by `programs.tmux` /
-      `programs.kitty`. Verified duplicates in `home.packages`: `kitty`, `tmux`,
-      `niri` (each listed twice).
-- [ ] `services/redis.nix:7` `databases = 8192` — leftover tuning, no consumer.
-- [ ] `shells/codeocean.nix`, `shells/wave_walker.nix` — use `import <nixpkgs>`,
-      which needs `NIX_PATH`, and are not reachable from the flake (only
-      `./modules` is imported). Convert to `devShells` in the main flake or move
-      them out of this repo.
-- [ ] `nix_config/wallpapers/.DS_Store` (tracked) and the 8 unused wallpapers
-      (~9 MB; only `night-mountain.jpg` is referenced).
-- [ ] `modules/home/desktop/{imv,mpv,easyeffects}` — 8 lines each for one
-      boolean; inline them into `desktop-programs.nix`.
-- [ ] `modules/home/fish/default.nix:19` `nixos-update` alias — duplicates
+- [x] `core/bluetooth.nix:6` `hardware.bluetooth.powerOnBoot = true` — default.
+- [x] `home/home.nix` `tmux`, `kitty` — already added by `programs.tmux` /
+      `programs.kitty`. Both removed; both still resolve via those modules.
+      `niri` still appears twice in `home.packages`, but that is upstream: the
+      HM `wayland.windowManager.niri` module adds `cfg.package` to
+      `home.packages` *and* to `xdg.portal.configPackages`. Not fixable here.
+- [x] `services/redis.nix:7` `databases = 8192` — leftover tuning, no consumer.
+      Back to the nixpkgs default of 16.
+- [x] `shells/codeocean.nix`, `shells/wave_walker.nix` — converted: both now take
+      `pkgs` as a function argument instead of `import <nixpkgs>`, and
+      `modules/flake/dev-shells.nix` exposes them as
+      `devShells.x86_64-linux.{codeocean,wave-walker}`.
+      `nix develop nix_config#wave-walker` verified (ruby 4.0.7 +YJIT).
+      `shells/xikolo` keeps its own flake and lock file.
+- [x] `nix_config/wallpapers/.DS_Store` (tracked) — deleted, and `.DS_Store`
+      added to `.gitignore`. The 8 unused wallpapers (~9 MB) were kept on
+      purpose; only `night-mountain.jpg` is referenced.
+- [x] `modules/home/desktop/{imv,mpv,easyeffects}` — inlined into
+      `desktop-programs.nix`; the three directories are gone.
+- [x] `modules/home/fish/default.nix:19` `nixos-update` alias — duplicates
       `nix.gc` in `core/nix.nix:4-8` and uses legacy `nix-env --delete-generations`.
-      Reduce to `sudo nixos-rebuild switch`.
-- [ ] `modules/home/opencode/skills/` — not deployed (only `agents/` and
-      `AGENTS.md` are, `opencode/default.nix:84-85`). Deploy it or delete it.
-- [ ] `packages/rails-mcp-server/default.nix:9` — `stdenv.mkDerivation` is
+      Reduced to `sudo nixos-rebuild switch`.
+- [x] `modules/home/opencode/skills/` — nothing to do: the directory was empty
+      and untracked, so git never had it. Removed the empty local directory.
+- [x] `packages/rails-mcp-server/default.nix:9` — `stdenv.mkDerivation` is
       deprecated, use `stdenvNoCC.mkDerivation`.
 
 Verify:
