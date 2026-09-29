@@ -3,6 +3,7 @@
 pkgs.mkShell {
   buildInputs = with pkgs; [
     bun
+    # The 4.0 series on purpose; nixpkgs `ruby` is still on 3.4.
     ruby_4_0
     postgresql_16
     libffi

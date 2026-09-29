@@ -3,6 +3,7 @@
 let
   env = pkgs.bundlerEnv {
     name = "rails-mcp-server-env";
+    # The 4.0 series on purpose; nixpkgs `ruby` is still on 3.4.
     ruby = pkgs.ruby_4_0;
     gemdir = ./.; # Looks for Gemfile, Gemfile.lock, and gemset.nix here
   };

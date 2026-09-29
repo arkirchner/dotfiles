@@ -3,9 +3,11 @@
   flake.modules.nixos.nvf =
     { pkgs, lib, ... }:
     let
-      # Define a Ruby environment with the ruby-lsp gem
-      # pkgs.ruby points to the latest stable Ruby in nixos-unstable
-      rubyWithLsp = pkgs.ruby_4_0.withPackages (rbPkgs: with rbPkgs; [
+            # Define a Ruby environment with the ruby-lsp gem.
+      # ruby_4_0 on purpose: nixpkgs `ruby` is still on the 3.4 series, and the
+      # same version is used by the dev shells and the rails MCP server.
+      rubyWithLsp = pkgs.ruby_4_0.withPackages (
+rbPkgs: with rbPkgs; [
         ruby-lsp
       ]);
     in
