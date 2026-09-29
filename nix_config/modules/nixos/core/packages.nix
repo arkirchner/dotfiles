@@ -8,8 +8,6 @@
 
       environment.systemPackages = with pkgs; [
         git
-        samba
-        lxqt.lxqt-policykit
         slack
         zoom-us
       ];

@@ -10,8 +10,7 @@
         settings = {
           client = {
             enabled = true;
-            # TODO: I needed to create /var/lib/alloc_mounts for nomad to start ...
-            alloc_dir = "/var/lib/nomad/allococ_mounts";
+            alloc_dir = "/var/lib/nomad/alloc_mounts";
           };
           server = {
             enabled = true;
@@ -31,5 +30,9 @@
           ];
         };
       };
+
+      # `StateDirectory` only covers /var/lib/nomad itself; the client needs
+      # alloc_dir to exist before it starts mounting allocation volumes.
+      systemd.tmpfiles.settings."nomad"."/var/lib/nomad/alloc_mounts".d.mode = "0700";
     };
 }
