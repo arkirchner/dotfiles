@@ -15,7 +15,7 @@
         extraGroups = [
           "networkmanager"
           "wheel"
-          "docker"
+          "podman"
           "libvirtd"
         ];
         packages = with pkgs; [ ];

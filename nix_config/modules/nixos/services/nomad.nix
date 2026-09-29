@@ -1,10 +1,17 @@
 { ... }:
 {
   flake.modules.nixos.nomad =
-    { pkgs, ... }:
+    { lib, pkgs, ... }:
     {
       services.nomad = {
-        enable = true;
+        # Off by default: this is a nomad *server* and it is not needed on every
+        # host. A host that wants it sets `services.nomad.enable = true`.
+        enable = lib.mkDefault false;
+
+        # Defaults to true upstream, which re-enables the Docker daemon and adds
+        # the user to the docker group. The driver configured below is podman.
+        enableDocker = false;
+
         extraSettingsPlugins = [ pkgs.nomad-driver-podman ];
 
         settings = {

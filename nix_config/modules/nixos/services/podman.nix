@@ -10,14 +10,10 @@
           enable = true;
 
           # Create a `docker` alias for podman, to use it as a drop-in replacement
-          dockerCompat = false;
+          dockerCompat = true;
 
           # Required for containers under podman-compose to be able to talk to each other.
           defaultNetwork.settings.dns_enabled = true;
-        };
-
-        docker = {
-          enable = true;
         };
       };
 
@@ -28,19 +24,12 @@
         podman-compose # start group of containers for dev
       ];
 
+      # Registers the binfmt handlers podman needs to run aarch64 images. This
+      # used to also be done by running the multiarch/qemu-user-static image in
+      # a privileged container on every boot, which the kernel interface above
+      # makes redundant.
       boot.binfmt.emulatedSystems = [
         "aarch64-linux"
       ];
-
-      systemd.services.qemu-user-static = {
-        description = "Register QEMU static binaries for Docker ARM emulation";
-        after = [ "docker.service" ];
-        wantedBy = [ "multi-user.target" ];
-        serviceConfig = {
-          Type = "oneshot";
-          ExecStart = "${pkgs.docker}/bin/docker run --rm --privileged multiarch/qemu-user-static --reset -p yes";
-          RemainAfterExit = true;
-        };
-      };
     };
 }
