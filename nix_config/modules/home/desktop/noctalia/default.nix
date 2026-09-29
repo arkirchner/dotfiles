@@ -26,7 +26,10 @@
 
           bar.default = {
             position = "top";
-            start = [ "launcher" "workspaces" ];
+            start = [
+              "launcher"
+              "workspaces"
+            ];
             center = [ "active_window" ];
             end = [
               "network"
