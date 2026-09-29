@@ -58,19 +58,19 @@ Verify:
 - [x] `nix eval` greeter command = `noctalia-greeter-session`,
       `displayManager.defaultSession = "niri"` (niri module default),
       both sessions present in `services.displayManager.sessionPackages`.
-- [ ] Boot test: greeter lists niri + Hyprland; logging into niri starts an
+- [x] Boot test: greeter lists niri + Hyprland; logging into niri starts an
       empty niri session.
 - [x] Commit.
 
 ## Phase 2 - Home Manager: niri settings
 
-- [ ] `modules/home/desktop/niri.nix`: `wayland.windowManager.niri.settings`
+- [x] `modules/home/desktop/niri.nix`: `wayland.windowManager.niri.settings`
       with the translated config (see mapping table below), incl.
       `spawn-at-startup` for Noctalia.
-- [ ] Wire into `modules/home/desktop/desktop-programs.nix`.
+- [x] Wire into `modules/home/desktop/desktop-programs.nix`.
 
 Verify:
-- [ ] Host builds pass (HM `checkConfig` runs `niri validate`).
+- [x] Host builds pass (HM `checkConfig` runs `niri validate`).
 - [ ] Commit.
 
 ### Hyprland -> niri mapping
