@@ -1,420 +1,152 @@
-# TODO: Migrate `nix_config` to the Dendritic Pattern (flake-parts)
+# TODO: Migrate from Hyprland to Niri + Noctalia Shell
 
-Goal: make every `.nix` file a self-contained flake-parts module, so that hosts,
-NixOS features, and Home Manager features compose by *declaration* instead of
-path-based `imports`.
+Goal: run [niri](https://niri.wf/) as the Wayland compositor with the
+[Noctalia](https://noctalia.dev/) desktop shell, replacing Hyprland, Waybar,
+Wofi, Mako, hyprpaper, hyprlock, hypridle and clipse.
 
-Reference reading:
-- Pattern: https://github.com/mightyiam/dendritic
-- `import-tree`: https://github.com/vic/import-tree
-- `flake.modules`: https://flake.parts/options/flake-parts-modules.html
+References:
+- NixOS `programs.niri`: nixpkgs `nixos/modules/programs/wayland/niri.nix`
+- NixOS `programs.noctalia` + `services.displayManager.noctalia-greeter`
+- Noctalia docs: https://docs.noctalia.dev/noctalia/
+- Reference config: https://github.com/vimjoyer/nixconf/blob/main/wrappedPrograms/niri.nix
 
-## Definition of done
+## Locked decisions
 
-- [ ] `nix_config/flake.nix` is <= ~15 lines and contains only `inputs` + `mkFlake`.
-- [ ] Every file under `nix_config/modules/` is a flake-parts module.
-- [ ] No module imports another module by path (`imports = [ ../programs ]` is gone).
-- [ ] Features expose `flake.modules.nixos.<name>` and `flake.modules.homeManager.<name>`.
-- [ ] Hosts are declared in one place as `flake.nixosConfigurations.<host>`.
-- [ ] All three hosts build:
-  - `nixos-rebuild build --flake /home/armin/Documents/dotfiles/nix_config#armin-pc`
-  - `nixos-rebuild build --flake /home/armin/Documents/dotfiles/nix_config#armin-laptop`
-  - `nixos-rebuild build --flake /home/armin/Documents/dotfiles/nix_config#armin-work-laptop`
+1. niri runs alongside Hyprland first; Hyprland is removed once niri is
+   verified (session switchable via the greeter).
+2. Official nixpkgs modules only: `programs.niri` (NixOS) and
+   `wayland.windowManager.niri` (Home Manager). No `nix-wrapper-modules`.
+3. Adopt Noctalia Shell: bar, launcher, control center, notifications,
+   wallpaper, lock screen and idle all come from Noctalia.
+4. Lock/idle: Noctalia's built-in lock screen + idle (no swaylock/swayidle).
+5. Login: replace tuigreet with `noctalia-greeter` (session picker, both
+   sessions listed during the parallel phase).
+6. Noctalia settings are authored declaratively in Nix via
+   `programs.noctalia.settings` (HM); GUI overrides are folded back.
 
-## Concepts (short version)
+## Phase 0 - Baseline
 
-- Each `.nix` file is a flake-parts module; `import-tree` imports the whole tree.
-- A file usually does one thing: register a deferred module, e.g.
-  `flake.modules.nixos.foo = { ... }: { ... };`
-- A NixOS config is built by listing deferred modules:
-  `modules = [ config.flake.modules.nixos.boot ... ];`
-- Values are shared through the top-level `config`, not `specialArgs`.
-- `import-tree` ignores any path whose name starts with `_` (use it for raw
-  files such as hardware scans that must not be evaluated as flake-parts modules).
+- [x] Branch `niri` created from `master` (dendritic layout already merged).
+- [x] Verified session files: `niri-26.04` ships
+      `share/wayland-sessions/niri.desktop`, `hyprland-0.56.2` ships
+      `hyprland.desktop` (+ `hyprland-uwsm.desktop`).
 
----
+## Phase 1 - NixOS: niri session + Noctalia greeter
 
-## Current state (inventory)
+- [ ] `modules/nixos/desktop/niri.nix`: `programs.niri.enable = true`.
+- [ ] `modules/nixos/desktop/hyprland.nix`: `programs.hyprland.enable = true`
+      (temporary, fallback session only; removed in Phase 5).
+- [ ] `modules/nixos/desktop/noctalia.nix`: `programs.noctalia.enable = true`
+      (no `systemd.enable`: would also start under Hyprland during the
+      parallel phase) + `programs.noctalia.recommendedServices.enable = true`
+      (NetworkManager/Bluetooth already on; rest is `mkDefault`) +
+      `services.displayManager.noctalia-greeter.enable = true`.
+- [ ] `modules/nixos/core/desktop.nix`: drop manual `services.greetd.settings`
+      (noctalia-greeter owns `greetd.enable` + `default_session.command` via
+      `mkDefault`) and the Hyprland-only `xdg.portal` bits
+      (`extraPortals = [ xdg-desktop-portal-hyprland ]`,
+      `config.common.default = "hyprland"`, `wlr.enable = false`); keep
+      `xdg.portal.enable = true` (niri/hyprland modules set the rest).
+- [ ] Wire all three modules into `modules/nixos/shared.nix`.
 
-| Current path | Class | Notes |
-| --- | --- | --- |
-| `flake.nix` | flake | 3 hosts, all use `specialArgs = { inherit inputs; }` |
-| `nixos_modules/default.nix` | nixos + hm | Monolith: boot, plymouth, users, packages, pam-u2f, overlays, AND the whole `home-manager.users.armin` block |
-| `nixos_modules/nvf.nix` | nixos | `programs.nvf` |
-| `nixos_modules/qmk.nix` | nixos | |
-| `nixos_modules/redis.nix` | nixos | |
-| `nixos_modules/vpn.nix` | nixos | |
-| `nixos_modules/libvirtd.nix` | nixos | |
-| `nixos_modules/postgresql/` | nixos | |
-| `nixos_modules/podman/` | nixos | |
-| `nixos_modules/nomad/` | nixos | |
-| `nixos_modules/thunar/` | nixos | `programs.thunar`, `services.gvfs` |
-| `nixos_modules/desktop_programs/*` | **home-manager** | hyprland, waybar, wofi, hyprpaper, imv, mpv, easyeffects |
-| `programs/*` | **home-manager** | fish, tmux, kitty, vscode, gpg, git, opencode, hermes-agent (aggregated by `programs/default.nix`) |
-| `programs/{bash,oh_my_posh,openvpn,vale}` | **home-manager** | NOT in the aggregator -> currently dead |
-| `machines/x600/configuration.nix` | nixos | thin host (`networking.hostName`, hardware import) |
-| `machines/720s/configuration.nix` | nixos | thin host |
-| `machines/dell_5450/configuration.nix` | nixos | thin host |
-| `machines/*/hardware-configuration.nix` | nixos | raw hardware scans |
-| `machines/720s/programs.nix` | - | **dead** (never imported) |
-| `packages/rails-mcp-server/` | package | `callPackage`-style derivation |
-| `shells/*` | devshells | not part of NixOS hosts |
-| `secrets/`, `.sops.yaml` | - | sops-nix data |
-
-Note: `programs/bash`, `programs/oh_my_posh`, `programs/openvpn`, `programs/vale`
-and `machines/720s/programs.nix` look unused today. Mention/remove during the
-migration (do not delete before confirming).
-
----
-
-## Target layout
-
-```
-nix_config/
-  flake.nix                      # inputs + mkFlake + import-tree
-  flake.lock
-  modules/
-    flake/
-      flake-parts.nix            # imports flake-parts.flakeModules.modules
-      systems.nix                # systems = [ "x86_64-linux" ]
-      home-manager.nix           # NixOS<->HM integration module
-      devshells.nix              # optional: port shells/codeocean + shells/xikolo
-      packages.nix               # optional: port packages/rails-mcp-server
-    nixos/
-      core/
-        boot.nix plymouth.nix nix.nix networking.nix users.nix
-        audio.nix bluetooth.nix graphics.nix fonts.nix desktop.nix
-        session.nix pam-u2f.nix overlays.nix packages.nix
-      services/
-        postgresql.nix podman.nix nomad.nix redis.nix vpn.nix libvirtd.nix qmk.nix
-      desktop/
-        thunar.nix
-      editors/
-        nvf.nix
-    home/
-      core/
-        home.nix                 # home.packages, stateVersion
-        fish.nix git.nix gpg.nix tmux.nix kitty.nix vscode.nix opencode.nix hermes-agent.nix
-        programs.nix             # profile: imports the program set
-      desktop/
-        hyprland.nix waybar.nix wofi.nix hyprpaper.nix imv.nix mpv.nix easyeffects.nix
-        desktop-programs.nix     # profile: imports the desktop set
-    hosts/
-      x600/
-        default.nix              # flake.nixosConfigurations.armin-pc
-        hardware.nix             # registers deferred NixOS module
-        _hardware-configuration.nix   # raw scan (underscore = ignored by import-tree)
-      _720s/ ...       # same shape for armin-laptop
-      _dell_5450/ ...  # same shape for armin-work-laptop
-      home/
-        armin-pc.nix armin-laptop.nix armin-work-laptop.nix   # per-host HM user
-```
-
-Do the move in phases and keep each phase buildable.
-
----
-
-## Phase 0 - Baseline and safety net
-
-- [ ] Create a branch: `git switch -c dendritic`.
-- [ ] Record current builds so you can diff later:
-  - `nixos-rebuild build --flake /home/armin/Documents/dotfiles/nix_config#armin-pc`
-  - repeat for `armin-laptop` and `armin-work-laptop`.
-- [ ] `git add -A && git commit -m "chore: baseline before dendritic migration"`.
-
-## Phase 1 - Bootstrap flake-parts
-
-- [ ] Add inputs `flake-parts` and `import-tree` to `flake.nix`; keep the rest.
-- [ ] Replace `outputs` with the one-liner.
-
-```nix
-# nix_config/flake.nix
-{
-  inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    home-manager.url = "github:nix-community/home-manager";
-    nvf.url = "github:arkirchner/nvf";
-    hermes-agent.url = "github:NousResearch/hermes-agent";
-    sops-nix.url = "github:Mic92/sops-nix";
-    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
-
-    flake-parts.url = "github:hercules-ci/flake-parts";
-    import-tree.url = "github:vic/import-tree";
-  };
-
-  outputs =
-    inputs:
-    inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);
-}
-```
-
-- [ ] Add the two bootstrap modules:
-
-```nix
-# modules/flake/flake-parts.nix
-{ inputs, ... }:
-{
-  imports = [ inputs.flake-parts.flakeModules.modules ];
-}
-```
-
-```nix
-# modules/flake/systems.nix
-{
-  systems = [ "x86_64-linux" ];
-}
-```
-
-- [ ] Verify: `nix flake show path:/home/armin/Documents/dotfiles/nix_config` (expect no hosts yet, no errors).
-
-## Phase 2 - NixOS feature modules
-
-Split `nixos_modules/default.nix` into one file per feature. Pattern:
-
-```nix
-# modules/nixos/core/boot.nix
-{ ... }:
-{
-  flake.modules.nixos.boot = {
-    boot.loader.systemd-boot.enable = true;
-    boot.loader.efi.canTouchEfiVariables = true;
-    boot.loader.timeout = 0;
-  };
-}
-```
-
-Checklist of features to extract from the monolith:
-- [ ] bootloader (`boot.loader.systemd-boot*`, `boot.loader.timeout`)
-- [ ] plymouth / silent boot (`boot.plymouth`, `consoleLogLevel`, `kernelParams`)
-- [ ] `nix.settings.experimental-features` + `nix.gc`
-- [ ] `nixpkgs.config.allowUnfree`
-- [ ] `nixpkgs.overlays` (python313Packages aioboto3/fastmcp overrides)
-- [ ] networking (`networkmanager`, `extraHosts`, `firewall.extraCommands`)
-- [ ] locale/time (`time.timeZone`, `i18n.*`, `services.xserver.xkb`)
-- [ ] users (`users.users.armin`, groups, `linger`)
-- [ ] dbus / fwupd / dconf / fish / steam
-- [ ] xdg.portal + greetd (session)
-- [ ] hardware: graphics, bluetooth, blueman, rtkit, pipewire
-- [ ] fonts (`fonts.packages`)
-- [ ] `environment.systemPackages` + `environment.sessionVariables`
-- [ ] `security.pam.u2f`
-- [ ] `system.stateVersion` (only in the host module, not shared)
-
-Move the existing service modules:
-- [ ] `nixos_modules/{qmk,redis,vpn,libvirtd}.nix` -> `modules/nixos/services/*.nix`, each wrapped as `flake.modules.nixos.<name>`.
-- [ ] `nixos_modules/{postgresql,podman,nomad,thunar}/default.nix` -> same, keeping subfiles.
-- [ ] `nixos_modules/nvf.nix` -> `modules/nixos/editors/nvf.nix` as `flake.modules.nixos.nvf`.
-- [ ] `nixos_modules/desktop_programs/*` are Home Manager modules -> move to Phase 3.
-
-Verify after this phase by wiring one host with the new modules (Phase 4).
-
-## Phase 3 - Home Manager modules
-
-- [ ] Move each `programs/<x>/default.nix` to `modules/home/<x>.nix`, wrapped:
-
-```nix
-# modules/home/tmux.nix
-{ ... }:
-{
-  flake.modules.homeManager.tmux =
-    { pkgs, ... }:
-    {
-      home.packages = [ pkgs.fzf ];
-      programs.tmux.enable = true;
-      # ...
-    };
-}
-```
-
-- [ ] Replace `programs/default.nix` (a list) with a profile module:
-
-```nix
-# modules/home/programs.nix
-{ config, ... }:
-{
-  flake.modules.homeManager.programs = {
-    imports = with config.flake.modules.homeManager; [
-      fish tmux kitty vscode gpg git opencode hermes-agent
-    ];
-  };
-}
-```
-
-- [ ] Move `nixos_modules/desktop_programs/*` to `modules/home/desktop/*` as
-      `flake.modules.homeManager.<name>`, plus a `desktop-programs` profile module.
-- [ ] Move the `home.packages` list + `home.stateVersion` into a shared
-      `flake.modules.homeManager.home`.
-- [ ] Keep non-`.nix` assets (e.g. `stay_always_in_tmux`, `tmux.config`, `wofi.css`)
-      next to their module; `builtins.readFile ./...` still works.
-
-## Phase 4 - Hosts
-
-- [ ] Convert each `machines/<host>/configuration.nix` into `modules/hosts/<host>/default.nix`:
-
-```nix
-# modules/hosts/x600/default.nix
-{ config, inputs, ... }:
-{
-  flake.nixosConfigurations.armin-pc = inputs.nixpkgs.lib.nixosSystem {
-    modules = [
-      inputs.nvf.nixosModules.default
-      config.flake.modules.nixos.boot
-      config.flake.modules.nixos.home-manager
-      config.flake.modules.nixos."nixosConfigurations/armin-pc"
-    ];
-  };
-}
-```
-
-- [ ] Put host-specific NixOS config (hostname, quirks, `stateVersion`) in a
-      matching entry and let multiple files contribute to the same key:
-
-```nix
-# modules/hosts/x600/configuration.nix
-{ ... }:
-{
-  flake.modules.nixos."nixosConfigurations/armin-pc" = {
-    networking.hostName = "armin-pc";
-    system.stateVersion = "24.11";
-  };
-}
-```
-
-- [ ] Hardware scans: rename to `_hardware-configuration.nix` (underscore so
-      `import-tree` skips it) and register it from a wrapper:
-
-```nix
-# modules/hosts/x600/hardware.nix
-{ ... }:
-{
-  flake.modules.nixos."nixosConfigurations/armin-pc".imports = [
-    ./_hardware-configuration.nix
-  ];
-}
-```
-
-- [ ] Repeat for `720s` (armin-laptop) and `dell_5450` (armin-work-laptop).
-- [ ] Optional DRY helper: a `flake/nixos-hosts.nix` option `nixosHosts` that
-      maps to `flake.nixosConfigurations` (see bivsk/GaetanLepage examples).
-
-## Phase 5 - Home Manager <-> NixOS integration
-
-This is the part that currently lives in `nixos_modules/default.nix`:
-
-```nix
-home-manager.backupFileExtension = "backup";
-home-manager.useGlobalPkgs = true;
-home-manager.useUserPackages = true;
-home-manager.sharedModules = [
-  inputs.hermes-agent.homeManagerModules.default
-  inputs.sops-nix.homeManagerModules.sops
-];
-home-manager.users.armin = { imports = (import ../programs) ++ (import ./desktop_programs); home.stateVersion = "24.05"; };
-```
-
-- [ ] Create a flake-parts module. Capture the HM modules in a `let` so the
-      inner NixOS module does not shadow flake-parts `config`:
-
-```nix
-# modules/flake/home-manager.nix
-{ inputs, config, ... }:
-let
-  hm = config.flake.modules.homeManager;
-in
-{
-  imports = [ inputs.home-manager.nixosModules.home-manager ];
-
-  flake.modules.nixos.home-manager = {
-    home-manager = {
-      useGlobalPkgs = true;
-      useUserPackages = true;
-      backupFileExtension = "backup";
-      sharedModules = [
-        inputs.hermes-agent.homeManagerModules.default
-        inputs.sops-nix.homeManagerModules.sops
-      ];
-      users.armin.imports = [
-        hm.home
-        hm.programs
-        hm.desktop-programs
-        hm."homeConfigurations/armin-pc" # per-host; set per host instead
-      ];
-    };
-  };
-}
-```
-
-- [ ] Prefer declaring `home-manager.users.armin.imports` in the host module and
-      only share `useGlobalPkgs`/`sharedModules` globally.
-- [ ] Add per-host HM file, e.g. `modules/hosts/home/armin-pc.nix`:
-
-```nix
-{ config, ... }:
-{
-  flake.modules.homeManager."homeConfigurations/armin-pc" = {
-    home.stateVersion = "24.05";
-    imports = with config.flake.modules.homeManager; [ programs desktop-programs ];
-  };
-}
-```
-
-- [ ] Port `inputs.sops-nix.nixosModules.sops` if any NixOS-level secrets are needed.
-
-## Phase 6 - Remaining outputs (optional)
-
-- [ ] `packages/rails-mcp-server` -> `flake.packages.<system>.rails-mcp-server = pkgs.callPackage ./rails-mcp-server { };` in `modules/flake/packages.nix`.
-- [ ] `shells/codeocean.nix`, `shells/wave_walker.nix`, `shells/xikolo/flake.nix` -> `flake.devShells.<system>.<name>`.
-
-## Phase 7 - Cutover and cleanup
-
-- [ ] Delete `nixos_modules/` and `programs/` and `machines/` once nothing references them.
-- [ ] Remove `specialArgs = { inherit inputs; }` (read inputs via flake-parts args
-      or `inputs.self.modules...`). Add a `generic` module only if a lower-level
-      module truly needs `inputs`:
-
-```nix
-# modules/flake/inputs.nix
-{ inputs, ... }:
-{
-  flake.modules.generic.inputs = { ... }: {
-    _module.args.inputs = inputs;
-  };
-}
-```
-
-- [ ] Confirm dead files before deleting: `programs/{bash,oh_my_posh,openvpn,vale}`,
-      `machines/720s/programs.nix`.
-- [ ] Final verification:
-  - `nix flake show path:/home/armin/Documents/dotfiles/nix_config`
-  - build all three hosts (commands in Definition of done).
+Verify:
+- [ ] `nix flake show nix_config`
+- [ ] build all three hosts:
+  - `nixos-rebuild build --flake nix_config#armin-pc`
+  - `nixos-rebuild build --flake nix_config#armin-laptop`
+  - `nixos-rebuild build --flake nix_config#armin-work-laptop`
+- [ ] `nix eval` greeter command = `noctalia-greeter-session`,
+      `displayManager.defaultSession = "niri"` (niri module default),
+      both sessions present in `services.displayManager.sessionPackages`.
+- [ ] Boot test: greeter lists niri + Hyprland; logging into niri starts an
+      empty niri session.
 - [ ] Commit.
 
----
+## Phase 2 - Home Manager: niri settings
+
+- [ ] `modules/home/desktop/niri.nix`: `wayland.windowManager.niri.settings`
+      with the translated config (see mapping table below), incl.
+      `spawn-at-startup` for Noctalia.
+- [ ] Wire into `modules/home/desktop/desktop-programs.nix`.
+
+Verify:
+- [ ] Host builds pass (HM `checkConfig` runs `niri validate`).
+- [ ] Commit.
+
+### Hyprland -> niri mapping
+
+| Hyprland | niri |
+| --- | --- |
+| `monitor = eDP-1, 1920x1080@1200,1560` | `output = "eDP-1" { mode = "1920x1080" position = { x = 1200; y = 1560; } }` |
+| `monitor = DP-4, 1920x1200@0,0,90` | `output = "DP-4" { mode = "1920x1200" transform = "90" position = { x = 0; y = 0; } }` |
+| `monitor = DP-3, 1920x1200@1200,360` | `output = "DP-3" { mode = "1920x1200" position = { x = 1200; y = 360; } }` |
+| `gaps_in 2` / `gaps_out 2` | `layout { gaps = 2 }` |
+| `border_size 2`, `border_color active #33ccff` | `layout { border = { width = 2 } focus-ring = { width = 2 active-color = "#33ccff" } }` |
+| `follow_mouse 1` | `input { focus-follows-mouse = {} }` |
+| `touchpad:natural_scroll yes` | `input { touchpad { natural-scroll = false } }` (check current value) |
+| `bind SUPER Q ...` etc. | `binds { "Mod+Q".spawn = "kitty" ... }` |
+| clipse window-rule (float, 622x652) | `window-rule { class-match "clipse" float = {} size = { width = 622; height = 652; } }` |
+| XWayland via Hyprland | `xwayland-satellite` (HM `xwaylandSatellitePackage` default) |
+| hyprpaper swaybg | Noctalia `[wallpaper]` (Phase 3) |
+| hyprlock | Noctalia `[lockscreen]` + `noctalia msg session lock` |
+| hypridle | Noctalia `[idle]` |
+
+Keybind conflicts to resolve in Phase 2:
+- `Mod+S`: screenshot (grim/slurp) -> `Print`; Noctalia control-center keeps `Mod+S`.
+- `Mod+R` wofi launcher -> Noctalia launcher `Mod+Space` (default).
+- `Mod+L`: Noctalia `noctalia msg session lock`.
+- `Mod+Comma`: Noctalia settings.
+- `Mod+V` clipse: keep clipse or switch to Noctalia clipboard (decide in Phase 3).
+- Media/brightness binds need `allow-when-locked = true` in niri.
+
+niri KDL gotchas: multiple `spawn-at-startup`/`window-rule`/`binds` nodes must
+use the `_children` form in the HM attrset; no `stay_focused` rule; blur only
+in niri >= 26.04; start Noctalia with `noctalia --daemon`.
+
+## Phase 3 - Home Manager: Noctalia shell
+
+- [ ] `modules/home/desktop/noctalia.nix`: `programs.noctalia.enable = true` +
+      `programs.noctalia.settings`:
+      - `[theme]` `mode = "dark"`, `source = "builtin"`, `builtin = "Catppuccin"`.
+      - `[wallpaper]` -> `wallpapers/night-mountain.jpg` (same file hyprpaper used).
+      - bar widgets mirroring the current Waybar set (workspaces via Noctalia's
+        niri integration, window title, battery, network, bluetooth, clock).
+      - `[lockscreen]`, `[idle]` (lock on idle timeout).
+      - niri integration settings (window rules for Noctalia surfaces).
+- [ ] niri `spawn-at-startup "noctalia" "--daemon"` (Phase 2 file).
+- [ ] Keep `programs.noctalia.systemd.enable` (HM) OFF during parallel phase.
+
+Verify: build hosts; boot into niri; Noctalia bar/launcher/lock/idle work.
+Commit.
+
+## Phase 4 - End-to-end verification
+
+- [ ] Screenshots: `Print` -> `grim -g "$(slurp)"`.
+- [ ] Portals: file chooser + screencast via `xdg-desktop-portal-gnome`.
+- [ ] XWayland apps (e.g. a quick x11 app) via `xwayland-satellite`.
+- [ ] Noctalia lock (`Mod+L`) and idle blanking.
+- [ ] All three hosts build.
+
+## Phase 5 - Remove Hyprland
+
+- [ ] Drop `modules/nixos/desktop/hyprland.nix` (+ `shared.nix` entry).
+- [ ] Drop HM modules `hyprland`, `waybar`, `wofi`, `hyprpaper` and their
+      `desktop-programs.nix` entries (files deleted).
+- [ ] Keep `imv`, `mpv`, `easyeffects`, `kitty`, `yazi`.
+- [ ] Verify builds; boot; commit.
 
 ## Gotchas
 
-- **Hardware scans must not be top-level modules.** `import-tree` would evaluate
-  them as flake-parts modules and fail on undeclared options. Underscore-prefix
-  the file and import it from a wrapper module.
-- **`config` shadowing.** Inside a deferred NixOS module, `config` is the NixOS
-  config, not flake-parts config. Capture `config.flake.modules...` in a `let`
-  before defining the inner module (see Phase 5).
-- **`flake.modules` needs the extra module.** Without
-  `inputs.flake-parts.flakeModules.modules` in `imports`, `flake.modules.*` is
-  undeclared.
-- **Attribute name collisions.** `flake.modules.nixos.home-manager` and
-  `flake.modules.homeManager.home-manager` coexist (different classes), but two
-  files registering the same class+name must be mergeable deferred modules.
-- **`home.stateVersion` vs `system.stateVersion`** live in different classes.
-- **`specialArgs` is the documented anti-pattern.** Prefer the top-level `config`
-  for sharing; only pass `inputs` down if unavoidable.
-- **`nixos-rebuild` flake URI is unchanged**: still `nix_config#<host>`.
-- **`programs.fish.enable` (NixOS)** and `programs.fish` (HM) are different
-  options; the monolith sets both.
-
-## Optional follow-ups
-
-- [ ] Adopt `flake-file` to declare inputs from within modules instead of `flake.nix`.
-- [ ] Adopt `vic/den` for aspect-oriented composition (what vic/vix moved to).
-- [ ] Add `treefmt-nix` and an `nix flake check` CI job.
-- [ ] Consider `colmena`/`deploy-rs` once hosts are declarative.
+- Do NOT enable `programs.noctalia.systemd.enable` (NixOS or HM) during the
+  parallel phase: the unit targets `graphical-session.target`, which Hyprland
+  also reaches, so Noctalia would run under Hyprland and fight Waybar/Mako.
+- Noctalia greeter sets `services.greetd` via `mkDefault`; the old manual
+  greetd block in `core/desktop.nix` must be deleted, not overridden.
+- Noctalia greeter needs `services.greetd.settings.default_session.user` to
+  exist (NixOS greetd default user `greeter` suffices).
+- Noctalia greeter disables the previous auto-login (`initial_session`); the
+  session is chosen at the login screen.
+- `programs.niri` sets `displayManager.defaultSession` and the niri portal
+  defaults; `programs.hyprland` adds `configPackages = [ hyprland ]`.
+  Don't also force `xdg.portal.config.common.default` by hand.
+- `nixos-rebuild` flake URI is unchanged: `nix_config#<host>`.

@@ -10,6 +10,9 @@
       config.flake.modules.nixos.locale
       config.flake.modules.nixos.users
       config.flake.modules.nixos.desktop
+      config.flake.modules.nixos.niri
+      config.flake.modules.nixos.hyprland
+      config.flake.modules.nixos.noctalia
       config.flake.modules.nixos.audio
       config.flake.modules.nixos.bluetooth
       config.flake.modules.nixos.graphics
