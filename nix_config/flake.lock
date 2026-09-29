@@ -75,6 +75,7 @@
       },
       "original": {
         "owner": "NousResearch",
+        "ref": "main",
         "repo": "hermes-agent",
         "type": "github"
       }
@@ -258,6 +259,7 @@
       },
       "original": {
         "owner": "arkirchner",
+        "ref": "main",
         "repo": "nvf",
         "type": "github"
       }
