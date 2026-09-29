@@ -131,23 +131,25 @@ Verify:
 
 ## Phase 5 - Remove Hyprland
 
-- [ ] Drop `modules/nixos/desktop/hyprland.nix` (+ `shared.nix` entry).
-- [ ] Drop HM modules `hyprland`, `waybar`, `wofi`, `hyprpaper` and their
+- [x] Drop `modules/nixos/desktop/hyprland.nix` (+ `shared.nix` entry).
+- [x] Drop HM modules `hyprland`, `waybar`, `wofi`, `hyprpaper` and their
       `desktop-programs.nix` entries (files deleted).
-- [ ] Relocate the bind tools that currently live in the hyprland HM module's
-      `home.packages` (`grim`, `slurp`, `wl-clipboard`, `clipse`, `playerctl`,
-      `brightnessctl`, `pwvucontrol`) into the niri module; `kitty`/`firefox`
-      already come from `home.nix`.
-- [ ] Keep `imv`, `mpv`, `easyeffects`, `kitty`, `yazi`.
-- [ ] Verify builds; boot; commit.
+- [x] Instead of relocating `grim`/`slurp`/`clipse`/`playerctl`/
+      `brightnessctl`/`pwvucontrol`, drive screenshot, clipboard history,
+      volume, brightness and media through `noctalia msg` (with OSDs). Only
+      `wl-clipboard` remains as a base CLI utility; `kitty`/`firefox` come
+      from `home.nix`.
+- [x] Keep `imv`, `mpv`, `easyeffects`, `kitty`, `yazi`.
+- [x] Noctalia's built-in polkit agent (`shell.polkit_agent`) covers niri's
+      recommended authentication agent.
+- [x] Verify builds (only the `niri` session remains).
+- [ ] Boot test after the tool swaps (screenshot/clipboard/media keys).
+- [ ] Commit.
 
 ## Gotchas
 
-- Do NOT enable `programs.noctalia.systemd.enable` (NixOS or HM) during the
-  parallel phase: the unit targets `graphical-session.target`, which Hyprland
-  also reaches, so Noctalia would run under Hyprland and fight Waybar/Mako.
-- `services.hyprpaper` is scoped to `hyprland-session.target` so the
-  Hyprland-only tool does not start (and fail-loop) under niri.
+- Noctalia is started by niri's `spawn-at-startup`, not a systemd user service;
+  leave `programs.noctalia.systemd.enable` off.
 - Noctalia greeter sets `services.greetd` via `mkDefault`; the old manual
   greetd block in `core/desktop.nix` must be deleted, not overridden.
 - Noctalia greeter needs `services.greetd.settings.default_session.user` to
@@ -155,6 +157,5 @@ Verify:
 - Noctalia greeter disables the previous auto-login (`initial_session`); the
   session is chosen at the login screen.
 - `programs.niri` sets `displayManager.defaultSession` and the niri portal
-  defaults; `programs.hyprland` adds `configPackages = [ hyprland ]`.
-  Don't also force `xdg.portal.config.common.default` by hand.
+  defaults. Don't also force `xdg.portal.config.common.default` by hand.
 - `nixos-rebuild` flake URI is unchanged: `nix_config#<host>`.

@@ -6,9 +6,8 @@
     programs.dconf.enable = true;
     programs.steam.enable = true;
 
-    # Session/portal backends are owned by the compositor modules
-    # (programs.niri and programs.hyprland); the login session is chosen by
-    # the Noctalia greeter (services.displayManager.noctalia-greeter).
+    # Session/portal backend is owned by programs.niri; the login session is
+    # chosen by the Noctalia greeter (services.displayManager.noctalia-greeter).
     xdg.portal.enable = true;
 
     # Configure keymap in X11

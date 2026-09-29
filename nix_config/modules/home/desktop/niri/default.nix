@@ -1,21 +1,24 @@
 { ... }:
 {
   flake.modules.homeManager.niri =
-    { ... }:
+    { pkgs, ... }:
     {
+      # Base clipboard utility for CLI apps; Noctalia owns the clipboard
+      # history panel itself.
+      home.packages = with pkgs; [
+        wl-clipboard
+      ];
+
       wayland.windowManager.niri = {
         enable = true;
 
-        # Translated from the old Hyprland config; Noctalia owns the launcher,
-        # control center, settings, lock and idle surfaces.
         settings = {
           _children = [
-            # Noctalia daemon; clipse kept until Phase 3 decides on the
-            # Noctalia clipboard.
+            # Noctalia desktop shell: bar, launcher, notifications, lock, idle,
+            # wallpaper, clipboard and screenshots.
             { spawn-at-startup._args = [ "noctalia" "--daemon" ]; }
-            { spawn-at-startup._args = [ "clipse" "-listen" ]; }
 
-            # MONITORS (Hyprland -> niri)
+            # MONITORS
             {
               output = {
                 _args = [ "eDP-1" ];
@@ -48,15 +51,6 @@
               };
             }
 
-            # clipse (was a Hyprland float rule; niri has no stay_focused)
-            {
-              window-rule = {
-                match._props = { app-id = "^clipse$"; };
-                open-floating = true;
-                default-column-width = { fixed = 622; };
-                default-window-height = { fixed = 652; };
-              };
-            }
             # Noctalia settings window floats (upstream recommendation)
             {
               window-rule = {
@@ -86,27 +80,24 @@
 
           input = {
             keyboard.xkb.layout = "us";
-            # natural-scroll omitted; niri's default is off (matches Hyprland).
             touchpad.tap = { };
             focus-follows-mouse = { };
           };
 
-          # Noctalia takes Mod+Space (launcher), Mod+S (control center) and
-          # Mod+Comma (settings); screenshots move to Print.
+          # Noctalia owns the launcher, control center, settings, lock,
+          # clipboard, screenshots and the volume/brightness/media OSDs.
           binds = {
             "Mod+Q" = { spawn = [ "kitty" ]; };
             "Mod+C" = { close-window = { }; };
             "Mod+M" = { quit = { }; };
             "Mod+E" = { spawn = [ "kitty" "-e" "yazi" ]; };
-            "Mod+V" = { spawn = [ "kitty" "--class" "clipse" "-e" "clipse" ]; };
             "Mod+W" = { spawn = [ "firefox" ]; };
+            "Mod+V" = { spawn = [ "noctalia" "msg" "panel-toggle" "clipboard" ]; };
             "Mod+L" = { spawn = [ "noctalia" "msg" "session" "lock" ]; };
             "Mod+Space" = { spawn = [ "noctalia" "msg" "panel-toggle" "launcher" ]; };
             "Mod+S" = { spawn = [ "noctalia" "msg" "panel-toggle" "control-center" ]; };
             "Mod+Comma" = { spawn = [ "noctalia" "msg" "settings-toggle" ]; };
-            "Print" = {
-              spawn-sh = "mkdir -p ~/Pictures/screenshot && grim -g \"$(slurp)\" ~/Pictures/screenshot/$(date +%s).png";
-            };
+            "Print" = { spawn = [ "noctalia" "msg" "screenshot-region" ]; };
 
             "Mod+Left" = { focus-column-left = { }; };
             "Mod+Right" = { focus-column-right = { }; };
@@ -146,39 +137,39 @@
 
             "XF86AudioRaiseVolume" = {
               _props.allow-when-locked = true;
-              spawn-sh = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+";
+              spawn = [ "noctalia" "msg" "volume-up" ];
             };
             "XF86AudioLowerVolume" = {
               _props.allow-when-locked = true;
-              spawn-sh = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-";
+              spawn = [ "noctalia" "msg" "volume-down" ];
             };
             "XF86AudioMute" = {
               _props.allow-when-locked = true;
-              spawn-sh = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
+              spawn = [ "noctalia" "msg" "volume-mute" ];
             };
             "XF86AudioPlay" = {
               _props.allow-when-locked = true;
-              spawn-sh = "playerctl play-pause";
+              spawn = [ "noctalia" "msg" "media" "toggle" ];
             };
             "XF86AudioPause" = {
               _props.allow-when-locked = true;
-              spawn-sh = "playerctl play-pause";
+              spawn = [ "noctalia" "msg" "media" "toggle" ];
             };
             "XF86AudioNext" = {
               _props.allow-when-locked = true;
-              spawn-sh = "playerctl next";
+              spawn = [ "noctalia" "msg" "media" "next" ];
             };
             "XF86AudioPrev" = {
               _props.allow-when-locked = true;
-              spawn-sh = "playerctl previous";
+              spawn = [ "noctalia" "msg" "media" "previous" ];
             };
             "XF86MonBrightnessDown" = {
               _props.allow-when-locked = true;
-              spawn-sh = "brightnessctl set 5%-";
+              spawn = [ "noctalia" "msg" "brightness-down" ];
             };
             "XF86MonBrightnessUp" = {
               _props.allow-when-locked = true;
-              spawn-sh = "brightnessctl set +5%";
+              spawn = [ "noctalia" "msg" "brightness-up" ];
             };
           };
 

@@ -1,16 +1,12 @@
 { ... }:
 {
   flake.modules.homeManager.noctalia =
-    { ... }:
+    { config, ... }:
     {
       programs.noctalia = {
         enable = true;
 
-        # systemd intentionally left off during the Hyprland parallel phase:
-        # the unit targets graphical-session.target, which Hyprland also
-        # reaches, so Noctalia would fight Waybar/Mako. niri starts it via
-        # spawn-at-startup instead.
-
+        # Started by niri's spawn-at-startup, so no systemd service here.
         settings = {
           theme = {
             mode = "dark";
@@ -28,8 +24,6 @@
           # in modules/home/desktop/niri).
           backdrop.enabled = true;
 
-          # Bar mirroring the old Waybar set: workspaces, window title, then
-          # network/volume/bluetooth/battery/clock.
           bar.default = {
             position = "top";
             start = [ "launcher" "workspaces" ];
@@ -53,6 +47,12 @@
           idle.behavior.lock = {
             enabled = true;
             timeout = 600.0;
+          };
+
+          shell = {
+            # Built-in polkit agent (niri's recommended authentication agent).
+            polkit_agent = true;
+            screenshot.directory = "${config.home.homeDirectory}/Pictures/screenshot";
           };
         };
       };
