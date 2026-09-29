@@ -16,7 +16,7 @@
       config.flake.modules.nixos.bluetooth
       config.flake.modules.nixos.graphics
       config.flake.modules.nixos.fonts
-      config.flake.modules.nixos.overlays
+
       config.flake.modules.nixos.packages
       config.flake.modules.nixos.postgresql
       config.flake.modules.nixos.podman
