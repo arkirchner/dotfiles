@@ -118,7 +118,7 @@ in niri >= 26.04; start Noctalia with `noctalia --daemon`.
 
 Verify:
 - [x] Host builds pass (`noctalia config validate` runs at build time).
-- [ ] Boot test: niri starts Noctalia; bar/launcher/lock/idle work.
+- [x] Boot test: niri starts Noctalia; bar/launcher/lock/idle work.
 - [x] Commit.
 
 ## Phase 4 - End-to-end verification
@@ -134,6 +134,10 @@ Verify:
 - [ ] Drop `modules/nixos/desktop/hyprland.nix` (+ `shared.nix` entry).
 - [ ] Drop HM modules `hyprland`, `waybar`, `wofi`, `hyprpaper` and their
       `desktop-programs.nix` entries (files deleted).
+- [ ] Relocate the bind tools that currently live in the hyprland HM module's
+      `home.packages` (`grim`, `slurp`, `wl-clipboard`, `clipse`, `playerctl`,
+      `brightnessctl`, `pwvucontrol`) into the niri module; `kitty`/`firefox`
+      already come from `home.nix`.
 - [ ] Keep `imv`, `mpv`, `easyeffects`, `kitty`, `yazi`.
 - [ ] Verify builds; boot; commit.
 
