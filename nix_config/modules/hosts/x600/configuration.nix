@@ -7,6 +7,6 @@ in
     networking.hostName = "armin-pc"; # Define your hostname.
     system.stateVersion = "24.11";
 
-    home-manager.users.armin.imports = [ hm.armin ];
+    home-manager.users.armin.imports = [ hm."nixosConfigurations/armin-pc" ];
   };
 }

@@ -18,38 +18,8 @@
             # wallpaper, clipboard and screenshots.
             { spawn-at-startup._args = [ "noctalia" "--daemon" ]; }
 
-            # MONITORS
-            {
-              output = {
-                _args = [ "eDP-1" ];
-                mode = "1920x1080";
-                position._props = {
-                  x = 1200;
-                  y = 1560;
-                };
-              };
-            }
-            {
-              output = {
-                _args = [ "DP-4" ];
-                mode = "1920x1200";
-                transform = "90";
-                position._props = {
-                  x = 0;
-                  y = 0;
-                };
-              };
-            }
-            {
-              output = {
-                _args = [ "DP-3" ];
-                mode = "1920x1200";
-                position._props = {
-                  x = 1200;
-                  y = 360;
-                };
-              };
-            }
+            # MONITORS are configured per host, since output names, modes and
+            # positions differ: see modules/hosts/*/home-manager.nix.
 
             # Noctalia settings window floats (upstream recommendation)
             {

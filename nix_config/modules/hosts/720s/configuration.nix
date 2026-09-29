@@ -14,6 +14,6 @@ in
     systemd.tpm2.enable = false;
     boot.initrd.systemd.tpm2.enable = false;
 
-    home-manager.users.armin.imports = [ hm.armin ];
+    home-manager.users.armin.imports = [ hm."nixosConfigurations/armin-laptop" ];
   };
 }

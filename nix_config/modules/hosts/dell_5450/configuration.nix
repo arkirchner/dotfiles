@@ -9,6 +9,6 @@ in
 
     powerManagement.cpuFreqGovernor = "performance";
 
-    home-manager.users.armin.imports = [ hm.armin ];
+    home-manager.users.armin.imports = [ hm."nixosConfigurations/armin-work-laptop" ];
   };
 }
