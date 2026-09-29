@@ -71,7 +71,7 @@ Verify:
 
 Verify:
 - [x] Host builds pass (HM `checkConfig` runs `niri validate`).
-- [ ] Commit.
+- [x] Commit.
 
 ### Hyprland -> niri mapping
 
