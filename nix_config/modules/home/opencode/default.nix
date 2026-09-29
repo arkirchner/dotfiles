@@ -64,6 +64,10 @@
               };
             };
           };
+          permission = {
+            external_directory."/nix/store/**" = "allow";
+            edit."/nix/store/**" = "deny";
+          };
           mcp = {
             nixos = {
               type = "local";
