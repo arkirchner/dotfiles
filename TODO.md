@@ -33,34 +33,34 @@ References:
 
 ## Phase 1 - NixOS: niri session + Noctalia greeter
 
-- [ ] `modules/nixos/desktop/niri.nix`: `programs.niri.enable = true`.
-- [ ] `modules/nixos/desktop/hyprland.nix`: `programs.hyprland.enable = true`
+- [x] `modules/nixos/desktop/niri.nix`: `programs.niri.enable = true`.
+- [x] `modules/nixos/desktop/hyprland.nix`: `programs.hyprland.enable = true`
       (temporary, fallback session only; removed in Phase 5).
-- [ ] `modules/nixos/desktop/noctalia.nix`: `programs.noctalia.enable = true`
+- [x] `modules/nixos/desktop/noctalia.nix`: `programs.noctalia.enable = true`
       (no `systemd.enable`: would also start under Hyprland during the
       parallel phase) + `programs.noctalia.recommendedServices.enable = true`
       (NetworkManager/Bluetooth already on; rest is `mkDefault`) +
       `services.displayManager.noctalia-greeter.enable = true`.
-- [ ] `modules/nixos/core/desktop.nix`: drop manual `services.greetd.settings`
+- [x] `modules/nixos/core/desktop.nix`: drop manual `services.greetd.settings`
       (noctalia-greeter owns `greetd.enable` + `default_session.command` via
       `mkDefault`) and the Hyprland-only `xdg.portal` bits
       (`extraPortals = [ xdg-desktop-portal-hyprland ]`,
       `config.common.default = "hyprland"`, `wlr.enable = false`); keep
       `xdg.portal.enable = true` (niri/hyprland modules set the rest).
-- [ ] Wire all three modules into `modules/nixos/shared.nix`.
+- [x] Wire all three modules into `modules/nixos/shared.nix`.
 
 Verify:
-- [ ] `nix flake show nix_config`
-- [ ] build all three hosts:
+- [x] `nix flake show nix_config`
+- [x] build all three hosts:
   - `nixos-rebuild build --flake nix_config#armin-pc`
   - `nixos-rebuild build --flake nix_config#armin-laptop`
   - `nixos-rebuild build --flake nix_config#armin-work-laptop`
-- [ ] `nix eval` greeter command = `noctalia-greeter-session`,
+- [x] `nix eval` greeter command = `noctalia-greeter-session`,
       `displayManager.defaultSession = "niri"` (niri module default),
       both sessions present in `services.displayManager.sessionPackages`.
 - [ ] Boot test: greeter lists niri + Hyprland; logging into niri starts an
       empty niri session.
-- [ ] Commit.
+- [x] Commit.
 
 ## Phase 2 - Home Manager: niri settings
 
