@@ -86,66 +86,88 @@ nix eval --impure --json --expr 'let f = builtins.getFlake (toString ./.);
 
 ## 3. Contradictions to resolve
 
-- [ ] **`services/podman.nix`: pick one container runtime.** `dockerCompat = false`
-      sits directly under the comment "Create a `docker` alias for podman"
-      (lines 12-13), and `virtualisation.docker.enable = true` runs the Docker
-      daemon next to Podman.
-- [ ] **`services/podman.nix:35-44`: delete `systemd.services.qemu-user-static`.**
-      It runs a `--privileged` Docker container on `multi-user.target` at every
+- [x] **`services/podman.nix`: pick one container runtime.** `dockerCompat = false`
+      sat directly under the comment "Create a `docker` alias for podman"
+      (lines 12-13), and `virtualisation.docker.enable = true` ran the Docker
+      daemon next to Podman. Podman only now: `dockerCompat = true`,
+      `virtualisation.docker` gone, and `users.users.armin.extraGroups` swaps
+      `docker` for `podman` (the `docker` group no longer exists). Note that
+      `services.nomad.enableDocker` *also* defaults to true upstream and would
+      have silently re-enabled the daemon — it is now `false`.
+- [x] **`services/podman.nix:35-44`: delete `systemd.services.qemu-user-static`.**
+      It ran a `--privileged` Docker container on `multi-user.target` at every
       boot to register binfmt handlers that `boot.binfmt.emulatedSystems` (lines
-      31-32) already registers.
-- [ ] **`home/desktop/niri/default.nix:21-52`: move the `output` blocks per host.**
-      eDP-1/DP-3/DP-4 with hardcoded positions is one docked 720s layout, shared
-      by all three hosts (harmless today only because unknown outputs are
-      ignored). Move monitor/position config into per-host HM modules.
-- [ ] **Server-ish services on every host.** nomad (server *and* client),
+      31-32) already registers. Verified `systemd.services ? qemu-user-static` is
+      now false.
+- [x] **`home/desktop/niri/default.nix:21-52`: move the `output` blocks per host.**
+      Done: the shared niri module keeps everything except the monitors, and
+      each host has a `home-manager.nix` defining
+      `flake.modules.homeManager."nixosConfigurations/<name>"` with its own
+      `output` blocks. armin-pc: DP-1 3840x2160 scale 1.5 at 0,0 (measured with
+      `niri msg outputs`; it has no eDP-1/DP-3/DP-4). armin-laptop: eDP-1 only.
+      armin-work-laptop: the old eDP-1/DP-4/DP-3 layout. All three rendered
+      configs pass `niri validate`.
+- [x] **Server-ish services on every host.** nomad (server *and* client),
       postgresql, redis and libvirtd are all in `nixos/shared.nix`, so the work
-      laptop runs a nomad server and a database. Move them to the hosts that
-      need them.
+      laptop ran a nomad server and a database. Resolved as: redis removed
+      outright (module and import gone), nomad kept but
+      `services.nomad.enable = lib.mkDefault false` so a host has to opt in,
+      postgresql and libvirtd stay on every host.
 - [ ] **sops is PGP/YubiKey-only** (`home/hermes-agent/default.nix`,
       `.sops.yaml`): every `home-manager` activation needs the card + PIN, and a
-      failed decrypt aborts activation. Consider an age key as fallback.
-      Related: `users.users.armin.linger = true` (`core/users.nix:14`) exists
-      only for this service.
-- [ ] **`flake.nix:5,7`: pin and document the non-nixpkgs inputs.**
-      `github:arkirchner/nvf` and `github:NousResearch/hermes-agent` follow the
-      default branch with no branch ref. Pin a branch and add a comment saying why
-      the fork is needed.
-- [ ] **`pkgs.ruby_4_0` is hardcoded in 3 places** (`editors/nvf.nix:8`,
+      failed decrypt aborts activation. Considered an age key as fallback and
+      decided against it (2026-09-29) — PGP-only stays, and with it
+      `users.users.armin.linger = true` (`core/users.nix`), which exists only
+      for the Hermes service.
+- [x] **`flake.nix:5,7`: pin and document the non-nixpkgs inputs.**
+      `github:arkirchner/nvf/main` and `github:NousResearch/hermes-agent/main`
+      now carry an explicit ref, with a comment above nvf explaining the fork
+      (its only local commit, c53fd06, merges upstream main and resolves a
+      tex.nix conflict in favour of ltex-ls-plus). The `ref` was added to
+      `flake.lock` by hand so the pinned revs did not move.
+- [x] **`pkgs.ruby_4_0` is hardcoded in 3 places** (`editors/nvf.nix:8`,
       `shells/*`, `packages/rails-mcp-server/default.nix`) while nixpkgs `ruby` is
-      3.4.9. Decide whether the 4.0 series is a requirement.
-- [ ] **Deduplicate host wiring**: `home-manager.users.armin.imports = [ hm.armin ]`
-      is copy-pasted in all three `modules/hosts/*/configuration.nix`; it belongs
-      in `modules/nixos/shared.nix`.
+      3.4.9. The 4.0 series is a requirement; each of the four sites now says so
+      in a comment.
+- [x] **Deduplicate host wiring**: `home-manager.users.armin.imports = [ hm.armin ]`
+      is now set once in `modules/nixos/shared.nix`; the three host files import
+      their own `hm."nixosConfigurations/<name>"` on top of it.
 
 Verify: `nix flake check` + `nixos-rebuild build --flake nix_config#armin-pc`
 (and the other two hosts).
 
 ## 4. Documentation and tooling
 
-- [ ] **Fix `AGENTS.md`.** It documents `nix_config/nixos_modules/**`,
+- [x] **Fix `AGENTS.md`.** It documented `nix_config/nixos_modules/**`,
       `nix_config/programs/**`, `nix_config/machines/*/`, `nix-darwin/flake.nix`
-      and `servers/` — none of which exist anymore (everything moved to
-      `nix_config/modules/`).
-- [ ] **Add a formatter.** No `formatter` output exists, so the `nix fmt`
-      mentioned in AGENTS.md does not work. Use `nixfmt-rfc-style` or `treefmt`.
+      and `servers/` — none of which exist anymore. It now describes the
+      `nix_config/modules/` layout, the per-host `home-manager.nix`, the
+      devShells, and the fact that untracked files are invisible to this git
+      flake.
+- [x] **Add a formatter.** `modules/flake/formatter.nix` exposes
+      `formatter.x86_64-linux` (a wrapper around treefmt), and
+      `treefmt.toml` runs nixfmt and deadnix. The whole repo was formatted once
+      in its own commit, so `nix fmt -- --fail-on-change` is now clean.
 - [ ] **Run `nix flake check` in CI** (or a pre-commit hook) so duplicate
-      attributes and unused inputs fail early.
-- [ ] **`.gitignore`**: replace the stale `linux/.bashrc.d/keys` entry with
-      `result`, `result-*`, `.direnv/`.
-- [ ] **Optional Nix settings**: `nix.settings.auto-optimise-store = true`
-      (store optimisation is currently off), and `nix.settings.trusted-users`
-      with `@wheel` if you want unprivileged `nix` (default is `["root"]`).
+      attributes and unused inputs fail early. Deliberately not added.
+- [x] **`.gitignore`**: the stale `linux/.bashrc.d/keys` entry is replaced by
+      `result`, `result-*`, `.direnv/` and `.DS_Store`.
+- [x] **Optional Nix settings**: `auto-optimise-store = true` and
+      `trusted-users = [ "@wheel" ]` (so the config is `[ "root" "@wheel" ]`)
+      in `core/nix.nix`.
 
 ## 5. Open questions (answer before implementing section 3)
 
-- [ ] Is Docker still needed at all, or is Podman with `dockerCompat = true` enough?
-- [ ] Which host(s) should run nomad / postgres / redis?
+- [x] Is Docker still needed at all, or is Podman with `dockerCompat = true` enough?
+      Answered: podman only, `dockerCompat = true`, no Docker daemon.
+- [x] Which host(s) should run nomad / postgres / redis? Answered: nomad off by
+      default (a host opts in), postgres and libvirtd everywhere, redis removed.
 - [ ] Is the `python313Packages` overlay (`core/overlays.nix`) still required?
       `aioboto3`/`fastmcp` still have pytest-based checks upstream, but verify
       they fail without `doCheck = false` before removing it.
 - [ ] Is `postgresql.package = pkgs.postgresql_16` (16.15, two majors behind
-      unstable) a hard requirement? Pinning means no security updates.
+      unstable) a hard requirement? Pinning means no security updates. Kept for
+      now — no answer yet.
 - [ ] Are `networking.extraHosts` entries `test.local` / `longhorn.test.local`
       still used?
 

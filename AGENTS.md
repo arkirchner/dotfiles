@@ -1,137 +1,94 @@
 # AGENTS: Repository Operating Guide
 
-This repository is a Nix-based dotfiles setup with multiple subtrees
-(`nix_config/`, `nix-darwin/`, `servers/`, `shells/`, etc.).
-Follow the conventions below when editing.
+NixOS dotfiles for three machines, built as a flake with flake-parts and
+`import-tree`. Follow the conventions below when editing.
 
-## Scope and Structure
-- Primary NixOS configuration: `nix_config/flake.nix`.
-- NixOS host configs: `nix_config/machines/*/configuration.nix`.
-- Shared NixOS modules: `nix_config/nixos_modules/**`.
-- Home Manager programs: `nix_config/programs/**`.
-- Darwin system flake: `nix-darwin/flake.nix`.
-- Dev shells: `nix_config/shells/**`.
-- Server bootstrap: `servers/configuration.nix` + `servers/README.md`.
+## Layout
 
-## Build / Lint / Test Commands
-There is no centralized build/test tooling beyond Nix commands.
-Prefer the commands below and be explicit about target hosts.
+- `nix_config/flake.nix` — inputs and `mkFlake`.
+- `nix_config/modules/flake/` — flake wiring: `systems.nix`, `home-manager.nix`,
+  `dev-shells.nix`, `formatter.nix`.
+- `nix_config/modules/nixos/` — NixOS modules. `core/` (os-wide),
+  `desktop/`, `editors/`, `services/`, and `shared.nix` (the import list every
+  host gets).
+- `nix_config/modules/home/` — Home Manager modules. `armin.nix` is the user
+  entry point, `home.nix` holds `home.packages`, `desktop/desktop-programs.nix`
+  the desktop imports.
+- `nix_config/modules/hosts/<machine>/` — one directory per host
+  (`720s` = armin-laptop, `x600` = armin-pc, `dell_5450` = armin-work-laptop):
+  `configuration.nix` (host options), `hardware.nix`,
+  `home-manager.nix` (host-specific Home Manager config, e.g. niri outputs).
+- `nix_config/packages/` — locally built packages.
+- `nix_config/shells/` — dev shell bodies; `xikolo/` is its own flake with its
+  own lock file.
+- `nix_config/secrets/`, `nix_config/.sops.yaml` — sops-nix, PGP/YubiKey only.
+- `nix_config/wallpapers/` — Noctalia wallpaper directory.
 
-### NixOS
-- Build a system (no switch):
-  `nixos-rebuild build --flake /home/armin/Documents/dotfiles/nix_config#armin-pc`
-- Switch to a system:
-  `sudo nixos-rebuild switch --flake /home/armin/Documents/dotfiles/nix_config#armin-pc`
-- Other host examples (from `nix_config/flake.nix`):
-  `#armin-laptop`, `#armin-work-laptop`.
+Every `.nix` file under `nix_config/modules` is imported as a module; files
+whose path contains a `_` component (e.g. `_hardware-configuration.nix`) are
+skipped. Modules define `flake.modules.<namespace>.<name>` and are wired
+together by explicit references, not by directory structure.
 
-### Darwin
-- Build darwin flake (see `nix-darwin/flake.nix`):
-  `darwin-rebuild build --flake /home/armin/Documents/dotfiles/nix-darwin#PC0099`
-- Switch darwin system:
-  `darwin-rebuild switch --flake /home/armin/Documents/dotfiles/nix-darwin#PC0099`
+## Build / verify commands
 
-### Dev Shells
-- Enter a dev shell (example):
-  `nix develop /home/armin/Documents/dotfiles/nix_config/shells/xikolo`
-- Non-flake shell (example):
-  `nix-shell /home/armin/Documents/dotfiles/nix_config/shells/codeocean.nix`
-- These shells may run setup steps in `shellHook` (e.g., `yarn install`).
+Always name the host.
 
-### Servers
-- Bootstrap a server with nixos-infect (see `servers/README.md`):
-  `curl https://raw.githubusercontent.com/elitak/nixos-infect/master/nixos-infect | \
-    NIX_CHANNEL=nixos-24.11 \
-    NIXOS_CONFIG=https://raw.githubusercontent.com/arkirchner/dotfiles/refs/heads/master/servers/configuration.nix \
-    bash -x`
+```bash
+# Evaluate all three configurations, no build. Catches duplicate attributes.
+cd nix_config && nix flake check
 
-### Lint / Format
-- No formatter is explicitly configured.
-- If you add a formatter, prefer `nix fmt` at repo root and document it.
-- Do not auto-format unless requested or the repo already uses a formatter.
+# Build a system (does not switch).
+sudo nixos-rebuild build --flake .#armin-pc          # also #armin-laptop, #armin-work-laptop
+sudo nixos-rebuild switch --flake .#armin-pc
 
-### Tests
-- No project-wide test runner is defined.
-- If you touch a subproject with its own tests, document and run those.
+# The rendered niri config, validated with niri.
+nix build .#nixosConfigurations.armin-pc.config.home-manager.users.armin.xdg.configFile."niri/config.kdl".source
+niri validate -c "$(nix build --no-link --print-out-paths .#nixosConfigurations.armin-pc.config.home-manager.users.armin.xdg.configFile."niri/config.kdl".source)"
 
-### Running a Single Test
-- Not applicable at repo root.
-- If you are in a subproject (e.g., within a dev shell), follow that
-  project's local `README` or tooling for single-test commands.
-- Neovim includes `vim-test`; prefer its project-specific runners when used.
+# Dev shells.
+nix develop .#codeocean      # also #wave-walker
+nix develop ./shells/xikolo  # separate flake, has its own lock file
 
-## Code Style Guidelines
+# Format (treefmt + nixfmt + deadnix, config in treefmt.toml).
+nix fmt
+nix fmt -- --fail-on-change  # what CI should run
+```
 
-### Nix Formatting and Style
-- Indentation: 2 spaces.
-- Braces: place opening brace on same line, close aligned.
-- Lists: one item per line for non-trivial lists; trailing commas are OK.
-- Attributes: align nested blocks for readability, avoid extra blank lines.
-- Strings: use double quotes for simple strings; use `''` for multi-line.
-- Prefer `let ... in` for shared values; keep `let` blocks small.
-- Keep commented-out code minimal; remove dead code unless a note is needed.
-- Keep whitespace consistent; avoid trailing spaces.
+There is no test runner and no CI workflow.
 
-### Imports and Module Layout
-- Use explicit `imports = [ ... ];` with one path per line.
-- Group imports logically (core modules, optional modules, local files).
-- For Home Manager modules, keep program-specific config in
-  `nix_config/programs/<name>/default.nix`.
-- For shared NixOS logic, prefer `nix_config/nixos_modules/**`.
-- Keep `hardware-configuration.nix` machine-specific only.
+## Style
 
-### Naming Conventions
-- File and directory names: lowercase with underscores where already used.
-- Nix attributes: lowerCamelCase for local names; follow existing pattern.
-- Modules: prefer `default.nix` entry points for directories.
-- Avoid renaming machine directories without updating `flake.nix`.
+- 2-space indentation, opening brace on the same line. Formatting is
+  automated: run `nix fmt` rather than reformatting by hand.
+- One item per line in non-trivial lists.
+- `''` for multi-line strings, `"` for simple ones.
+- Small `let` blocks for shared values; `let ... in` instead of repeating.
+- No dead code, no commented-out code. If something is left on purpose, say why
+  in a comment.
+- Explicit `imports = [ ... ];`, one path per line.
+- Prefer `lib.mkIf` / `lib.mkDefault` / `lib.mkForce` over duplicating config.
+  `mkDefault` for values a host may override (e.g. `services.nomad.enable`).
+- Use `pkgs` from the module arguments; never re-import nixpkgs.
+- Keep host-specific values (hostnames, monitor layout, CPU governor) in
+  `modules/hosts/<machine>/`, not in shared modules.
+- Prefer `assert` / `lib.assertMsg` for non-obvious constraints.
 
-### Types and Options
-- Prefer `lib.mkIf`, `lib.mkDefault`, or `lib.mkForce` to manage option merges.
-- When overriding packages, prefer `override` or `overrideAttrs` explicitly.
-- Use `pkgs` from arguments; do not re-import nixpkgs inside modules.
-- Favor option merges over duplicating blocks between machines.
+## Git
 
-### Error Handling and Safety
-- Use `assert` or `lib.assertMsg` for non-obvious constraints.
-- Keep `specialArgs` or `inputs` wired through `flake.nix` only.
-- Avoid hardcoding system-specific paths unless required (use `${pkgs...}`).
-- Be cautious with secrets; prefer external secrets tooling if added later.
+- Commits are GPG signed; never disable signing.
+- Default branch is `master`.
+- Editor is `nvim`.
+- Note: this repo is a git flake, so *untracked* files are invisible to `nix`.
+  Stage a new file (`git add`) before evaluating the flake, or it will look
+  like the file does not exist.
 
-### Dependencies and Environment
-- Keep `home.packages` and `environment.systemPackages` sorted or grouped.
-- When adding system services, keep related settings together.
-- Prefer environment variables in `environment.sessionVariables`.
-- Keep per-host packages in machine configs, not shared modules.
+## Adding things
 
-### Shell Hooks
-- If a shell hook performs installs, explain it in a comment.
-- Avoid destructive steps; keep hooks idempotent when possible.
-- Document any required external binaries in the shell definition.
-
-## Git Practices (from config)
-- Git is configured to sign commits; do not disable signing.
-- Default branch is `main`.
-- Use `nvim` as the editor.
-- Prefer small, focused commits if asked to commit.
-
-## Repository-Specific Notes
-- `nix_config/flake.nix` defines three NixOS systems. Use those names.
-- `nix-darwin/flake.nix` defines the `PC0099` darwin host.
-- Dev shell `xikolo` installs Ruby, Node, and toolchains; it runs `yarn install`.
-- Keep `home-manager` imports under `nix_config/nixos_modules/default.nix`.
-- `nix_config/programs/default.nix` aggregates Home Manager program modules.
-
-## Cursor/Copilot Rules
-- No `.cursor/rules/`, `.cursorrules`, or
-  `.github/copilot-instructions.md` files were found.
-
-## When Adding New Files
-- Use ASCII unless the file already uses Unicode.
-- Keep module files small and focused.
-- Prefer placing program configs under `nix_config/programs/`.
-- For new machines, add to `nix_config/machines/` and wire in `flake.nix`.
-
-## Documentation Updates
-- Update this file if you add new commands or tooling.
-- Add brief notes to `servers/README.md` if server setup changes.
+- New NixOS option → a file in `modules/nixos/<area>/`, added to
+  `modules/nixos/shared.nix` if it should apply to every host, or imported from
+  the host's `configuration.nix` if not.
+- New Home Manager option → a file in `modules/home/<name>/`, added to
+  `modules/home/armin.nix`, `home.nix` or `desktop/desktop-programs.nix`.
+- New host → a directory in `modules/hosts/`, and a `default.nix` that calls
+  `nixpkgs.lib.nixosSystem` with `flake.modules.nixos.shared` plus
+  `flake.modules.nixos."nixosConfigurations/<name>"`.
