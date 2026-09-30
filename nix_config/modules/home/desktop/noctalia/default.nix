@@ -18,6 +18,15 @@
             enabled = true;
             directory = "${../../../../wallpapers}";
             default.path = "${../../../../wallpapers/night-mountain.jpg}";
+
+            # A random wallpaper from the same directory at every shell start,
+            # then a new one every hour. The picks cycle through
+            # `directory`, not `default.path`.
+            automation = {
+              enabled = true;
+              interval_seconds = 3600;
+              order = "random";
+            };
           };
 
           # Blurred wallpaper backdrop for niri's overview (see the layer-rule
@@ -36,8 +45,19 @@
               "volume"
               "bluetooth"
               "battery"
+              "wallpaper"
               "clock"
             ];
+          };
+
+          # The wallpaper widget only opens the picker out of the box, so the
+          # gestures it leaves unused are bound to the wallpaper IPC commands.
+          widget.wallpaper.actions = {
+            left = "wallpaper-next";
+            right = "wallpaper-random";
+            middle = "panel-toggle wallpaper";
+            scroll_up = "wallpaper-next";
+            scroll_down = "wallpaper-previous";
           };
 
           lockscreen = {
