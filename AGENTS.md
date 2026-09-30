@@ -19,6 +19,8 @@ NixOS dotfiles for three machines, built as a flake with flake-parts and
   `configuration.nix` (host options), `hardware.nix`,
   `home-manager.nix` (host-specific Home Manager config, e.g. niri outputs).
 - `nix_config/packages/` — locally built packages.
+- `nix_config/devenv/` — one directory per project that has services, each with
+  a `devenv.nix` that the app repo imports. See "Project services" below.
 - `nix_config/shells/` — dev shell bodies. They return a
   `{ buildInputs, shellEnv, shellHook }` definition rather than a shell, so that
   `rails-devenv.nix` can hand the same one to a devenv. `rails-base.nix` and
@@ -105,21 +107,45 @@ attribute set would have stdenv try to coerce `shellEnv` into an env var.
 
 PostgreSQL is not a NixOS service any more. It belongs to the project that needs
 it, as a devenv service, so it only exists while that project's environment is
-up. `xikolo` has postgres; `codeocean` has postgres and nomad. Each app repo
-carries its own `devenv.nix` and `devenv.yaml` and activates them with:
+up. `xikolo` has postgres; `codeocean` has postgres and nomad. Their
+environments live here, in `nix_config/devenv/<app>/devenv.nix` — the app repos
+hold no configuration, only the two files devenv insists on:
 
 ```bash
 eval "$(devenv direnvrc)"
 ```
 
-The toolchain still comes from here: `devenv.yaml` takes this flake as the
-`dotfiles` input (with `nixpkgs.follows: dotfiles/nixpkgs`, so there is one
-nixpkgs in the store), and `devenv.nix` imports the app's shell body and wraps
-it in `shells/rails-devenv.nix`. That module takes `base`, `lib` and `root`
-explicitly, because devenv calls imported modules with no implicit arguments.
-It resolves the `$PWD` that the shellHook relies on against `config.devenv.root`
-— devenv sets env vars verbatim and cannot expand it — and leaves `PATH` alone,
-since only a shell can expand its own `$PATH`.
+An app repo's `devenv.nix` is empty on purpose and its `devenv.yaml` is just
+inputs plus an import:
+
+```yaml
+inputs:
+  dotfiles:
+    url: git+file:///home/armin/Documents/dotfiles?dir=nix_config
+  nixpkgs:
+    follows: dotfiles/nixpkgs
+
+imports:
+  - dotfiles/devenv/xikolo
+```
+
+The empty `devenv.nix` cannot be dropped: devenv fails with "File devenv.nix
+does not exist" before it looks at `imports`. The import has to be a directory
+containing a `devenv.nix`, and it has to be reached through an `inputs` entry —
+devenv rejects a local `imports` path that resolves outside the git repository
+("Imports must stay within the repository").
+
+Importing from elsewhere does not move the project: `config.devenv.root` and
+`config.devenv.state` stay the *app* directory, so `.bundle`, the postgres
+socket and `$DEVENV_STATE` are per-app even though the definition is not.
+
+The toolchain comes from here too: `nixpkgs.follows` keeps one nixpkgs in the
+store, and `nix_config/devenv/<app>/devenv.nix` imports the app's shell body
+over relative paths and wraps it in `shells/rails-devenv.nix`. That module takes
+`base`, `lib` and `root` explicitly, because devenv calls imported modules with
+no implicit arguments. It resolves the `$PWD` that the shellEnv relies on
+against `config.devenv.root` — devenv sets env vars verbatim and cannot expand
+it — and leaves `PATH` alone, since only a shell can expand its own `$PATH`.
 
 Two things to know when writing one:
 
@@ -130,7 +156,11 @@ Two things to know when writing one:
 - **Unfree packages** need a top-level `nixpkgs.per_platform.<system>` block in
   `devenv.yaml`, not `nixpkgs.config` in `devenv.nix` (devenv has no `nixpkgs`
   option). nomad is BSL, so codeocean lists it under
-  `permitted_unfree_packages`.
+  `permitted_unfree_packages`, which is why its `devenv.yaml` is the longer of
+  the two.
+
+Adding a project is therefore: a `nix_config/devenv/<app>/devenv.nix`, and a
+`devenv.yaml` in the app repo that copies one of these two.
 
 `$DEVENV_STATE` is 80M+ of postgres data per project, so `.devenv*` is
 gitignored in the app repos.
