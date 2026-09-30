@@ -19,8 +19,10 @@ NixOS dotfiles for three machines, built as a flake with flake-parts and
   `configuration.nix` (host options), `hardware.nix`,
   `home-manager.nix` (host-specific Home Manager config, e.g. niri outputs).
 - `nix_config/packages/` — locally built packages.
-- `nix_config/shells/` — dev shell bodies. `rails-base.nix` and `rails-mcp.nix`
-  are shared pieces, not shells themselves.
+- `nix_config/shells/` — dev shell bodies. They return a
+  `{ buildInputs, shellEnv, shellHook }` definition rather than a shell, so that
+  `rails-devenv.nix` can hand the same one to a devenv. `rails-base.nix` and
+  `rails-mcp.nix` are shared pieces, not shells themselves.
 - `nix_config/secrets/`, `nix_config/.sops.yaml` — sops-nix, PGP/YubiKey only.
 - `nix_config/wallpapers/` — Noctalia wallpaper directory.
 
@@ -46,13 +48,16 @@ nix build .#nixosConfigurations.armin-pc.config.home-manager.users.armin.xdg.con
 niri validate -c "$(nix build --no-link --print-out-paths .#nixosConfigurations.armin-pc.config.home-manager.users.armin.xdg.configFile."niri/config.kdl".source)"
 
 # Dev shells.
-nix develop .#codeocean      # also #wave-walker
-nix develop .#agent-rails    # Rails toolchain + the Rails MCP set
-nix develop .#agent-xikolo   # same MCP set, plus the xikolo build deps
+nix develop .#codeocean      # also #wave-walker, #agent-rails, #agent-xikolo
 nix develop .#agent-dotfiles # nil, statix, deadnix, and the nix MCP
 
 # Which MCP servers a shell turned on.
 opencode mcp list
+
+# Per-project services, in the app repos. See "Project services" below.
+cd ~/Documents/xikolo && devenv up -d      # postgres
+cd ~/Documents/codeocean && devenv up -d   # postgres + nomad
+devenv processes down                      # stop them
 
 # Format (treefmt + nixfmt + deadnix, config in treefmt.toml).
 nix fmt
@@ -74,12 +79,13 @@ The two splits are:
 | Shell | MCPs |
 | --- | --- |
 | `agent-dotfiles` | `context7`, `nixos` — `rails` disabled |
-| `agent-rails`, `agent-xikolo` | `context7`, `rails`, `playwright`, `serena` — `nixos` disabled |
+| `codeocean`, `agent-rails`, `agent-xikolo` | `context7`, `rails`, `playwright`, `serena` — `nixos` disabled |
 
-An app repo opts in with an `.envrc`; it needs no opencode config of its own:
+A repo that only wants a shell opts in with an `.envrc`; it needs no opencode
+config of its own:
 
 ```bash
-use flake ../dotfiles/nix_config#agent-rails   # or #agent-xikolo
+use flake ../dotfiles/nix_config#agent-rails   # or #agent-xikolo, #codeocean
 ```
 
 Use `use flake`, not `use nix <file>`. The shell bodies take a required `pkgs`
@@ -87,11 +93,47 @@ argument, which `nix-shell` will not supply, so `use nix` on them fails with
 "cannot evaluate a function that has an argument without a value".
 
 `shells/rails-base.nix` is the shared Ruby toolchain and `shells/rails-mcp.nix`
-is the shared MCP set; neither is a shell itself. The per-app shells import both
-and pass `extraBuildInputs`, `extraLibPath` and `extraShellHook`. `mkShell` does
-not derive `LD_LIBRARY_PATH`, so `rails-base` assigns it from
-`nativeLibs ++ extraLibPath` — anything a native gem links against has to be
-named in one of those two.
+is the shared MCP set; neither is a shell itself. The per-app bodies import both
+and pass `extraBuildInputs`, `extraLibPath`, `extraShellEnv` and
+`extraShellHook`. `mkShell` does not derive `LD_LIBRARY_PATH`, so `rails-base`
+assigns it from `nativeLibs ++ extraLibPath` — anything a native gem links
+against has to be named in one of those two. `dev-shells.nix` wraps the result
+in `mkShell`, taking only `buildInputs` and `shellHook`: passing the whole
+attribute set would have stdenv try to coerce `shellEnv` into an env var.
+
+## Project services
+
+PostgreSQL is not a NixOS service any more. It belongs to the project that needs
+it, as a devenv service, so it only exists while that project's environment is
+up. `xikolo` has postgres; `codeocean` has postgres and nomad. Each app repo
+carries its own `devenv.nix` and `devenv.yaml` and activates them with:
+
+```bash
+eval "$(devenv direnvrc)"
+```
+
+The toolchain still comes from here: `devenv.yaml` takes this flake as the
+`dotfiles` input (with `nixpkgs.follows: dotfiles/nixpkgs`, so there is one
+nixpkgs in the store), and `devenv.nix` imports the app's shell body and wraps
+it in `shells/rails-devenv.nix`. That module takes `base`, `lib` and `root`
+explicitly, because devenv calls imported modules with no implicit arguments.
+It resolves the `$PWD` that the shellHook relies on against `config.devenv.root`
+— devenv sets env vars verbatim and cannot expand it — and leaves `PATH` alone,
+since only a shell can expand its own `$PATH`.
+
+Two things to know when writing one:
+
+- **Do not set `DATABASE_URL`.** `config/database.yml` reads it per environment,
+  so a single URL overrides the distinct `database:` names and collapses e.g. the
+  queue database into the primary one. `PGHOST`, which devenv points at the
+  per-project socket, is enough.
+- **Unfree packages** need a top-level `nixpkgs.per_platform.<system>` block in
+  `devenv.yaml`, not `nixpkgs.config` in `devenv.nix` (devenv has no `nixpkgs`
+  option). nomad is BSL, so codeocean lists it under
+  `permitted_unfree_packages`.
+
+`$DEVENV_STATE` is 80M+ of postgres data per project, so `.devenv*` is
+gitignored in the app repos.
 
 ## Style
 

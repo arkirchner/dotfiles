@@ -1,9 +1,11 @@
-# Shared toolchain for the Rails apps. Not a shell on its own: the per-app
-# shells import it and pass only what is specific to them.
+# The shared Ruby toolchain. Returns the definition rather than a shell:
+# shells/rails-devenv.nix turns the same attribute set into a devenv module, so
+# a devShell and a devenv get an identical environment.
 {
   pkgs,
   extraBuildInputs ? [ ],
   extraLibPath ? [ ],
+  extraShellEnv ? { },
   extraShellHook ? "",
 }:
 
@@ -20,7 +22,7 @@ let
     zlib
   ];
 in
-pkgs.mkShell {
+rec {
   buildInputs =
     with pkgs;
     [
@@ -33,12 +35,19 @@ pkgs.mkShell {
     ++ nativeLibs
     ++ extraBuildInputs;
 
+  shellEnv = {
+    BUNDLE_PATH = "$PWD/.bundle";
+    GEM_HOME = "$PWD/.bundle";
+    PATH = "$PWD/.bundle/bin:$PATH";
+    LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath (nativeLibs ++ extraLibPath);
+    RUBY_YJIT_ENABLE = "1";
+  }
+  // extraShellEnv;
+
   shellHook = ''
-    export BUNDLE_PATH=$PWD/.bundle
-    export GEM_HOME=$PWD/.bundle
-    export PATH=$PWD/.bundle/bin:$PATH
-    export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath (nativeLibs ++ extraLibPath)}
-    export RUBY_YJIT_ENABLE=1
+    ${pkgs.lib.concatStringsSep "\n" (
+      pkgs.lib.mapAttrsToList (name: value: "export ${name}=${value}") shellEnv
+    )}
   ''
   + extraShellHook;
 }

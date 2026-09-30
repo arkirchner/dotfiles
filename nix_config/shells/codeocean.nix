@@ -24,6 +24,9 @@ import ./rails-base.nix {
     postgresql_16
     vips
   ];
+  extraShellEnv = {
+    OPENCODE_CONFIG = "${import ./rails-mcp.nix { inherit pkgs; }}";
+  };
   extraShellHook = ''
     export FREEDESKTOP_MIME_TYPES_PATH="${pkgs.shared-mime-info}/share/mime/packages/freedesktop.org.xml"
   '';

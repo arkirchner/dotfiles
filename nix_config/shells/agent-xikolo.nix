@@ -1,5 +1,8 @@
 # Agent-ready shell for the xikolo apps. Same MCP set as agent-rails; the extra
 # packages are the ones xikolo needs to build its CSS and image pipelines.
+#
+# This returns the definition, not a shell: dev-shells.nix wraps it in mkShell,
+# and an app's devenv.nix imports it through shells/rails-devenv.nix.
 { pkgs }:
 
 let
@@ -81,17 +84,17 @@ import ./rails-base.nix {
     vips
   ];
 
-  extraShellHook = ''
-    export NIX_LD=${pkgs.lib.fileContents "${pkgs.stdenv.cc}/nix-support/dynamic-linker"}
-    export NIX_LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath [ pkgs.stdenv.cc.cc ]}
-    export CFLAGS="-O2"
-    export LDFLAGS="-lc"
-    export HUSKY=0
-    export FREEDESKTOP_MIME_TYPES_PATH="${pkgs.shared-mime-info}/share/mime/packages/freedesktop.org.xml"
-    export PKG_CONFIG=${pkgs.pkg-config}/bin/pkg-config
-    export PKG_CONFIG_PATH=${
+  extraShellEnv = {
+    NIX_LD = "${pkgs.lib.fileContents "${pkgs.stdenv.cc}/nix-support/dynamic-linker"}";
+    NIX_LD_LIBRARY_PATH = "${pkgs.lib.makeLibraryPath [ pkgs.stdenv.cc.cc ]}";
+    CFLAGS = "-O2";
+    LDFLAGS = "-lc";
+    HUSKY = "0";
+    FREEDESKTOP_MIME_TYPES_PATH = "${pkgs.shared-mime-info}/share/mime/packages/freedesktop.org.xml";
+    PKG_CONFIG = "${pkgs.pkg-config}/bin/pkg-config";
+    PKG_CONFIG_PATH = "${
       builtins.concatStringsSep ":" (map (p: "${p.dev or p}/lib/pkgconfig") gtkDeps)
-    }:${pkgs.xorgproto}/share/pkgconfig:$PKG_CONFIG_PATH
-    export OPENCODE_CONFIG=${import ./rails-mcp.nix { inherit pkgs; }}
-  '';
+    }:${pkgs.xorgproto}/share/pkgconfig:$PKG_CONFIG_PATH";
+    OPENCODE_CONFIG = "${import ./rails-mcp.nix { inherit pkgs; }}";
+  };
 }

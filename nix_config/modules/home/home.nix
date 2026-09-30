@@ -23,6 +23,8 @@
         pgadmin4-desktopmode
         glab
         opentofu
+        # Per-project dev environments; each app repo carries its own devenv.nix.
+        devenv
       ];
     };
 }

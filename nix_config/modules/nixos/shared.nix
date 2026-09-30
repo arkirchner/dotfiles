@@ -18,9 +18,7 @@
       config.flake.modules.nixos.fonts
 
       config.flake.modules.nixos.packages
-      config.flake.modules.nixos.postgresql
       config.flake.modules.nixos.podman
-      config.flake.modules.nixos.nomad
       config.flake.modules.nixos.nvf
       config.flake.modules.nixos.qmk
       config.flake.modules.nixos.vpn
