@@ -20,7 +20,6 @@
         teams-for-linux
         dig
         btop
-        pgadmin4-desktopmode
         glab
         opentofu
         # Per-project dev environments; each app repo carries its own devenv.nix.
