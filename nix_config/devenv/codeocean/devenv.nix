@@ -1,7 +1,12 @@
-# The codeocean dev environment, kept here rather than in the app repo: the
-# repo's devenv.yaml pulls this in through its `imports` key and carries an
-# empty devenv.nix, because devenv requires that file to exist in the project
-# root.
+# The codeocean dev environment, kept here rather than in the app repo. An app
+# carries no devenv files beyond a devenv.local.yaml: its .envrc is a single
+# `use devenv --from` pointing at this directory, and that is enough. `devenv
+# --from` reads devenv.nix from wherever it is told to, so the definition can
+# live here.
+#
+# The one thing an app cannot get from here is allow_unfree: devenv reads that
+# from YAML in the project root only, so codeocean carries a two-line
+# devenv.local.yaml saying so. nomad is BSL.
 #
 # config.devenv.root is the *app* directory even though this file lives here, so
 # .bundle, the postgres socket and $DEVENV_STATE all stay per-app.
@@ -13,8 +18,8 @@
 }:
 
 let
-  # Relative paths, so this resolves against this file inside the dotfiles input
-  # rather than depending on the app naming that input.
+  # Relative paths, so this resolves against this file's own location and does
+  # not depend on how the app named this input.
   shells = ../../shells;
   base = import (shells + "/codeocean.nix") { inherit pkgs; };
 in

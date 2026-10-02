@@ -1,7 +1,7 @@
 { ... }:
 {
   flake.modules.homeManager.fish =
-    { ... }:
+    { lib, pkgs, ... }:
     let
       tatConfig = builtins.readFile ./stay_always_in_tmux;
     in
@@ -25,6 +25,15 @@
           silent = true;
           nix-direnv.enable = true;
           enableFishIntegration = true;
+          # Home Manager writes this to ~/.config/direnv/direnvrc, which direnv
+          # sources before it evaluates any .envrc, so `use devenv` is available
+          # in every project and each .envrc needs no preamble.
+          #
+          # eval, not `source "$(...)"`: that form fails under bash 5.3 with
+          # "File name too long" rather than sourcing the string as a script.
+          stdlib = ''
+            eval "$(${lib.getExe pkgs.devenv} direnvrc)"
+          '';
         };
 
         carapace = {
@@ -63,6 +72,18 @@
             set -g fish_pager_color_completion cdd6f4
             set -g fish_pager_color_description 6c7086
             ${tatConfig}
+
+            # devenv's direnvrc exports DEVENV_CMDLINE, which holds the
+            # `--from ...` the current project's .envrc passed to `use devenv`.
+            # Repeating it here means these work without naming the app, and
+            # work in all four xikolo directories at once.
+            function devenv-up
+                command devenv up -d $DEVENV_CMDLINE
+            end
+
+            function devenv-down
+                command devenv down $DEVENV_CMDLINE
+            end
           '';
         };
       };
