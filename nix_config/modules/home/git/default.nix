@@ -17,11 +17,23 @@
             user.signingkey = "CB0A750597297FF3C6861AE11FED64228A24AF9E";
           };
 
+          # Home Manager writes these to ~/.config/git/ignore and points
+          # core.excludesFile at it, so they apply in every repository rather
+          # than needing each repo's own .gitignore touched.
+          #
+          # devenv writes devenv.lock and .devenv/ into the project root, and
+          # an app here holds its devenv.local.yaml, which by devenv's own
+          # convention is machine-local. None of the three belongs in a commit.
+          # devenv.yaml and devenv.nix are deliberately absent: those are meant
+          # to be committed in a project that uses them.
           ignores = [
             "*~"
             "*.swp"
             "*.swo"
             ".direnv/"
+            ".devenv/"
+            "devenv.lock"
+            "devenv.local.yaml"
           ];
 
           includes = [
