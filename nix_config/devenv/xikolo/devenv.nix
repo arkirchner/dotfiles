@@ -28,6 +28,15 @@ in
     })
   ];
 
+  # The app loads its own .env, through `gem "dotenv", groups: %i[development
+  # test]` in the Gemfile, and app/controllers/maintenance_task_controller.rb does
+  # an ENV.fetch with no default on one of those keys. Loading it here as well
+  # would put the values into the devenv environment, where postgres and
+  # everything else this project starts inherits them, and would freeze them at
+  # evaluation time rather than re-reading them per boot. So the hint is silenced
+  # instead of satisfied.
+  dotenv.disableHint = true;
+
   # The database this app needs, and nothing else: no host-level postgres, no
   # cluster outside $DEVENV_STATE.
   services.postgres = {
