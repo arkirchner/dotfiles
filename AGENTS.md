@@ -57,7 +57,7 @@ nix develop .#agent-dotfiles # nil, statix, deadnix, and the nix MCP
 opencode mcp list
 
 # Per-project services, in the app repos. See "Project services" below.
-cd ~/Documents/xikolo && devenv-up      # postgres
+cd ~/Documents/xikolo && devenv-up      # postgres + seaweedfs
 cd ~/Documents/codeocean && devenv-up   # postgres + nomad
 devenv-down                              # stop them
 
@@ -107,7 +107,7 @@ attribute set would have stdenv try to coerce `shellEnv` into an env var.
 
 PostgreSQL is not a NixOS service any more. It belongs to the project that needs
 it, as a devenv service, so it only exists while that project's environment is
-up. `xikolo` has postgres; `codeocean` has postgres and nomad.
+up. `xikolo` has postgres and seaweedfs; `codeocean` has postgres and nomad.
 
 The definitions live here, in `nix_config/devenv/<app>/devenv.nix`. The app repo
 holds **no devenv files**: its `.envrc` is a single `use devenv --from` line that
@@ -187,6 +187,39 @@ committed, and neither is gitignored — `devenv.lock` shows up as untracked, wh
 was the lesser evil against editing five repos' `.gitignore`. `$DEVENV_STATE` is
 80M+ of postgres data per directory, so four parallel clones of one app is a few
 hundred MB and one postgres process each.
+
+## S3
+
+xikolo's object store is seaweedfs, as a devenv process, in place of the MinIO
+its `.env` points at. Nothing in the app repo changed: `Xikolo::S3` builds its
+client from `S3_ACCESS_ID` / `S3_ACCESS_KEY` / `S3_PROVIDER_ENDPOINT` alone, and
+dotenv does not overwrite variables that are already set, so exporting them from
+`devenv.nix` beats the MinIO endpoint in `.env`. The `connect_info` block in
+`xikolo.development.yml` is read by nothing — that file supplies the bucket
+*names*, which the app does use.
+
+`weed server` runs master, volume, filer and the S3 gateway as one process. Three
+of its settings are load-bearing, and all three fail in ways that point somewhere
+other than the cause:
+
+- **`-volume.max`** defaults to 8. Each bucket becomes a *collection*, and a
+  collection needs a volume of its own to be writable; a bucket created over the
+  API has none until something writes to it. At the default, `local_s3:configure`
+  reports success and the first write to the second bucket fails with "No
+  writable volumes", which reaches Ruby as a bare `InternalError`.
+- **`-s3.port.iceberg=0`.** The Iceberg REST catalog defaults to a fixed 8181
+  that no port allocation covers, and failing to bind it is *fatal*, so without
+  this a second clone kills itself on startup and reports `gave_up`.
+- **`ready.exec`, not `ready.http.get`.** The S3 root answers 403 without
+  credentials, the http probe treats any non-2xx as still starting, and the
+  daemon then gives up after its startup timeout — with the process itself
+  running fine, which makes it look like everything stopped.
+
+The four listeners use `ports.<name>.allocate`, so a second clone takes the next
+free port rather than colliding, and `S3_PROVIDER_ENDPOINT` reads the allocated
+value. Note that the endpoint is fixed at evaluation time: if a clone was
+evaluated while the other was down it caches the same port, and it has to be
+re-evaluated once both are up.
 
 ## Style
 
