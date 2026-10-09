@@ -8,9 +8,6 @@
 
     hermes-agent.url = "github:NousResearch/hermes-agent/main";
 
-    sops-nix.url = "github:Mic92/sops-nix";
-    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
-
     flake-parts.url = "github:hercules-ci/flake-parts";
     import-tree.url = "github:vic/import-tree";
   };

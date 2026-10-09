@@ -26,7 +26,6 @@ NixOS dotfiles for three machines, built as a flake with flake-parts and
   `{ buildInputs, shellEnv, shellHook }` definition rather than a shell, so that
   `rails-devenv.nix` can hand the same one to a devenv. `rails-base.nix` and
   `rails-mcp.nix` are shared pieces, not shells themselves.
-- `nix_config/secrets/`, `nix_config/.sops.yaml` — sops-nix, PGP/YubiKey only.
 - `nix_config/wallpapers/` — Noctalia wallpaper directory.
 
 Every `.nix` file under `nix_config/modules` is imported as a module; files
