@@ -76,13 +76,20 @@
             # devenv's direnvrc exports DEVENV_CMDLINE, which holds the
             # `--from ...` the current project's .envrc passed to `use devenv`.
             # Repeating it here means these work without naming the app, and
-            # work in all four xikolo directories at once.
+            # work in every xikolo directory at once.
+            #
+            # eval, not a bare $DEVENV_CMDLINE: fish never word-splits an
+            # unquoted variable, unlike bash, so passing it directly hands
+            # devenv the whole string as a single argument and it rejects it as
+            # an unexpected argument. eval re-parses it into separate ones.
+            # Empty stays empty, so a project that ran a plain `use devenv`
+            # still works.
             function devenv-up
-                command devenv up -d $DEVENV_CMDLINE
+                eval command devenv up -d $DEVENV_CMDLINE
             end
 
             function devenv-down
-                command devenv down $DEVENV_CMDLINE
+                eval command devenv down $DEVENV_CMDLINE
             end
           '';
         };

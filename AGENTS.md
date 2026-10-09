@@ -152,12 +152,21 @@ Starting and stopping is explicit, through two fish functions from
 they replay whatever `--from` the current `.envrc` passed and work unchanged in
 every app:
 
-```bash
-devenv-up      # devenv up -d $DEVENV_CMDLINE
-devenv-down    # devenv down $DEVENV_CMDLINE
+```fish
+function devenv-up
+    eval command devenv up -d $DEVENV_CMDLINE
+end
 ```
 
-Two things to know when writing one:
+The `eval` is load-bearing. `DEVENV_CMDLINE` is one flat string, and unlike bash
+fish never word-splits an unquoted variable, so a bare `devenv up -d
+$DEVENV_CMDLINE` hands devenv the whole thing as a single argument and it fails
+with "unexpected argument ... found". `eval` re-parses it into separate ones.
+This was invisible until an app actually used `--from`: without it
+`DEVENV_CMDLINE` is empty, so the broken form and the working form do the same
+thing. Any new wrapper that replays a command line has the same trap.
+
+Three things to know when writing one:
 
 - **Do not set `DATABASE_URL`.** `config/database.yml` reads it per environment,
   so a single URL overrides the distinct `database:` names and collapses e.g. the
