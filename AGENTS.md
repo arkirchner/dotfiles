@@ -110,10 +110,13 @@ it, as a devenv service, so it only exists while that project's environment is
 up. `xikolo` has postgres and seaweedfs; `codeocean` has postgres and nomad.
 
 The definitions live here, in `nix_config/devenv/<app>/devenv.nix`. The app repo
-holds **no devenv files**: its `.envrc` is a single `use devenv --from` line that
-names the definition, and that is enough.
+holds **no devenv files**: its `.envrc` is an `eval "$(devenv direnvrc)"` line
+followed by one `use devenv --from` line that names the definition, and that is
+enough.
 
 ```bash
+eval "$(devenv direnvrc)"
+
 use devenv --from ../dotfiles/nix_config/devenv/xikolo \
   -o nixpkgs "github:NixOS/nixpkgs/$(nix flake metadata --json ../dotfiles/nix_config | jq -r .locks.nodes.nixpkgs.locked.rev)"
 ```
@@ -133,11 +136,15 @@ Reading the revision out of `flake.lock` costs ~60ms per load and needs `jq` on
 the plain `PATH`, because direnv evaluates `.envrc` before any dev shell is
 active.
 
-`use devenv` itself comes from `programs.direnv.stdlib` in
-`modules/home/fish/default.nix`, which `eval`s `devenv direnvrc` into
-`~/.config/direnv/direnvrc`. It has to be `eval`, not
-`source "$(devenv direnvrc)"`: that form fails under bash 5.3 with "File name too
-long" instead of sourcing the string as a script.
+`use devenv` itself comes from devenv's own `direnvrc`, `eval`-ed by the app's
+`.envrc` before `use devenv` — devenv's canonical direnv pattern. It is loaded
+per-project and not from `~/.config/direnv/direnvrc`, because devenv's direnvrc
+redefines two nix-direnv functions (`_nix_direnv_preflight`,
+`_nix_import_env`) with different semantics, and a global preload shadows
+nix-direnv in every `use flake` directory. Within an `.envrc` it still has to
+be `eval "$(devenv direnvrc)"`, not `source "$(devenv direnvrc)"`: that form
+fails under bash 5.3 with "File name too long" instead of sourcing the string
+as a script.
 
 The toolchain comes from here too. `nix_config/devenv/<app>/devenv.nix` imports
 the app's shell body over relative paths and wraps it in

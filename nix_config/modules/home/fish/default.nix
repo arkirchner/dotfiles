@@ -1,7 +1,7 @@
 { ... }:
 {
   flake.modules.homeManager.fish =
-    { lib, pkgs, ... }:
+    { ... }:
     let
       tatConfig = builtins.readFile ./stay_always_in_tmux;
     in
@@ -25,15 +25,19 @@
           silent = true;
           nix-direnv.enable = true;
           enableFishIntegration = true;
-          # Home Manager writes this to ~/.config/direnv/direnvrc, which direnv
-          # sources before it evaluates any .envrc, so `use devenv` is available
-          # in every project and each .envrc needs no preamble.
+          # devenv's `use devenv` is deliberately NOT preloaded here. devenv's
+          # direnvrc redefines two functions that nix-direnv's home-manager
+          # integration also defines (_nix_direnv_preflight, _nix_import_env)
+          # with different semantics, and whichever loads last wins for every
+          # directory. Preloading devenv's broke `use flake`: nix-direnv's
+          # preflight never ran, so its `_nix` helper expanded to nothing
+          # ("--no-warn-dirty: command not found"), and nix-direnv passes
+          # _nix_import_env a profile path where devenv's expects env text
+          # ("flake-profile-...rc: No such file or directory").
           #
-          # eval, not `source "$(...)"`: that form fails under bash 5.3 with
-          # "File name too long" rather than sourcing the string as a script.
-          stdlib = ''
-            eval "$(${lib.getExe pkgs.devenv} direnvrc)"
-          '';
+          # devenv projects instead follow devenv's canonical .envrc: an
+          # `eval "$(devenv direnvrc)"` right before `use devenv`, so devenv's
+          # definitions only exist where nix-direnv isn't in use.
         };
 
         carapace = {
