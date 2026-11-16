@@ -3,7 +3,6 @@
   flake.modules.nixos.desktop = {
     services.fwupd.enable = true;
     programs.dconf.enable = true;
-    programs.steam.enable = true;
 
     # Session/portal backend is owned by programs.niri; the login session is
     # chosen by the Noctalia greeter (services.displayManager.noctalia-greeter).
