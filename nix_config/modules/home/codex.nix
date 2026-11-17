@@ -1,14 +1,16 @@
-{ ... }:
+{ inputs, ... }:
 {
   flake.modules.homeManager.codex =
     { pkgs, ... }:
     let
       railsMcpServer = pkgs.callPackage ../../packages/rails-mcp-server { };
       serena = import ../../shells/serena.nix { inherit pkgs; };
+      skills = "${inputs.rails-consultant}/skills";
     in
     {
       programs.codex = {
         enable = true;
+        skills = skills;
         # Codex writes project trust levels back into config.toml, so the file
         # must be writable, not a symlink into the Nix store.
         mutableSettings = true;

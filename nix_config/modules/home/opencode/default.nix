@@ -1,9 +1,10 @@
-{ ... }:
+{ inputs, ... }:
 {
   flake.modules.homeManager.opencode =
     { pkgs, ... }:
     let
       railsMcpServer = pkgs.callPackage ../../../packages/rails-mcp-server { };
+      skills = "${inputs.rails-consultant}/skills";
     in
     {
       programs.opencode = {
@@ -89,6 +90,7 @@
       };
 
       home.file.".config/opencode/agents/".source = ./agents;
+      home.file.".config/opencode/skills/".source = skills;
       home.file.".config/opencode/AGENTS.md".source = ./AGENTS.md;
     };
 }

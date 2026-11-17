@@ -160,13 +160,30 @@
         "type": "github"
       }
     },
+    "rails-consultant": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1793991854,
+        "narHash": "sha256-/+yEWfOM45OQk01tMKOrQA5ARHNn7rzGO5zx8C5Oy0c=",
+        "owner": "thoughtbot",
+        "repo": "rails-consultant",
+        "rev": "5b1536c74b2baafcf382d6b784dadf8ef028d84e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "thoughtbot",
+        "repo": "rails-consultant",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "flake-parts": "flake-parts",
         "home-manager": "home-manager",
         "import-tree": "import-tree",
         "nixpkgs": "nixpkgs_2",
-        "nvf": "nvf"
+        "nvf": "nvf",
+        "rails-consultant": "rails-consultant"
       }
     }
   },
