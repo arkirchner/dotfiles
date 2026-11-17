@@ -7,7 +7,6 @@
       backupFileExtension = "backup";
       useGlobalPkgs = true;
       useUserPackages = true;
-      sharedModules = [ inputs.hermes-agent.homeManagerModules.default ];
     };
   };
 }

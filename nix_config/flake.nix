@@ -6,8 +6,6 @@
     # upstream main and resolves a tex.nix conflict in favour of ltex-ls-plus.
     nvf.url = "github:arkirchner/nvf/main";
 
-    hermes-agent.url = "github:NousResearch/hermes-agent/main";
-
     flake-parts.url = "github:hercules-ci/flake-parts";
     import-tree.url = "github:vic/import-tree";
   };
