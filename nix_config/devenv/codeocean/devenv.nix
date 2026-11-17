@@ -1,8 +1,6 @@
 # The codeocean dev environment, kept here rather than in the app repo. An app
-# carries no devenv files beyond a devenv.local.yaml: its .envrc is a single
-# `use devenv --from` pointing at this directory, and that is enough. `devenv
-# --from` reads devenv.nix from wherever it is told to, so the definition can
-# live here.
+# carries no devenv files beyond a devenv.local.yaml. `devenv --from` reads
+# devenv.nix from wherever it is told to, so the definition can live here.
 #
 # The one thing an app cannot get from here is allow_unfree: devenv reads that
 # from YAML in the project root only, so codeocean carries a two-line

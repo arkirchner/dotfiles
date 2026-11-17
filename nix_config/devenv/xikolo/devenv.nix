@@ -1,7 +1,6 @@
 # The xikolo dev environment, kept here rather than in the app repo. An app
-# carries no devenv files at all: its .envrc is a single `use devenv --from`
-# pointing at this directory, and that is enough. `devenv --from` reads
-# devenv.nix from wherever it is told to, so the definition can live here.
+# carries no devenv files at all. `devenv --from` reads devenv.nix from
+# wherever it is told to, so the definition can live here.
 #
 # config.devenv.root is the *app* directory even though this file lives here, so
 # .bundle, the postgres socket and $DEVENV_STATE all stay per-app. That is what
