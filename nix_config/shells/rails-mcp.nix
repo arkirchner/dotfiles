@@ -17,6 +17,8 @@ pkgs.writeText "opencode-rails.json" (
       rails = {
         type = "local";
         command = [ "${railsMcpServer}/bin/rails-mcp-server" ];
+        # The global config leaves rails off; this is a Rails app, so opt in.
+        enabled = true;
       };
       playwright = {
         type = "local";

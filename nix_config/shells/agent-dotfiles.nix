@@ -1,6 +1,6 @@
-# Agent-ready shell for this repo. The nix MCP is registered globally (see
-# modules/home/opencode/default.nix); the only thing this shell has to do is
-# turn off the Rails MCP, which is dead weight here.
+# Agent-ready shell for this repo. The nix and context7 MCPs are registered
+# globally and rails is off by default (see modules/home/opencode/default.nix),
+# so this shell needs no opencode config of its own.
 { pkgs }:
 
 pkgs.mkShell {
@@ -16,14 +16,4 @@ pkgs.mkShell {
     yq
   ];
 
-  shellHook = ''
-    export OPENCODE_CONFIG=${
-      pkgs.writeText "opencode-dotfiles.json" (
-        builtins.toJSON {
-          "$schema" = "https://opencode.ai/config.json";
-          mcp.rails.enabled = false;
-        }
-      )
-    }
-  '';
 }

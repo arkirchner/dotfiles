@@ -80,6 +80,9 @@
             rails = {
               type = "local";
               command = [ "${railsMcpServer}/bin/rails-mcp-server" ];
+              # Rails shells opt back in through OPENCODE_CONFIG; everywhere
+              # else this server is dead weight.
+              enabled = false;
             };
           };
         };
