@@ -23,9 +23,10 @@
           #
           # devenv writes devenv.lock and .devenv/ into the project root, and
           # an app here holds its devenv.local.yaml, which by devenv's own
-          # convention is machine-local. None of the three belongs in a commit.
-          # devenv.yaml and devenv.nix are deliberately absent: those are meant
-          # to be committed in a project that uses them.
+          # convention is machine-local. Serena keeps its per-project config
+          # and memories in .serena/, likewise machine-local. None of these
+          # belongs in a commit. devenv.yaml and devenv.nix are deliberately
+          # absent: those are meant to be committed in a project that uses them.
           ignores = [
             "*~"
             "*.swp"
@@ -34,6 +35,7 @@
             ".devenv/"
             "devenv.lock"
             "devenv.local.yaml"
+            ".serena/"
           ];
 
           includes = [
