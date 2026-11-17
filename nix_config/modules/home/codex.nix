@@ -24,6 +24,14 @@
             };
             serena = {
               command = "${serena}/bin/serena-mcp";
+              # MCP stdio servers inherit only selected environment variables.
+              # Ruby LSP needs the active Rails shell's gems and native libraries.
+              env_vars = [
+                "GEM_HOME"
+                "GEM_PATH"
+                "BUNDLE_PATH"
+                "LD_LIBRARY_PATH"
+              ];
               # First run downloads the Ruby language server, which is well
               # over Codex's default startup timeout.
               startup_timeout_sec = 300;

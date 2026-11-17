@@ -10,5 +10,7 @@ pkgs.writeShellScriptBin "serena-mcp" ''
   export LD_LIBRARY_PATH=${
     pkgs.lib.makeLibraryPath [ pkgs.python313 ]
   }''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
-  exec ${pkgs.uv}/bin/uvx --from serena-agent serena start-mcp-server --context ide-assistant "$@"
+  # Without an explicit project, Serena starts with no active project and no
+  # language servers; --project-from-cwd picks the app up from its .git root.
+  exec ${pkgs.uv}/bin/uvx --from serena-agent serena start-mcp-server --context ide-assistant --project-from-cwd "$@"
 ''

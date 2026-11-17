@@ -25,6 +25,8 @@
         # An app's .envrc reads the nixpkgs revision out of flake.lock with jq,
         # and direnv evaluates that before any dev shell is on the PATH.
         jq
+        # The coding agents use rg directly for searches in every project.
+        ripgrep
         # Per-project dev environments. An app repo holds no devenv files at
         # all: its .envrc points `use devenv --from` at ../../devenv/<app>.
         devenv
