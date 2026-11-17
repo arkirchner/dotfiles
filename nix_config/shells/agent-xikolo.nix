@@ -65,7 +65,8 @@ import ./rails-base.nix {
       ffmpeg
       nasm
       dart
-      python315
+      # Codex skills run on this interpreter; their validator imports yaml.
+      (python315.withPackages (ps: [ ps.pyyaml ]))
       # Node native addons.
       patchelf
       vips

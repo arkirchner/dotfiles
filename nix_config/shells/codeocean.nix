@@ -6,6 +6,8 @@ import ./rails-base.nix {
     bun
     postgresql_16
     vips
+    # AI coding assistants run Python skills here; their validator imports yaml.
+    (python3.withPackages (ps: [ ps.pyyaml ]))
     shared-mime-info
     icu
     nodejs_22
