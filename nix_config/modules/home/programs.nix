@@ -9,6 +9,7 @@
       gpg
       git
       opencode
+      codex
       yazi
     ];
   };

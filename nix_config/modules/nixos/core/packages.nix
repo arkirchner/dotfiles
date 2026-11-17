@@ -10,6 +10,8 @@
         git
         slack
         zoom-us
+        # Codex uses bwrap for its sandbox.
+        bubblewrap
       ];
 
       environment.sessionVariables = {
