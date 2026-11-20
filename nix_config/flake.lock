@@ -112,11 +112,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1794890597,
-        "narHash": "sha256-lME2lHoDHAaSHP3/okgiVoJ0icVEvsQH8LeU3We7tcc=",
+        "lastModified": 1795085501,
+        "narHash": "sha256-S5keGWzaKpuXo9MNoIC2FfTIuTyTnx8P4NhYJMEsTLI=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "04906337b6d53e8bb0eaf0470ae9f070a4d4eb55",
+        "rev": "0bb8272318b4ca41bf0edc6224df3e3e3046b70d",
         "type": "github"
       },
       "original": {
@@ -163,11 +163,11 @@
     "rails-consultant": {
       "flake": false,
       "locked": {
-        "lastModified": 1795020398,
-        "narHash": "sha256-KLKExyq6El9qxmmjcXnFgtoVmR+90Iwk5W4CdRzQtZU=",
+        "lastModified": 1795169825,
+        "narHash": "sha256-40zdlRKGQ/qjNFgkPEZ+dxTfU6riMnZEjN+p2OMtnSg=",
         "ref": "refs/heads/main",
-        "rev": "cfad304f247eca51ae02a3745f42104bd5601055",
-        "revCount": 39,
+        "rev": "456738cbe454fa1ef7a34539929227a66bc8973c",
+        "revCount": 40,
         "type": "git",
         "url": "ssh://git@github.com/arkirchner/rails-consultant.git"
       },
