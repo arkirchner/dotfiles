@@ -163,17 +163,17 @@
     "rails-consultant": {
       "flake": false,
       "locked": {
-        "lastModified": 1793991854,
-        "narHash": "sha256-/+yEWfOM45OQk01tMKOrQA5ARHNn7rzGO5zx8C5Oy0c=",
-        "owner": "thoughtbot",
-        "repo": "rails-consultant",
-        "rev": "5b1536c74b2baafcf382d6b784dadf8ef028d84e",
-        "type": "github"
+        "lastModified": 1795020398,
+        "narHash": "sha256-KLKExyq6El9qxmmjcXnFgtoVmR+90Iwk5W4CdRzQtZU=",
+        "ref": "refs/heads/main",
+        "rev": "cfad304f247eca51ae02a3745f42104bd5601055",
+        "revCount": 39,
+        "type": "git",
+        "url": "ssh://git@github.com/arkirchner/rails-consultant.git"
       },
       "original": {
-        "owner": "thoughtbot",
-        "repo": "rails-consultant",
-        "type": "github"
+        "type": "git",
+        "url": "ssh://git@github.com/arkirchner/rails-consultant.git"
       }
     },
     "root": {

@@ -7,7 +7,7 @@
     nvf.url = "github:arkirchner/nvf/main";
     # Agent skills installed globally for opencode and Codex. Not a flake.
     rails-consultant = {
-      url = "github:thoughtbot/rails-consultant";
+      url = "git+ssh://git@github.com/arkirchner/rails-consultant.git";
       flake = false;
     };
 
