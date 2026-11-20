@@ -14,11 +14,14 @@ pkgs.stdenvNoCC.mkDerivation {
   pname = "rails-mcp-server";
   version = "1.5.1";
 
-  buildInputs = [ env ];
+  nativeBuildInputs = [ pkgs.makeWrapper ];
 
   unpackPhase = "true";
   installPhase = ''
     mkdir -p $out/bin
-    ln -s ${env}/bin/rails-mcp-server $out/bin/rails-mcp-server
+    # Keep user and project gems out of the server's Ruby environment.
+    makeWrapper ${env}/bin/rails-mcp-server $out/bin/rails-mcp-server \
+      --set GEM_HOME ${env}/${env.ruby.gemPath} \
+      --set GEM_PATH ${env}/${env.ruby.gemPath}
   '';
 }
