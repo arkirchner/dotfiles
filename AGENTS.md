@@ -230,6 +230,31 @@ value. Note that the endpoint is fixed at evaluation time: if a clone was
 evaluated while the other was down it caches the same port, and it has to be
 re-evaluated once both are up.
 
+## Local Inkling 2 Mini
+
+Only `armin-pc` installs the launchers and registers
+`local-inkling/inkling-2-mini` in OpenCode. Both launchers use the 17.6 GB
+`IQ4_NL` model from `ggml-org/Inkling-2-Mini-GGUF`, which llama.cpp downloads
+and caches on first use.
+
+```bash
+cd nix_config
+sudo nixos-rebuild switch --flake .#armin-pc
+inkling-2-mini-server
+```
+
+Leave the server running and select **Local Inkling → Inkling 2 Mini** in
+OpenCode's `/models` picker. The server listens at `http://127.0.0.1:8082/v1`
+and uses a 16,384-token context. It runs in the foreground and keeps the model
+loaded while idle, including after OpenCode closes. Press Ctrl+C in its
+terminal to stop it and release GPU memory. The cached download stays on disk.
+For standalone chat, run `inkling-2-mini` with its 4,096-token default context.
+
+The x600 host pins a Vulkan build of llama.cpp because the flake's package
+predates Inkling support. Both launchers target `Vulkan0` with full layer
+offload and automatic fitting disabled. The Radeon 780M reported about 31 GiB
+free through Vulkan with the BIOS memory setting on Auto.
+
 ## Style
 
 - 2-space indentation, opening brace on the same line. Formatting is
