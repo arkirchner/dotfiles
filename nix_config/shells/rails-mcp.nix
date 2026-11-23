@@ -20,10 +20,6 @@ pkgs.writeText "opencode-rails.json" (
         # The global config leaves rails off; this is a Rails app, so opt in.
         enabled = true;
       };
-      playwright = {
-        type = "local";
-        command = [ "${pkgs.playwright-mcp}/bin/playwright-mcp" ];
-      };
       serena = {
         type = "local";
         command = [ "${serena}/bin/serena-mcp" ];

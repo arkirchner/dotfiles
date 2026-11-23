@@ -12,9 +12,6 @@ import ./rails-base.nix {
     # Nearly every app in here has a package.json next to its Gemfile.
     nodejs_22
     postgresql_16
-    # Ships its own browser via PLAYWRIGHT_BROWSERS_PATH, so no browser needs
-    # to be on the shell.
-    playwright-mcp
   ];
   extraLibPath = with pkgs; [ postgresql_16 ];
   extraShellEnv = {

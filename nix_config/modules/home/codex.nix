@@ -19,6 +19,10 @@
             context7 = {
               command = "${pkgs.context7-mcp}/bin/context7-mcp";
             };
+            playwright = {
+              command = "${pkgs.playwright-mcp}/bin/playwright-mcp";
+              args = [ "--headless" ];
+            };
             rails = {
               command = "${railsMcpServer}/bin/rails-mcp-server";
             };

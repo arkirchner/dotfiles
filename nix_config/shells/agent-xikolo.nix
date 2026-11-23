@@ -45,7 +45,6 @@ import ./rails-base.nix {
       nodejs_24
       corepack_24
       bun
-      playwright-mcp
       postgresql_16
       shared-mime-info
       icu

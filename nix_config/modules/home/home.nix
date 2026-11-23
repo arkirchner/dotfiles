@@ -7,6 +7,7 @@
         firefox
         chromedriver
         chromium
+        playwright-mcp
         gnupg
         cmus
         pass
