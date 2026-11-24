@@ -70,7 +70,7 @@ There is no test runner and no CI workflow.
 
 ## Dev shells and MCP servers
 
-`modules/home/opencode/default.nix` registers the `nixos` and `context7` MCP
+`modules/home/opencode/default.nix` registers the `nixos` and `docs-mcp-server` MCP
 servers globally, so they are on in every project. It also defines `rails` but
 leaves it disabled: outside a Rails app it is dead weight. A Rails shell exports
 `OPENCODE_CONFIG` pointing at a JSON file it generates into the store, and
@@ -82,8 +82,8 @@ The two splits are:
 
 | Shell | MCPs |
 | --- | --- |
-| `agent-dotfiles` | `context7`, `nixos` |
-| `codeocean`, `agent-rails`, `agent-xikolo`, `wave-walker` | `context7`, `rails`, `playwright`, `serena` — `nixos` disabled |
+| `agent-dotfiles` | `docs-mcp-server`, `nixos` |
+| `codeocean`, `agent-rails`, `agent-xikolo`, `wave-walker` | `docs-mcp-server`, `rails`, `playwright`, `serena` — `nixos` disabled |
 
 A repo that only wants a shell opts in with an `.envrc`; it needs no opencode
 config of its own:

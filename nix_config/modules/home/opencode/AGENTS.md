@@ -69,21 +69,25 @@ When working with libraries, frameworks, or packages, query the appropriate MCP 
 ## Available MCPs
 
 **rails** - Rails API docs, methods, conventions, gems (use first for Rails projects)
-**context7** - JS/TS/Python libraries, frameworks, APIs (call resolve-library-id, then query-docs)
+**docs-mcp-server** - Library and framework documentation (list indexed libraries, then search by name and version)
 **nixos** - Nix packages, NixOS/Home Manager/Darwin options, flake inputs
 
 ## Quick Reference
 
 ### When to Use Each MCP
-- Rails code? → **rails** (fallback to context7 if needed)
-- React/Vue/Next.js/Django/etc? → **context7**
+- Rails code? → **rails** (fall back to **docs-mcp-server** if needed)
+- React/Vue/Next.js/Django/etc? → **docs-mcp-server**
 - NixOS packages or options? → **nixos**
 
 ### Common Patterns
 ```
-# context7: resolve first, then query
-context7_resolve-library-id(libraryName: "React", query: "...")
-context7_query-docs(libraryId: "/facebook/react", query: "useState hook usage")
+# Docs MCP Server: check the local index and search it
+docs-mcp-server_list_libraries()
+docs-mcp-server_search_docs(library: "react", version: "19", query: "useState hook usage")
+
+# If a library is missing, index its official docs and check the job status
+docs-mcp-server_scrape_docs(library: "react", version: "19", url: "https://react.dev/reference/react")
+docs-mcp-server_get_job_info(jobId: "<job ID>")
 
 # nixos: common actions
 nixos(action: "search", query: "package-name")

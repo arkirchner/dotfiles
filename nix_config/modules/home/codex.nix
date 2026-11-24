@@ -3,6 +3,7 @@
   flake.modules.homeManager.codex =
     { pkgs, ... }:
     let
+      docsMcpServer = pkgs.callPackage ../../packages/docs-mcp-server { };
       railsMcpServer = pkgs.callPackage ../../packages/rails-mcp-server { };
       serena = import ../../shells/serena.nix { inherit pkgs; };
       skills = "${inputs.rails-consultant}/skills";
@@ -16,8 +17,9 @@
         mutableSettings = true;
         settings = {
           mcp_servers = {
-            context7 = {
-              command = "${pkgs.context7-mcp}/bin/context7-mcp";
+            docs-mcp-server = {
+              command = "${docsMcpServer}/bin/docs-mcp-server";
+              startup_timeout_sec = 120;
             };
             playwright = {
               command = "${pkgs.playwright-mcp}/bin/playwright-mcp";

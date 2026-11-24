@@ -1,4 +1,4 @@
-# Agent-ready shell for this repo. The nix, context7, and Playwright MCPs are registered
+# Agent-ready shell for this repo. The NixOS, Docs MCP Server, and Playwright MCPs are registered
 # globally and rails is off by default (see modules/home/opencode/default.nix),
 # so this shell needs no opencode config of its own.
 { pkgs }:

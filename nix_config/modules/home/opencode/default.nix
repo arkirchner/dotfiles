@@ -3,6 +3,7 @@
   flake.modules.homeManager.opencode =
     { pkgs, ... }:
     let
+      docsMcpServer = pkgs.callPackage ../../../packages/docs-mcp-server { };
       railsMcpServer = pkgs.callPackage ../../../packages/rails-mcp-server { };
       skills = "${inputs.rails-consultant}/skills";
     in
@@ -74,9 +75,10 @@
               type = "local";
               command = [ "${pkgs.mcp-nixos}/bin/mcp-nixos" ];
             };
-            context7 = {
+            docs-mcp-server = {
               type = "local";
-              command = [ "${pkgs.context7-mcp}/bin/context7-mcp" ];
+              command = [ "${docsMcpServer}/bin/docs-mcp-server" ];
+              timeout = 120000;
             };
             playwright = {
               type = "local";
