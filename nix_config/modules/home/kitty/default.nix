@@ -13,7 +13,7 @@
 
         settings = {
           background_opacity = "0.8";
-          macos_option_as_meta = "yes";
+          confirm_os_window_close = 0;
           macos_option_as_alt = "yes";
         };
 

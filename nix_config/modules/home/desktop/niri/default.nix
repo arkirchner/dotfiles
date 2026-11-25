@@ -41,6 +41,13 @@
                 };
               };
             }
+            # Keep the focus ring from showing through Kitty's transparent background.
+            {
+              window-rule = {
+                match._props.app-id = "^kitty$";
+                draw-border-with-background = false;
+              };
+            }
             # Shows Noctalia's blurred wallpaper backdrop in niri's overview.
             {
               layer-rule = {
